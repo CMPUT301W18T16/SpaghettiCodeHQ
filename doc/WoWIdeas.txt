@@ -1,5 +1,9 @@
-Worth $$$$$$$$, DO NOT STEAL
+Worth $$$$$$$$, DO NOT STEAL!
 
--Ratings + Review
--Leaving a message
--
+-Ratings (provide, view) + Review System
+-A messaging system (e.g. PM) for provider/requester
+-Selecting and viewing tasks using a geolocation-based interface (e.g. a scaleable map)
+-Integration of tasks and their according date-time into the Calendar/Reminder section of Android OS
+-Availability specification. That is, a system where providers or requesters can specify availability for tasks at a time and date on a schedule.
+
+-More to be added
