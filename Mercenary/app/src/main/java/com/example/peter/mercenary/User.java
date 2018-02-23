@@ -7,10 +7,22 @@ import java.util.List;
  */
 
 public class User {
-    private String Username;
-    private String Password;
-    private String email;
-    private int rating;
+    protected String Username;
+    protected String Password;
+    protected String email;
+    protected int rating;
+
+    public User(String Username, String Password, String email, int rating){
+        this.Username=Username;
+        this.Password=Password;
+        this.email=email;
+        this.rating= rating;
+    }
+
+    public User(String Username) {
+
+    }
+
 
     public String getUsername(){
         return this.Username;
