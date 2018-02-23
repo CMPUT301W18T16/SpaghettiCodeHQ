@@ -7,14 +7,14 @@ import java.util.List;
  */
 
 public class User {
-    protected String Username;
-    protected String Password;
+    protected String username;
+    protected String password;
     protected String email;
-    protected int rating;
+    protected float rating;
 
-    public User(String Username, String Password, String email, int rating){
-        this.Username=Username;
-        this.Password=Password;
+    public User(String username, String password, String email, float rating){
+        this.username=username;
+        this.password=password;
         this.email=email;
         this.rating= rating;
     }
@@ -25,19 +25,20 @@ public class User {
 
 
     public String getUsername(){
-        return this.Username;
+        return this.username;
     }
+
     public void setUsername(String name) {
-        this.Username = name;
+        this.username = name;
     }
 
     private void setPassword(String pass){
-        this.Password = pass;
+        this.password = pass;
 
     }
 
     private String getPassword(){
-        return this.Password;
+        return this.password;
 
     }
     public String getEmail(){
@@ -48,7 +49,7 @@ public class User {
         this.email = mail;
     }
 
-    public int getRating(){
+    public float getRating(){
         return this.rating;
     }
 

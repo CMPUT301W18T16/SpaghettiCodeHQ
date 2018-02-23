@@ -10,8 +10,8 @@ import java.util.NoSuchElementException;
 public class Requester extends User {
     private List tasks;
 
-    public Requester(String Username){
-        super(Username);
+    public Requester(String username){
+        super(username);
     }
 
     public List getTask(){
@@ -31,14 +31,9 @@ public class Requester extends User {
             has = this.tasks.contains(task);
             index = this.tasks.indexOf(task);
 
-        }catch(NoSuchElementException e){
+        }catch(NoSuchElementException e) {
             e.printStackTrace();
         }
-
-
-
-
-
     }
 
 
