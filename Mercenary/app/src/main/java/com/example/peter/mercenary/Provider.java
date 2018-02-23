@@ -10,9 +10,8 @@ public class Provider extends User {
 
     private List biddedTask;
 
-    public Provider(String Username, List biddedTask){
+    public Provider(String Username){
         super(Username);
-        this.biddedTask=biddedTask;
     }
 
 
