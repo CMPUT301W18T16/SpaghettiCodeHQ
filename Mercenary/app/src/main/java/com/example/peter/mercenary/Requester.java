@@ -8,13 +8,13 @@ import java.util.NoSuchElementException;
  */
 
 public class Requester extends User {
-    private List tasks;
+    private Tasklist tasks;
 
     public Requester(String username){
         super(username);
     }
 
-    public List getTask(){
+    public Tasklist getTask(){
         return this.tasks;
     }
     public void addTask(Task task){
@@ -22,19 +22,7 @@ public class Requester extends User {
 
     }
 
-    public void modTask(Task task)
-    {
-        boolean has = false;
-        int index;
 
-        try{
-            has = this.tasks.contains(task);
-            index = this.tasks.indexOf(task);
-
-        }catch(NoSuchElementException e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }

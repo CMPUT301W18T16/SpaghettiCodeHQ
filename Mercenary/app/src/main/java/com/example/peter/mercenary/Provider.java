@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Provider extends User {
 
-    private List biddedTask;
+    private Tasklist biddedTask;
 
     public Provider(String username){
         super(username);
