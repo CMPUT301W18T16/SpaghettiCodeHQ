@@ -10,6 +10,7 @@ public class User {
     protected String username;
     protected String password;
     protected String email;
+    protected String phoneNumber;
     protected float rating;
 
     public User(String username, String password, String email, float rating){
@@ -48,6 +49,10 @@ public class User {
     public void setEmail(String mail) {
         this.email = mail;
     }
+    
+    public void setPhoneNumber(String number) { this.phoneNumber = number; }
+    
+    public String getPhoneNumber() { return this.phoneNumber; }
 
     public float getRating(){
         return this.rating;
