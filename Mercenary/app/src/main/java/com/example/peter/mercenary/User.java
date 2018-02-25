@@ -24,21 +24,22 @@ public class User {
 
     }
 
-
     public String getUsername(){
         return this.username;
     }
 
+    //Username needs to be unique
+    //Username needs to be at least 8 characters (max length would be good too)
     public void setUsername(String name) {
         this.username = name;
     }
 
-    private void setPassword(String pass){
+    public void setPassword(String pass){
         this.password = pass;
 
     }
 
-    private String getPassword(){
+    public String getPassword(){
         return this.password;
 
     }
@@ -46,10 +47,12 @@ public class User {
         return this.email;
     }
 
+    //Make sure email is in the right format
     public void setEmail(String mail) {
         this.email = mail;
     }
-    
+
+    //make sure format is in the right format
     public void setPhoneNumber(String number) { this.phoneNumber = number; }
     
     public String getPhoneNumber() { return this.phoneNumber; }
@@ -58,10 +61,8 @@ public class User {
         return this.rating;
     }
 
-    public void setRating(int rate) {
+    //make sure rating is in the corrrect range
+    public void setRating(float rate) {
         this.rating = rate;
     }
-
-
-
 }
