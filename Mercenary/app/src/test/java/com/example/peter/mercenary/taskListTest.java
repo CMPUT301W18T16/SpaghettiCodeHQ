@@ -2,30 +2,37 @@ package com.example.peter.mercenary;
 
 import android.test.ActivityInstrumentationTestCase2;
 import org.junit.Test;
-import java.util.ArrayList;
+import java.lang.*;
+import java.util.Arrays;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Created by Shardul Shah on 2018-02-25
  */
 
-public class taskListTest extends ActivityInstrumentationTestCase2 
+public class taskListTest
 {
 
-    public taskListTest() 
-    {
-        super(MainActivity.class);
-    }
+    //public taskListTest()
+    //{
+  //      super(MainActivity.class);
+  //  }
 
     @Test
     public void add() throws Exception 
     {
     	Tasklist taskList = new Tasklist();
     	Task myTask = new Task("Shovel snow", "Shovelling snow at my house", "open");
-    	assertFalse(taskList.contains(myTask));
+    	assertFalse(Arrays.asList(taskList).contains(myTask));
     	taskList.add(myTask);
-    	assertTrue(taskList.contains(myTask));
+        /*TODO: contains method does not work on objects; build your own contains method*/
+    	assertTrue(Arrays.asList(taskList).contains(myTask));
     }
 
+    @Test
     public void hasTask() throws Exception
     {
     	Tasklist taskList = new Tasklist();
@@ -35,6 +42,7 @@ public class taskListTest extends ActivityInstrumentationTestCase2
     	assertTrue(taskList.hasTask(myTask));
     }
 
+    @Test
     public void getTask() throws Exception
     {
     	Tasklist taskList = new Tasklist();
@@ -44,14 +52,15 @@ public class taskListTest extends ActivityInstrumentationTestCase2
 
     }
 
+    @Test
     public void delTask() throws Exception
     {
     	Tasklist taskList = new Tasklist();
     	Task myTask = new Task("Shovel snow", "Shovelling snow at my house", "open");
     	taskList.add(myTask);
-    	assertTrue(taskList.contains(myTask));
+    	assertTrue(Arrays.asList(taskList).contains(myTask));
     	taskList.delTask(myTask);
-    	assertFalse(taskList.contains(myTask));
+    	assertFalse(Arrays.asList(taskList).contains(myTask));
 
     }
 
