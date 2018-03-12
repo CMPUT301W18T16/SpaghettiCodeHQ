@@ -37,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(
+        /*navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        setContentView(R.layout.activity_main2);
+                        mDrawerLayout = findViewById(R.id.drawer_layout);
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
@@ -54,13 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
                         return true;
                     }
-                });
+                });*/
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                setContentView(R.layout.activity_main2);
+                mDrawerLayout = findViewById(R.id.drawer_layout);
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
