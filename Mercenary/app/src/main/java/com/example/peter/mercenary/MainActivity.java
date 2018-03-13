@@ -1,5 +1,6 @@
 package com.example.peter.mercenary;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+
+        Intent intent = new Intent(this, LoginScreen.class);
+        startActivity(intent);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
