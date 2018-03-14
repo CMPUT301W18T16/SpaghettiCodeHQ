@@ -7,11 +7,13 @@ import java.util.List;
  */
 
 public class User {
-    protected String username;
-    protected String password;
-    protected String email;
-    protected String phoneNumber;
-    protected float rating;
+    private String username;
+    private String password;
+    private String email;
+    private String phoneNumber;
+    private float rating;
+    private Tasklist biddedTask;
+    private Tasklist tasks;
 
     public User(String username, String password, String email, float rating){
         this.username=username;
@@ -65,4 +67,21 @@ public class User {
     public void setRating(float rate) {
         this.rating = rate;
     }
+
+    public void bidTask(Task task){
+        this.biddedTask.add(task);
+
+    }
+
+
+    public Tasklist getTask(){
+        return this.tasks;
+    }
+    public void addTask(Task task){
+        this.tasks.add(task);
+
+    }
+
+
+
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by peter on 2018-02-23.
  */
-
+//Custom ArrayList type BidList
 public class BidList {
 
     private ArrayList<Bid> bids = new ArrayList<Bid>();
