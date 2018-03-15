@@ -7,15 +7,15 @@ import java.util.List;
  */
 
 public class User {
-    protected String username;
-    protected String password;
-    protected String email;
-    protected String phoneNumber;
-    protected float rating;
+    private String username;
+    private String email;
+    private String phoneNumber;
+    private float rating;
+    private Tasklist biddedTask;
+    private Tasklist tasks;
 
-    public User(String username, String password, String email, float rating){
+    public User(String username, String email, float rating){
         this.username=username;
-        this.password=password;
         this.email=email;
         this.rating= rating;
     }
@@ -34,15 +34,6 @@ public class User {
         this.username = name;
     }
 
-    public void setPassword(String pass){
-        this.password = pass;
-
-    }
-
-    public String getPassword(){
-        return this.password;
-
-    }
     public String getEmail(){
         return this.email;
     }
@@ -64,5 +55,17 @@ public class User {
     //make sure rating is in the corrrect range
     public void setRating(float rate) {
         this.rating = rate;
+    }
+
+    public void bidTask(Task task) {
+        this.biddedTask.add(task);
+    }
+
+    public Tasklist getTask() {
+        return this.tasks
+    }
+
+    public void addTask(Task task) {
+        this.tasks.add(task);
     }
 }
