@@ -1,10 +1,15 @@
 package com.example.peter.mercenary;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Signup extends AppCompatActivity {
     Button cancel;
@@ -27,7 +32,7 @@ public class Signup extends AppCompatActivity {
                 email = (EditText) findViewById(R.id.emailText);
                 phone = (EditText) findViewById(R.id.phoneText);
                 User newUser = new User(username.getText().toString(), email.getText().toString(),
-                        phone.getText().toString());
+                        phone.getText().toString(), 0);
                 saveUser(newUser);
                 finish();
             }
@@ -41,7 +46,17 @@ public class Signup extends AppCompatActivity {
         });
     }
 
+    //based on the code from the lab
     public void saveUser(User user) {
-
+        try {
+            FileOutputStream fos = openFileOutput("users.txt", Context.MODE_APPEND);
+            fos.write(new String(user.getUsername() + " | " + user.getEmail() + " | " +
+                    user.getPhoneNumber() + " | " + Float.toString(user.getRating()) + " | ").getBytes());
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -6,87 +6,120 @@
     android:layout_height="match_parent"
     tools:context="com.example.peter.mercenary.Signup">
 
-    <EditText
-        android:id="@+id/usernameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="80dp" />
-
-    <EditText
-        android:id="@+id/emailText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="177dp" />
-
-    <EditText
-        android:id="@+id/phoneText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="277dp" />
-
-    <TextView
-        android:id="@+id/textView"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Username:"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/usernameText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.875"
-        tools:layout_editor_absoluteX="16dp" />
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/Email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Email:"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/emailText"
-        app:layout_constraintTop_toBottomOf="@+id/usernameText"
-        tools:layout_editor_absoluteX="16dp" />
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Username:"
+            android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Phone number:"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/phoneText"
-        app:layout_constraintTop_toBottomOf="@+id/emailText"
-        tools:layout_editor_absoluteX="16dp" />
+        <EditText
+            android:id="@+id/usernameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@id/username"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="textPersonName"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="86dp" />
 
-    <Button
-        android:id="@+id/submitBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Signup"
-        app:layout_constraintTop_toBottomOf="@+id/phoneText"
-        tools:layout_editor_absoluteX="16dp" />
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/usernameText"
+            android:text="Email:"
+            android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/cancelBtn"
-        android:layout_width="72dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="20dp"
-        android:text="@android:string/cancel"
-        android:textSize="10sp"
-        app:layout_constraintTop_toBottomOf="@+id/submitBtn"
-        tools:layout_editor_absoluteX="16dp" />
+        <EditText
+            android:id="@+id/emailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@id/email"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textPersonName"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="86dp" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/emailText"
+            android:text="Phone number:"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/phoneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@id/phone"
+            android:ems="10"
+            android:hint="Phone number"
+            android:inputType="textPersonName"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="86dp" />
+
+        <TextView
+            android:id="@+id/error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/phoneText"
+            android:textColor="@android:color/holo_red_dark"
+            tools:layout_editor_absoluteX="85dp" />
+
+        <Button
+            android:id="@+id/signupBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/error"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="Signup" />
+
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/signupBtn"
+            android:layout_marginTop="16dp"
+            android:text="Cancel" />
+    </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>

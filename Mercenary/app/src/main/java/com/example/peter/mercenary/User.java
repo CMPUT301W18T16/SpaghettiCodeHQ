@@ -14,9 +14,10 @@ public class User {
     private Tasklist biddedTask;
     private Tasklist tasks;
 
-    public User(String username, String email, float rating){
+    public User(String username, String email, String phoneNumber, float rating){
         this.username=username;
         this.email=email;
+        this.phoneNumber = phoneNumber;
         this.rating= rating;
     }
 
@@ -62,7 +63,7 @@ public class User {
     }
 
     public Tasklist getTask() {
-        return this.tasks
+        return this.tasks;
     }
 
     public void addTask(Task task) {
