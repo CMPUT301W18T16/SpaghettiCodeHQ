@@ -8,15 +8,16 @@ import java.util.List;
 
 public class User {
     protected String username;
+    protected String password;
     protected String email;
     protected String phoneNumber;
     protected float rating;
 
-    public User(String username, String email, String phoneNumber){
+    public User(String username, String password, String email, float rating){
         this.username=username;
+        this.password=password;
         this.email=email;
-        this.phoneNumber = phoneNumber;
-        this.rating= 0;
+        this.rating= rating;
     }
 
     public User(String Username) {
@@ -33,6 +34,15 @@ public class User {
         this.username = name;
     }
 
+    public void setPassword(String pass){
+        this.password = pass;
+
+    }
+
+    public String getPassword(){
+        return this.password;
+
+    }
     public String getEmail(){
         return this.email;
     }

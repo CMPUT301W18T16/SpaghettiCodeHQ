@@ -12,9 +12,6 @@ public class Tasklist {
 
     public void add(Task task) {
 
-        if (hasTask(task)) {
-            throw new IllegalArgumentException("Duplicate bid found!");
-        }
         tasks.add(task);
 
 
