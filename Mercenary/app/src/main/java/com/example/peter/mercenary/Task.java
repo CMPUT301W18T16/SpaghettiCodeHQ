@@ -1,9 +1,7 @@
 package com.example.peter.mercenary;
 
-import java.util.List;
-
 import io.searchbox.annotations.JestId;
-
+import android.media.Image;
 /**
  * Created by peter on 2018-02-22.
  * Editted by Jason L. and Shardul S. on 2018-05-15
@@ -19,14 +17,6 @@ public class Task {
     @JestId
     private String id;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public Task(String title, String description, String status) {
         this.title = title;
         this.description = description;
@@ -34,7 +24,7 @@ public class Task {
 
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title) throws TitleTooLongException{
 
         if (title.length() > 30) {
             throw new TitleTooLongException();
@@ -42,13 +32,16 @@ public class Task {
         this.title = title;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description) throws DescTooLongException{
 
         if (description.length() > 300) {
             throw new DescTooLongException();
         }
         this.description = description;
 
+    }
+    public void setId(String id) {
+        this.id = id;
     }
     public void setPhoto(byte picture){
         this.picture=picture;
@@ -58,6 +51,7 @@ public class Task {
 
     public String getTitle(){return this.title;}
     public String getDescription(){return this.description;}
+    public String getId() {return this.id;}
     public byte getPhoto(){return this.picture;}
     public float getGeoLoc(){return this.geoLoc;}
     //public void getStatus(String taskStatus){this.status = status;}
