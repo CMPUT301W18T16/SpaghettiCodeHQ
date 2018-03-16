@@ -21,9 +21,7 @@ public class User {
         this.rating= rating;
     }
 
-    public User(String Username) {
-
-    }
+    public User(String Username) {}
 
     public String getUsername(){
         return this.username;

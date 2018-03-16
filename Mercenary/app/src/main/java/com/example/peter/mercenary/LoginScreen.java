@@ -55,15 +55,16 @@ public class LoginScreen extends AppCompatActivity {
 
     private boolean isValid(String name) {
         try {
-            FileInputStream fis = openFileInput("users.txt");
+            FileInputStream fis = openFileInput("users.sav");
             BufferedReader in =  new BufferedReader(new InputStreamReader(fis));
             String line = in.readLine();
             while (line != null) {
                 String[] parts = line.split("\\|");
-                if (parts[0] == name) {
-                    user = new User(parts[0], parts[1], parts[2], Float.parseFloat(parts[4]));
+                if (parts[0].equals(name)) {
+                    user = new User(parts[0], parts[1], parts[2], Float.parseFloat(parts[3]));
                     return true;
                 }
+                line = in.readLine();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

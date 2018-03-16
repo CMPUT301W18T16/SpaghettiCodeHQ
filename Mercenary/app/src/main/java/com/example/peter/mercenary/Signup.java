@@ -49,9 +49,9 @@ public class Signup extends AppCompatActivity {
     //based on the code from the lab
     public void saveUser(User user) {
         try {
-            FileOutputStream fos = openFileOutput("users.txt", Context.MODE_APPEND);
-            fos.write(new String(user.getUsername() + " | " + user.getEmail() + " | " +
-                    user.getPhoneNumber() + " | " + Float.toString(user.getRating()) + " | ").getBytes());
+            FileOutputStream fos = openFileOutput("users.sav", Context.MODE_APPEND);
+            fos.write((user.getUsername() + "|" + user.getEmail() + "|" +
+                    user.getPhoneNumber() + "|" + Float.toString(user.getRating()) + "\n").getBytes());
             fos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
