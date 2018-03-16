@@ -11,9 +11,13 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import io.searchbox.core.Delete;
+import io.searchbox.core.DeleteByQuery;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -27,8 +31,10 @@ public class ElasticFactory {
         @Override
         protected Void doInBackground(Task...tasks){
             verifySettings();
+            String uniqueID = UUID.randomUUID().toString();
+
             for(Task task : tasks){
-                Index index = new Index.Builder(task).index("testing").type("task").build();
+                Index index = new Index.Builder(task).index("testing").type("task").id(uniqueID).build();
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
@@ -47,42 +53,64 @@ public class ElasticFactory {
             return null;
         }
     }
-public static class getListOfTask extends AsyncTask<String, Void, ArrayList<Task>>{
+
+    public static class getListOfTask extends AsyncTask<String, Void, ArrayList<Task>>{
+            @Override
+        protected ArrayList<Task> doInBackground(String...search_parameters){
+                verifySettings();
+
+                ArrayList<Task> taskList = new ArrayList<Task>();
+
+                Search search = new Search.Builder(search_parameters[0])
+                        .addIndex("testing")
+                        .addType("task")
+                        .build();
+                try{
+                    SearchResult result = client.execute(search);
+                    if(result.isSucceeded())
+                    {
+                        List<Task> foundTasks =result.getSourceAsObjectList(Task.class);
+                        taskList.addAll(foundTasks);
+                    }
+                    else
+                    {
+                        Log.i("Error","The search query failed");
+                    }
+                }
+                catch (Exception e){
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+
+                }
+              return taskList;
+
+            }
+    }
+
+    public static class DeletingTask extends AsyncTask<String, Void, Task>{
         @Override
-    protected ArrayList<Task> doInBackground(String... search_parameters){
+        protected Task doInBackground(String...search_parameters){
             verifySettings();
 
-            ArrayList<Task> taskList = new ArrayList<Task>();
+            try {
+                client.execute(new Delete.Builder(search_parameters[0])
+                        .index("testing")
+                        .type("task")
+                        .build());
 
-            Search search = new Search.Builder(search_parameters[0])
-                    .addIndex("testing")
-                    .addType("task")
-                    .build();
-            try{
-                SearchResult result = client.execute(search);
-                if(result.isSucceeded())
-                {
-                    List<Task> foundTasks =result.getSourceAsObjectList(Task.class);
-                    taskList.addAll(foundTasks);
-                }
-                else
-                {
-                    Log.i("Error","The search query failed");
-                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            catch (Exception e){
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
 
-            }
-          return taskList;
-
+            return null;
         }
-}
+
+
+    }
 
 
 
 
-    public static void verifySettings() {
+        public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
             DroidClientConfig config = builder.build();
