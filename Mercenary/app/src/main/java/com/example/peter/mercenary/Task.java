@@ -1,9 +1,7 @@
 package com.example.peter.mercenary;
 
-import java.util.List;
-
 import io.searchbox.annotations.JestId;
-
+import android.media.Image;
 /**
  * Created by peter on 2018-02-22.
  */
