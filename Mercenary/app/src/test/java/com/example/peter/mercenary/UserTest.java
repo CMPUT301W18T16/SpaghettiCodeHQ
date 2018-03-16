@@ -22,13 +22,16 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         assertTrue(UserList.contains(newUser));
     }
 
+
+/*
+    password no longer needed
     @Test
     public void setPassword() throws Exception {
         User newUser = new User("HelloWorld");
         newUser.setPassword("hunter2");
         assertTrue(newUser.getPassword().equals("hunter2"));
     }
-
+*/
     @Test
     public void setEmail() throws Exception {
         User newUser = new User("HelloWorld");
