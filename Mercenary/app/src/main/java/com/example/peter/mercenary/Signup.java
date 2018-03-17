@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,22 +20,31 @@ public class Signup extends AppCompatActivity {
     EditText email;
     EditText phone;
 
+    TextView errorText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
         signup = (Button) findViewById(R.id.signupBtn);
+        errorText = (TextView) findViewById(R.id.error);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 username = (EditText) findViewById(R.id.usernameText);
                 email = (EditText) findViewById(R.id.emailText);
                 phone = (EditText) findViewById(R.id.phoneText);
-                User newUser = new User(username.getText().toString(), email.getText().toString(),
-                        phone.getText().toString(), 0);
-                saveUser(newUser);
-                finish();
+                try {
+                    User newUser = new User(username.getText().toString(), email.getText().toString(),
+                            phone.getText().toString(), 0);
+                    saveUser(newUser);
+                    finish();
+                } catch (UsernameTooShortException e) {
+                    errorText.setText("Username must be at least 8 characters");
+                } catch (InvalidEmailException e) {
+                    errorText.setText("Email is invalid");
+                }
             }
         });
         cancel = (Button) findViewById(R.id.cancelBtn);

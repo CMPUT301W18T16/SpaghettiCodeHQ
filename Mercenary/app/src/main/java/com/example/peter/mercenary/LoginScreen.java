@@ -49,6 +49,8 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Signup.class);
                 startActivity(intent);
+                username.setText("");
+                errorText.setText("");
             }
         });
     }
@@ -61,7 +63,13 @@ public class LoginScreen extends AppCompatActivity {
             while (line != null) {
                 String[] parts = line.split("\\|");
                 if (parts[0].equals(name)) {
-                    user = new User(parts[0], parts[1], parts[2], Float.parseFloat(parts[3]));
+                    try {
+                        user = new User(parts[0], parts[1], parts[2], Float.parseFloat(parts[3]));
+                    } catch (UsernameTooShortException e) {
+                        e.printStackTrace();
+                    } catch (InvalidEmailException e) {
+                        e.printStackTrace();
+                    }
                     return true;
                 }
                 line = in.readLine();

@@ -1,6 +1,8 @@
 package com.example.peter.mercenary;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by peter on 2018-02-22.
@@ -14,7 +16,17 @@ public class User {
     private Tasklist biddedTask;
     private Tasklist tasks;
 
-    public User(String username, String email, String phoneNumber, float rating){
+    //Email format check from https://stackoverflow.com/questions/42266148/email-validation-regex-java
+    public User(String username, String email, String phoneNumber, float rating) throws UsernameTooShortException, InvalidEmailException {
+        if (username.length() < 8) {
+            throw new UsernameTooShortException();
+        }
+        String regex = "^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{1,6}))?$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            throw new InvalidEmailException();
+        }
         this.username=username;
         this.email=email;
         this.phoneNumber = phoneNumber;
@@ -29,7 +41,7 @@ public class User {
 
     //Username needs to be unique
     //Username needs to be at least 8 characters (max length would be good too)
-    public void setUsername(String name) {
+    public void setUsername(String name) throws UsernameTooShortException {
         this.username = name;
     }
 
@@ -38,7 +50,7 @@ public class User {
     }
 
     //Make sure email is in the right format
-    public void setEmail(String mail) {
+    public void setEmail(String mail) throws InvalidEmailException {
         this.email = mail;
     }
 
