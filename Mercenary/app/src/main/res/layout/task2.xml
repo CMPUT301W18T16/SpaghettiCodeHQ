@@ -8,12 +8,12 @@
         android:id="@+id/ListTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Header for the list of Tasks" />
+        android:text="@+string/Header for the list of Tasks" />
 
     <ListView
         android:id="@+id/TaskList"
         android:layout_width="fill_parent"
-        android:layout_height="263dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical" >
 
@@ -23,24 +23,24 @@
         android:id="@+id/hello"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="hello" />
+        android:text="@+string/hello" />
 
-     <!-- <EditText
+    <EditText
         android:id="@+id/body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="horizontal" /> -->
+        android:scrollbars="horizontal" />
 
     <Button
         android:id="@+id/clear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Clear" />
+        android:text="@+string/Clear" />
 
     <Button
         android:id="@+id/add"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Add" />
+        android:text="@+string/Add" />
 
 </LinearLayout>
