@@ -37,7 +37,7 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View view) {
                 String usernameText = username.getText().toString();
                 if (isValid(usernameText)) {
-                    errorText.setText("Valid username");
+                    finish();
                 } else {
                     errorText.setText("Invalid username");
                 }
