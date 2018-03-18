@@ -12,6 +12,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Allows user to create an account to use the app
+ *
+ * @author Melissa Buljubasic
+ * @Version 1.0
+ * @see LoginScreen
+ */
 public class Signup extends AppCompatActivity {
     Button cancel;
     Button signup;
@@ -40,8 +47,8 @@ public class Signup extends AppCompatActivity {
                             phone.getText().toString(), 0);
                     saveUser(newUser);
                     finish();
-                } catch (UsernameTooShortException e) {
-                    errorText.setText("Username must be at least 8 characters");
+                } catch (UsernameTooLongException e) {
+                    errorText.setText("Username must be less then 8 characters");
                 } catch (InvalidEmailException e) {
                     errorText.setText("Email is invalid");
                 }
@@ -56,6 +63,11 @@ public class Signup extends AppCompatActivity {
         });
     }
 
+    /**
+     * Saves the newly created user account
+     *
+     * @param user The new user created by the user
+     */
     //based on the code from the lab
     public void saveUser(User user) {
         try {

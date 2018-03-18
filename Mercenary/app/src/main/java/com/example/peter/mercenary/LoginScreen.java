@@ -15,6 +15,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Login screen to log into the app with a user account
+ *
+ * @author Melissa Buljubasic
+ * @Version 1.0
+ */
 public class LoginScreen extends AppCompatActivity {
     EditText username;
     Button login;
@@ -55,6 +61,11 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
+    /**
+     * Checks if the username entered by the user is valid
+     * @param name Username entered by the user
+     * @return True is the username is valid, otherwise returns false
+     */
     private boolean isValid(String name) {
         try {
             FileInputStream fis = openFileInput("users.sav");
@@ -65,7 +76,7 @@ public class LoginScreen extends AppCompatActivity {
                 if (parts[0].equals(name)) {
                     try {
                         user = new User(parts[0], parts[1], parts[2], Float.parseFloat(parts[3]));
-                    } catch (UsernameTooShortException e) {
+                    } catch (UsernameTooLongException e) {
                         e.printStackTrace();
                     } catch (InvalidEmailException e) {
                         e.printStackTrace();
