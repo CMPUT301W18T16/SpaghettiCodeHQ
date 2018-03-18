@@ -28,6 +28,8 @@ public class LoginScreen extends AppCompatActivity {
     TextView errorText;
     User user;
 
+    //Code for returning user is from here:
+    //https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +45,9 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View view) {
                 String usernameText = username.getText().toString();
                 if (isValid(usernameText)) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("USER", user);
+                    setResult(0, returnIntent);
                     finish();
                 } else {
                     errorText.setText("Invalid username");

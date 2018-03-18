@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -28,17 +29,15 @@ public class MainActivity extends AppCompatActivity
     private ListView oldTaskList;
     private ArrayList<Task> taskList = new ArrayList<Task>();
     private ArrayAdapter<Task> adapter;
-
+    private User user; //currently logged in user
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
 
-        //Intent intent = new Intent(this, LoginScreen.class);
-        //startActivity(intent);
-
-
+        Intent intent = new Intent(this, LoginScreen.class);
+        startActivityForResult(intent, 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,8 +75,17 @@ public class MainActivity extends AppCompatActivity
         oldTaskList.setAdapter(adapter);
     }
 
-
-
+    /**
+     * Get the user data for the logged in user
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data user
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        user = data.getExtras().getParcelable("USER");
+    }
 
     @Override
     public void onBackPressed() {
