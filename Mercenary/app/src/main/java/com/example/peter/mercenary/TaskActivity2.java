@@ -1,7 +1,11 @@
 package com.example.peter.mercenary;
 
 /**
- * Created by jmleung & Shardul S. on 3/15/18.
+ * @date Created by jmleung & Shardul S. on 3/15/18.
+ * @author jmleung and Shardul S.
+ * @version version 1.0
+ * @see Task, TaskList
+ *
  */
 
 import android.os.Bundle;

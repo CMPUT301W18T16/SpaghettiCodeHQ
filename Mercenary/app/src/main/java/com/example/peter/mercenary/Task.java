@@ -4,7 +4,11 @@ import io.searchbox.annotations.JestId;
 import android.media.Image;
 /**
  * Created by peter on 2018-02-22.
- * Editted by Jason L. and Shardul S. on 2018-05-15
+ * Edited by Jason L. and Shardul S. on 2018-05-15
+ * @date 2018-02-22
+ * @author Peter G, Jason L, Shardul S.
+ * @see Tasklist
+ * @version 1.0
  */
 
 public class Task {
@@ -24,6 +28,11 @@ public class Task {
 
     }
 
+    /**
+     *
+      * @param title
+     * @throws TitleTooLongException
+     */
     public void setTitle(String title) throws TitleTooLongException{
 
         if (title.length() > 30) {
@@ -32,6 +41,11 @@ public class Task {
         this.title = title;
     }
 
+    /**
+     *
+     * @param description
+     * @throws DescTooLongException
+     */
     public void setDescription(String description) throws DescTooLongException{
 
         if (description.length() > 300) {
@@ -40,21 +54,69 @@ public class Task {
         this.description = description;
 
     }
+
+    /**
+     *
+     * @param id
+     */
     public void setId(String id) {
         this.id = id;
     }
+
+    /**
+     *
+     * @param picture
+     */
     public void setPhoto(byte picture){
         this.picture=picture;
     }
+
+    /**
+     *
+     * @param geoLoc
+     */
     public void setGeo(float geoLoc){ this.geoLoc=geoLoc;}
+
+    /**
+     *
+     * @param status
+     */
     public void setStatus(String status){this.status=status;}
 
+    /**
+     *
+     * @return
+     */
     public String getTitle(){return this.title;}
+
+    /**
+     *
+     * @return
+     */
     public String getDescription(){return this.description;}
+
+    /**
+     *
+     * @return
+     */
     public String getId() {return this.id;}
+
+    /**
+     *
+     * @return
+     */
     public byte getPhoto(){return this.picture;}
+
+    /**
+     *
+     * @return
+     */
     public float getGeoLoc(){return this.geoLoc;}
-    //public void getStatus(String taskStatus){this.status = status;}
+
+    /**
+     *
+     * @return
+     */
     public String getStatus(){return this.status;}
 
 

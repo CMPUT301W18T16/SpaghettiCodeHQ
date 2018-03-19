@@ -65,7 +65,6 @@ public class Signup extends AppCompatActivity {
 
     /**
      * Saves the newly created user account
-     *
      * @param user The new user created by the user
      */
     //based on the code from the lab
