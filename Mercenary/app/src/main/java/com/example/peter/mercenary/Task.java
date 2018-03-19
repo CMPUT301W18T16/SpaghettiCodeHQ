@@ -21,10 +21,11 @@ public class Task {
     @JestId
     private String id;
 
-    public Task(String title, String description, String status) {
+    public Task(String title, String description, String status, String Id) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.id = Id;
 
     }
 
