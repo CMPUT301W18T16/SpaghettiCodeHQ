@@ -43,12 +43,12 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         oldTaskList = (ListView) findViewById(R.id.myTaskView);
-        Button addButton = (Button) findViewById(R.id.add);
+        Button addButton = (Button) findViewById(R.id.add1);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddTask.class);
+                Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
                 startActivity(intent);
                 String title = intent.getStringExtra("title");
                 String desc = intent.getStringExtra("description");
