@@ -30,8 +30,8 @@ public class Task {
 
     /**
      *
-      * @param title
-     * @throws TitleTooLongException
+     * @param title: title of the task
+     * @throws TitleTooLongException if the title is longer than 30 characters!
      */
     public void setTitle(String title) throws TitleTooLongException{
 
@@ -43,8 +43,9 @@ public class Task {
 
     /**
      *
-     * @param description
-     * @throws DescTooLongException
+     * @param description: description of the task
+     * @throws DescTooLongException if the description is longer than 300 characters!
+     * Setter
      */
     public void setDescription(String description) throws DescTooLongException{
 
@@ -57,7 +58,7 @@ public class Task {
 
     /**
      *
-     * @param id
+     * @param id: id of the task
      */
     public void setId(String id) {
         this.id = id;
@@ -65,7 +66,8 @@ public class Task {
 
     /**
      *
-     * @param picture
+     * @param picture: the photo the user wishes to assign to the task
+     * Setter
      */
     public void setPhoto(byte picture){
         this.picture=picture;
@@ -73,49 +75,60 @@ public class Task {
 
     /**
      *
-     * @param geoLoc
+     * @param geoLoc: the geolocation (most likely a pair of float coordinates) the user will assign to the task
+     * Setter
      */
     public void setGeo(float geoLoc){ this.geoLoc=geoLoc;}
 
     /**
      *
-     * @param status
+     * @param status: the status the user wants to assign to the task (i.e. open, closed, pending, etc).
+     * Setter
      */
     public void setStatus(String status){this.status=status;}
 
     /**
      *
-     * @return
+     * @return title: title of the task.
+     * Setter
      */
     public String getTitle(){return this.title;}
 
     /**
-     *
-     * @return
+     * @return description: return the description of the task.
+     * Getter.
+     * @see  public Task(String title, String description, String status) (Task constructor)
      */
     public String getDescription(){return this.description;}
 
     /**
      *
-     * @return
+     * @return id: return the id of the task.
+     * Getter.
+     * @see public void SetId(...)
      */
     public String getId() {return this.id;}
 
     /**
-     *
-     * @return
+     * @return picture: return the photo assigned to the task.
+     * Getter.
+     * @see public void setPhoto(...)
      */
     public byte getPhoto(){return this.picture;}
 
     /**
      *
-     * @return
+     * @return geoLoc: return the geoLoc coordinates of the task.
+     * Getter.
+     * @see public void setGeo(...)
      */
     public float getGeoLoc(){return this.geoLoc;}
 
     /**
      *
-     * @return
+     * @return status: return the status of the task
+     * Getter.
+     * @see public Task(String title, String description, String status) (Task constructor)
      */
     public String getStatus(){return this.status;}
 
