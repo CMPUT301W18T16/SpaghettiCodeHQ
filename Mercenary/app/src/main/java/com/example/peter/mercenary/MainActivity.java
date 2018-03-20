@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -73,6 +74,29 @@ public class MainActivity extends AppCompatActivity
         adapter = new ArrayAdapter<Task>(this,
                 R.layout.list_item, taskList);
         oldTaskList.setAdapter(adapter);
+
+
+        // listen to task clicks
+        oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Task task = (Task) oldTaskList.getAdapter().getItem(position);
+
+                Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
+                intent.putExtra("task_title",task.getTitle());
+                intent.putExtra("task_desc",task.getDescription());
+                intent.putExtra("task_status",task.getStatus());
+                intent.putExtra("task_id",task.getId());
+                intent.putExtra("task_geo_loc",task.getGeoLoc());
+                intent.putExtra("task_img",task.getPhoto());
+
+                startActivityForResult(intent,0);
+
+
+            }
+        });
+
+
     }
 
     /**
