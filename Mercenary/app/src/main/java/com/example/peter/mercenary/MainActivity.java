@@ -16,9 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -40,6 +42,28 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         oldTaskList = (ListView) findViewById(R.id.myTaskView);
+        Button addButton = (Button) findViewById(R.id.add1);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
+                startActivity(intent);
+            }
+            /*public void onActivityResult(int requestCode, int resultCode, Intent data){
+                String title = data.getStringExtra("title");
+                String desc = data.getStringExtra("description");
+                String status = data.getStringExtra("status");
+                String id = data.getStringExtra("id");
+                Task newTask = new Task(title, desc, status, id);
+                taskList.add(newTask);
+
+                Toast toast = Toast.makeText(getApplicationContext(), title+
+                        desc+status+id, Toast.LENGTH_LONG);
+                toast.show();
+                adapter.notifyDataSetChanged();
+            }*/
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
