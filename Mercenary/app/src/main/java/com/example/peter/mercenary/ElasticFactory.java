@@ -31,10 +31,10 @@ public class ElasticFactory {
         @Override
         protected Void doInBackground(Task...tasks){
             verifySettings();
-            String uniqueID = UUID.randomUUID().toString();
+            //String uniqueID = UUID.randomUUID().toString();
 
             for(Task task : tasks){
-                Index index = new Index.Builder(task).index("testing").type("task").id(uniqueID).build();
+                Index index = new Index.Builder(task).index("testing").type("task").build();
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
@@ -53,6 +53,66 @@ public class ElasticFactory {
             return null;
         }
     }
+
+    public static class AddingUser extends AsyncTask<User, Void, Void>{
+        @Override
+        protected Void doInBackground(User...users){
+            verifySettings();
+            //String uniqueID = UUID.randomUUID().toString();
+
+            for(User user : users){
+                Index index = new Index.Builder(user).index("testing").type("User").build();
+                try{
+                    DocumentResult result = client.execute(index);
+                    if(result.isSucceeded())
+                    {
+                        user.setId(result.getId());
+                    }
+                    else{
+                        Log.i("Error","Elasticsearch was not able to add the user");
+                    }
+                }
+                catch(Exception e){
+                    Log.i("Error", "The application failed to build and send the user");
+
+                }
+            }
+            return null;
+        }
+    }
+
+    public static class checkUserExist extends AsyncTask<String, Void, Void>{
+        @Override
+        protected Void doInBackground(String...search_parameters){
+            verifySettings();
+
+            Search search = new Search.Builder(search_parameters[0])
+                    .addIndex("testing")
+                    .addType("User")
+                    .build();
+            try{
+                SearchResult result = client.execute(search);
+                if(result.isSucceeded())
+                {
+                    //Everything is peachy, nothing needs to be done.
+                }
+                else
+                {
+                    Log.i("Error","The search query failed");
+                }
+            }
+            catch (Exception e){
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+
+            }
+            return null;
+
+        }
+    }
+
+
+
+
 
     public static class getListOfTask extends AsyncTask<String, Void, ArrayList<Task>>{
             @Override

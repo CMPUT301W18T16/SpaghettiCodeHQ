@@ -8,6 +8,7 @@ package com.example.peter.mercenary;
  *
  */
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,11 +45,11 @@ public class TaskActivity2 extends AppCompatActivity implements NavigationView.O
         EditText bodyText = (EditText) findViewById(R.id.body);
         Button clearButton = (Button) findViewById(R.id.clear);
         Button addButton = (Button) findViewById(R.id.add);
-        ListView taskListView = (ListView) findViewById(R.id.TaskList);
+        final ListView taskListView = (ListView) findViewById(R.id.TaskList);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        setSupportActionBar(toolbar);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -57,6 +60,23 @@ public class TaskActivity2 extends AppCompatActivity implements NavigationView.O
 
         NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(this);
+
+        // listen to item clicks
+        adapter = new ArrayAdapter<Task>(TaskActivity2.this, android.R.layout.activity_list_item,taskList);
+        taskListView.setAdapter(adapter);
+
+        taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Task task = (Task) taskListView.getAdapter().getItem(position);
+
+                Intent intent = new Intent(TaskActivity2.this, SingleTaskActivity.class);
+                startActivityForResult(intent,0);
+
+            }
+        });
+        taskListView.setAdapter(adapter);
+
     }
 
     @Override

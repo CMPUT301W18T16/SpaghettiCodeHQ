@@ -7,8 +7,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by peter on 2018-02-22.
+ * @date 2018-02-22
+ * @author Peter Gao
+ * @version 1.0
  */
 public class User implements Parcelable{
     private String username;
@@ -18,6 +23,20 @@ public class User implements Parcelable{
     private Tasklist biddedTask;
     private Tasklist tasks;
     private int mData;
+    @JestId
+    private String id;
+
+
+    /**
+     *
+     * @param username: user's username
+     * @param email: user's email address
+     * @param phoneNumber: user's phone #
+     * @param rating: the rating of the user in terms of bidding/completing task/etc
+     * @throws UsernameTooLongException: if username is too long (greater than 8 characters)
+     * @throws InvalidEmailException: if email address is not valid and does not fit email address syntax
+     * Constructor
+     */
 
     //Email format check from https://stackoverflow.com/questions/42266148/email-validation-regex-java
     public User(String username, String email, String phoneNumber, float rating) throws UsernameTooLongException, InvalidEmailException {
@@ -36,7 +55,19 @@ public class User implements Parcelable{
         this.rating= rating;
     }
 
+    /**
+     *
+     * @param Username: user's username
+     * Constructor
+     */
+
     public User(String Username) {}
+
+    /**
+     *
+     * @return: the username of the user
+     * Getter function.
+     */
 
     public String getUsername(){
         return this.username;
@@ -48,50 +79,123 @@ public class User implements Parcelable{
         this.username = name;
     }
 
+    /**
+     *
+     * @return email address of the user
+     * Getter function
+     */
+
     public String getEmail(){
         return this.email;
     }
+
+    /**
+     *
+     * @param mail: a valid email address
+     * @throws InvalidEmailException: if the email address is invalid
+     * Setter
+     */
 
     //Make sure email is in the right format
     public void setEmail(String mail) throws InvalidEmailException {
         this.email = mail;
     }
 
+    /**
+     *
+     * @param number: phone # of a user
+     *  Setter
+     */
+
     //make sure format is in the right format
     public void setPhoneNumber(String number) { this.phoneNumber = number; }
+
+    /**
+     *
+     * @return phone number of user.
+     * @see  public void setPhoneNumber(String number)
+     * Getter
+     */
     
     public String getPhoneNumber() { return this.phoneNumber; }
+
+    /**
+     *
+     * @param id: id of the user
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
+    /**
+     * @return rating of user.
+     * @see  public void setRating(float rate)
+     * Getter
+     */
 
     public float getRating(){
         return this.rating;
     }
+
+    /**
+     *
+     * @param rate: rating of the user
+     * Setter
+     */
 
     //make sure rating is in the corrrect range
     public void setRating(float rate) {
         this.rating = rate;
     }
 
+    /**
+     *
+     * @param task: a task to be bid on by the user
+     */
+
     public void bidTask(Task task) {
         this.biddedTask.add(task);
     }
+
+    /**
+     *
+     * @return the entire Tasklist of a user
+     */
 
     public Tasklist getTask() {
         return this.tasks;
     }
 
+    /**
+     *
+     * @param task: a task to be added to the TaskList of a user
+     */
+
     public void addTask(Task task) {
         this.tasks.add(task);
     }
+
+    /**
+     *
+     * @return: 0, to return true
+     */
 
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     *
+     * @param out: Parcel type object (OUT)
+     * @param flags: any flags
+     */
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(mData);
     }
+
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
         public User createFromParcel(Parcel in) {
@@ -103,6 +207,10 @@ public class User implements Parcelable{
         }
     };
 
+    /**
+     *
+     * @param in: parcel type object (IN)
+     */
     private User(Parcel in) {
         mData = in.readInt();
     }

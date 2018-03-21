@@ -7,4 +7,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_task">AddTaskActivity</string>
+    <string name="taskTitle" />
+    <string name="task_title" />
+    <string name="null_img">No image found</string>
 </resources>

@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,9 +38,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
-
-        Intent intent = new Intent(this, LoginScreen.class);
-        startActivityForResult(intent, 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,6 +81,10 @@ public class MainActivity extends AppCompatActivity
         // TODO Auto-generated method stub
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
+
+        user = getIntent().getExtras().getParcelable("USER");
+        String query = "{\n" + " \"query\": { \"term\": {\"message\":\"" + "text" + "\"} }\n" + "}";
+
         ElasticFactory.getListOfTask getTaskList
                 = new ElasticFactory.getListOfTask();
         getTaskList.execute("");
@@ -97,19 +99,46 @@ public class MainActivity extends AppCompatActivity
         adapter = new ArrayAdapter<Task>(this,
                 R.layout.list_item, taskList);
         oldTaskList.setAdapter(adapter);
+
+
+        // listen to task clicks
+        oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Task task = (Task) oldTaskList.getAdapter().getItem(position);
+
+                Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
+                intent.putExtra("task_title",task.getTitle());
+                intent.putExtra("task_desc",task.getDescription());
+                intent.putExtra("task_status",task.getStatus());
+                intent.putExtra("task_id",task.getId());
+                intent.putExtra("task_geo_loc",task.getGeoLoc());
+                intent.putExtra("task_img",task.getPhoto());
+
+                startActivityForResult(intent,0);
+
+            }
+        });
+
     }
 
-    /**
+    public void onResume(){
+
+    }
+
+
+ /*   /**
      * Get the user data for the logged in user
      *
      * @param requestCode
      * @param resultCode
      * @param data user
      */
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         user = data.getExtras().getParcelable("USER");
     }
+    */
 
     @Override
     public void onBackPressed() {
