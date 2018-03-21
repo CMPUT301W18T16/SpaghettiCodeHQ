@@ -11,25 +11,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class AddTaskActivity extends AppCompatActivity {
-    Integer numId = 0;
     EditText title;
     EditText description;
     EditText status;
     TextView error1;
     Button done;
-    Intent data = new Intent();
+    Task newTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+
 
         done = (Button) findViewById(R.id.done1);
 
@@ -41,18 +43,19 @@ public class AddTaskActivity extends AppCompatActivity {
                 status = (EditText) findViewById(R.id.status);
                 error1 = (TextView) findViewById(R.id.error1);
 
-                numId += 1;
-                if (title.getText().toString().length() > 30){
-                    error1.setText("Task title must be less than 30 characters in length.");
-                }
-                if (description.getText().toString().length() > 300){
-                    error1.setText("Task description must be less than 300 characters in length.");
-                }
-                data.putExtra("title", title.getText().toString());
-                data.putExtra("description", description.getText().toString());
-                data.putExtra("status", status.getText().toString());
-                data.putExtra("id", Integer.toString(numId));
-                setResult(RESULT_OK, data);
+                newTask = new Task(title.getText().toString(),
+                        description.getText().toString(),
+                        status.getText().toString());
+
+                //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
+                //Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getApplicationContext(), "New Task Added",
+                        Toast.LENGTH_SHORT);
+                toast.show();
+
+                ElasticFactory.AddingTasks addTask = new ElasticFactory.AddingTasks();
+                addTask.execute(newTask);
+
                 finish();
             }
         });

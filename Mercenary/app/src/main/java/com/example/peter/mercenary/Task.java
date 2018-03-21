@@ -2,6 +2,9 @@ package com.example.peter.mercenary;
 
 import io.searchbox.annotations.JestId;
 import android.media.Image;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by peter on 2018-02-22.
  * Edited by Jason L. and Shardul S. on 2018-05-15
@@ -11,21 +14,23 @@ import android.media.Image;
  * @version 1.0
  */
 
-public class Task {
+public class Task implements Parcelable {
     private String title;
     private String description;
     private BidList listBids;
     private float geoLoc;
     private byte picture;
     private String status;
+    private int mData;
+
+
     @JestId
     private String id;
 
-    public Task(String title, String description, String status, String Id) {
+    public Task(String title, String description, String status) {
         this.title = title;
         this.description = description;
         this.status = status;
-        this.id = Id;
 
     }
 
@@ -132,6 +137,30 @@ public class Task {
      * @see public Task(String title, String description, String status) (Task constructor)
      */
     public String getStatus(){return this.status;}
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(mData);
+    }
+
+    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+        public Task createFromParcel(Parcel in) { return new Task(in);
+        }
+
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
+
+    private Task(Parcel in) {
+        mData = in.readInt();
+    }
+
 
 
     //public BidList getBids(){return this.listBids;}
