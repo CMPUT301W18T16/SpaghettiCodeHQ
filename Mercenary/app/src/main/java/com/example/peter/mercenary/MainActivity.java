@@ -37,9 +37,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
 
-        Intent intent = new Intent(this, LoginScreen.class);
-        startActivityForResult(intent, 0);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         oldTaskList = (ListView) findViewById(R.id.myTaskView);
@@ -60,6 +57,10 @@ public class MainActivity extends AppCompatActivity
         // TODO Auto-generated method stub
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
+
+        user = getIntent().getExtras().getParcelable("USER");
+        String query = "{\n" + " \"query\": { \"term\": {\"message\":\"" + "text" + "\"} }\n" + "}";
+
         ElasticFactory.getListOfTask getTaskList
                 = new ElasticFactory.getListOfTask();
         getTaskList.execute("");
@@ -92,24 +93,28 @@ public class MainActivity extends AppCompatActivity
 
                 startActivityForResult(intent,0);
 
-
             }
         });
 
+    }
+
+    public void onResume(){
 
     }
 
-    /**
+
+ /*   /**
      * Get the user data for the logged in user
      *
      * @param requestCode
      * @param resultCode
      * @param data user
      */
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         user = data.getExtras().getParcelable("USER");
     }
+    */
 
     @Override
     public void onBackPressed() {

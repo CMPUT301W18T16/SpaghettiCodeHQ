@@ -9,6 +9,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 
@@ -24,6 +25,9 @@ public class SingleTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_task_activity);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         TextView taskTitle = findViewById(R.id.task_title);
         TextView taskDesc = findViewById(R.id.task_desc);
         TextView taskStatus = findViewById(R.id.task_status);
@@ -37,14 +41,13 @@ public class SingleTaskActivity extends AppCompatActivity {
             taskStatus.setText(bundle.getString("task_status"));
             if (bundle.getString("task_img") == null){
                 imgByte.setText("null_img");
-
-
             }
-
         }
-
-
     }
+
+
+
+
 
     @Override
     public void onBackPressed() {

@@ -45,10 +45,10 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View view) {
                 String usernameText = username.getText().toString();
                 if (isValid(usernameText)) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("USER", user);
-                    setResult(0, returnIntent);
-                    finish();
+                    Intent intent = new Intent(LoginScreen.this, MainActivity.class);
+                    intent.putExtra("USER", user);
+                    startActivity(intent);
+
                 } else {
                     errorText.setText("Invalid username");
                 }

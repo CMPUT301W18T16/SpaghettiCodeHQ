@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by peter on 2018-02-22.
  * @date 2018-02-22
@@ -21,6 +23,9 @@ public class User implements Parcelable{
     private Tasklist biddedTask;
     private Tasklist tasks;
     private int mData;
+    @JestId
+    private String id;
+
 
     /**
      *
@@ -113,6 +118,15 @@ public class User implements Parcelable{
      */
     
     public String getPhoneNumber() { return this.phoneNumber; }
+
+    /**
+     *
+     * @param id: id of the user
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
 
     /**
      * @return rating of user.
