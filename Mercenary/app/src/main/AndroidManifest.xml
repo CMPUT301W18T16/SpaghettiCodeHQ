@@ -29,8 +29,10 @@
         <activity
             android:name=".AddTaskActivity"
             android:label="@string/title_activity_add_task"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".SingleTaskActivity" />
+        <activity android:name=".UserProfile" />
+        <activity android:name=".EditUserProfile"></activity>
     </application>
 
 </manifest>
