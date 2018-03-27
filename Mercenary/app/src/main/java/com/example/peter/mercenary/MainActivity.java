@@ -39,6 +39,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
 
+        /* try {
+            User user = new User("TestUser", "example@gmail.com", "1234567890", 3.5f);
+            Intent intent = new Intent(getApplicationContext(), UserProfile.class);
+            intent.putExtra("clicked_user", user);
+            startActivity(intent);
+        } catch (UsernameTooLongException e) {
+            //pass
+        } catch (InvalidEmailException e) {
+            //pass
+        } */
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         oldTaskList = (ListView) findViewById(R.id.myTaskView);
@@ -123,6 +134,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onResume(){
+        super.onResume();
 
     }
 
