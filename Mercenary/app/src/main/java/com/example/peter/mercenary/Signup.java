@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Allows user to create an account to use the app
@@ -22,6 +23,7 @@ import java.io.IOException;
 public class Signup extends AppCompatActivity {
     Button cancel;
     Button signup;
+    boolean alreadyExist=false;
 
     EditText username;
     EditText email;
@@ -42,14 +44,30 @@ public class Signup extends AppCompatActivity {
                 username = (EditText) findViewById(R.id.usernameText);
                 email = (EditText) findViewById(R.id.emailText);
                 phone = (EditText) findViewById(R.id.phoneText);
-                try {
-                    User newUser = new User(username.getText().toString(), email.getText().toString(),
-                            phone.getText().toString(), 0);
+                ElasticFactory.checkUserExist userExists = new ElasticFactory.checkUserExist();
+                userExists.execute(username.getText().toString());
 
-                    ElasticFactory.AddingUser addUser = new ElasticFactory.AddingUser();
-                    addUser.execute(newUser);
-                    //saveUser(newUser);
-                    finish();
+                try {
+                    alreadyExist = userExists.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    if(alreadyExist==true){
+                        errorText.setText("This user already exist, please pick a new name.");
+                    }
+                    else {
+                        User newUser = new User(username.getText().toString(), email.getText().toString(),
+                                phone.getText().toString(), 0);
+
+                        ElasticFactory.AddingUser addUser = new ElasticFactory.AddingUser();
+                        addUser.execute(newUser);
+                        //saveUser(newUser);
+                        finish();
+                    }
                 } catch (UsernameTooLongException e) {
                     errorText.setText("Username must be less then 8 characters");
                 } catch (InvalidEmailException e) {
