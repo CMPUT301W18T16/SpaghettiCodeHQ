@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.peter.mercenary.UserProfile">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/usernameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="39dp"
+            android:layout_marginStart="39dp"
+            android:layout_marginTop="32dp"
+            android:text="Username"
+            android:textSize="24sp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView8"
+            android:layout_alignStart="@+id/textView8"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textView"
+            android:layout_alignEnd="@+id/usernameText"
+            android:layout_alignLeft="@+id/usernameText"
+            android:layout_alignRight="@+id/usernameText"
+            android:layout_alignStart="@+id/usernameText"
+            android:layout_below="@+id/usernameText"
+            android:layout_marginBottom="156dp"
+            android:layout_marginTop="24dp"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/profileImage"
+            android:layout_marginLeft="19dp"
+            android:layout_marginStart="19dp"
+            android:layout_toEndOf="@+id/profileImage"
+            android:layout_toRightOf="@+id/profileImage"
+            android:text="Email Address:" />
+
+        <TextView
+            android:id="@+id/emailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textview"
+            android:layout_alignStart="@+id/textview"
+            android:layout_below="@+id/textview"
+            android:text="placeholder@text.ca" />
+
+        <TextView
+            android:id="@+id/textview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/emailText"
+            android:layout_alignStart="@+id/emailText"
+            android:layout_below="@+id/textview"
+            android:layout_marginTop="35dp"
+            android:text="Phone Number:" />
+
+        <TextView
+            android:id="@+id/phoneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textview2"
+            android:layout_alignStart="@+id/textview2"
+            android:layout_below="@+id/textview2"
+            android:text="(111)-111-1111" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/profileImage"
+            android:layout_alignStart="@+id/profileImage"
+            android:layout_below="@+id/phoneText"
+            android:layout_marginTop="40dp"
+            android:text="Ratings and reviews:" />
+
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/profileImage"
+            android:layout_toEndOf="@+id/ratingBar"
+            android:layout_toRightOf="@+id/ratingBar"
+            android:text="Edit"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
