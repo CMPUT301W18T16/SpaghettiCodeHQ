@@ -24,10 +24,10 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        //curUser = getIntent().getParcelableExtra("user");
+        curUser = getIntent().getParcelableExtra("user");
         pUser = getIntent().getParcelableExtra("clicked_user");
 
-        /*if (curUser == pUser) {
+        if (curUser == pUser) {
             edit = (Button) findViewById(R.id.editBtn);
             edit.setVisibility(View.VISIBLE);
             edit.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +38,7 @@ public class UserProfile extends AppCompatActivity {
                     startActivityForResult(intent, 0);
                 }
             });
-        }*/
+        }
 
         usernameText = findViewById(R.id.usernameText);
         emailText = findViewById(R.id.emailText);

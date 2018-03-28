@@ -41,9 +41,9 @@ public class EditUserProfile extends AppCompatActivity {
                     user.setPhoneNumber(phone.getText().toString());
                     finish();
                 } catch (UsernameTooLongException e) {
-                    //print error
+                    //todo
                 } catch (InvalidEmailException e) {
-                    //print error
+                    //todo
                 }
             }
         });
