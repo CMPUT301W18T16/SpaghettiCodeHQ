@@ -3,6 +3,7 @@ package com.example.peter.mercenary;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Login screen to log into the app with a user account
@@ -44,14 +46,27 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String usernameText = username.getText().toString();
-                if (isValid(usernameText)) {
-                    Intent intent = new Intent(LoginScreen.this, MainActivity.class);
-                    intent.putExtra("USER", user);
-                    startActivity(intent);
+                ElasticFactory.checkUserExist checkUser = new ElasticFactory.checkUserExist();
+                String query = "{\n" + " \"query\": { \"match\": {\"username\":\"" + usernameText + "\"} }\n" + "}";
 
-                } else {
-                    errorText.setText("Invalid username");
+                try {
+                    if (checkUser.execute(query).get()) {
+
+                        Intent intent = new Intent(LoginScreen.this, MainActivity.class);
+                        intent.putExtra("USER", user);
+                        startActivity(intent);
+
+                    } else {
+                        errorText.setText("Invalid username");
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
+
+
             }
         });
 

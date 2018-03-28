@@ -45,13 +45,16 @@ public class Signup extends AppCompatActivity {
                 try {
                     User newUser = new User(username.getText().toString(), email.getText().toString(),
                             phone.getText().toString(), 0);
-                    saveUser(newUser);
+
+                    ElasticFactory.AddingUser addUser = new ElasticFactory.AddingUser();
+                    addUser.execute(newUser);
+                    //saveUser(newUser);
                     finish();
                 } catch (UsernameTooLongException e) {
                     errorText.setText("Username must be less then 8 characters");
                 } catch (InvalidEmailException e) {
                     errorText.setText("Email is invalid");
-                }
+                } //catch(UserAlreadyExistException e){}
             }
         });
         cancel = (Button) findViewById(R.id.cancelBtn);
@@ -70,10 +73,12 @@ public class Signup extends AppCompatActivity {
     //based on the code from the lab
     public void saveUser(User user) {
         try {
+
             FileOutputStream fos = openFileOutput("users.sav", Context.MODE_APPEND);
             fos.write((user.getUsername() + "|" + user.getEmail() + "|" +
                     user.getPhoneNumber() + "|" + Float.toString(user.getRating()) + "\n").getBytes());
             fos.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -25,6 +25,7 @@ import io.searchbox.core.SearchResult;
 
 
 public class ElasticFactory {
+    private static String elasticIndex = "cmput301w18t16";
     private static JestDroidClient client;
 
     public static class AddingTasks extends AsyncTask<Task, Void, Void>{
@@ -34,7 +35,7 @@ public class ElasticFactory {
             //String uniqueID = UUID.randomUUID().toString();
 
             for(Task task : tasks){
-                Index index = new Index.Builder(task).index("testing").type("task").build();
+                Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
@@ -61,7 +62,7 @@ public class ElasticFactory {
             //String uniqueID = UUID.randomUUID().toString();
 
             for(User user : users){
-                Index index = new Index.Builder(user).index("testing").type("User").build();
+                Index index = new Index.Builder(user).index(elasticIndex).type("User").build();
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
@@ -81,31 +82,33 @@ public class ElasticFactory {
         }
     }
 
-    public static class checkUserExist extends AsyncTask<String, Void, Void>{
+    public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
         @Override
-        protected Void doInBackground(String...search_parameters){
+        protected Boolean doInBackground(String...search_parameters){
             verifySettings();
 
-            Search search = new Search.Builder(search_parameters[0])
-                    .addIndex("testing")
+            Search search = new Search.Builder(""+search_parameters[0]+"")
+                    .addIndex(elasticIndex)
                     .addType("User")
                     .build();
             try{
                 SearchResult result = client.execute(search);
-                if(result.isSucceeded())
+                if(result.getTotal()==1)
                 {
-                    //Everything is peachy, nothing needs to be done.
+                    return true;
                 }
                 else
                 {
                     Log.i("Error","The search query failed");
+                    return false;
+
                 }
             }
             catch (Exception e){
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                return false;
 
             }
-            return null;
 
         }
     }
@@ -122,7 +125,7 @@ public class ElasticFactory {
                 ArrayList<Task> taskList = new ArrayList<Task>();
 
                 Search search = new Search.Builder(search_parameters[0])
-                        .addIndex("testing")
+                        .addIndex(elasticIndex)
                         .addType("task")
                         .build();
                 try{
@@ -131,6 +134,7 @@ public class ElasticFactory {
                     {
                         List<Task> foundTasks =result.getSourceAsObjectList(Task.class);
                         taskList.addAll(foundTasks);
+                        //Log.i("print",taskList.toString());
                     }
                     else
                     {
@@ -153,7 +157,7 @@ public class ElasticFactory {
 
             try {
                 client.execute(new Delete.Builder(search_parameters[0])
-                        .index("testing")
+                        .index(elasticIndex)
                         .type("task")
                         .build());
 
