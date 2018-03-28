@@ -122,10 +122,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void onResume(){
+    /*public void onResume(){
 
     }
-
+*/
 
  /*   /**
      * Get the user data for the logged in user

@@ -15,6 +15,7 @@ public class Bid {
     private float value;
     @JestId
     private String id;
+    private String UserId;
 
     /**
      *
@@ -33,6 +34,7 @@ public class Bid {
     public void setId(String id) {
         this.id = id;
     }
+
 
     /**
      *
