@@ -1,5 +1,6 @@
 package com.example.peter.mercenary;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,8 @@ public class EditUserProfile extends AppCompatActivity {
 
     Button finish;
     Button cancel;
+
+    TextView error;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +29,8 @@ public class EditUserProfile extends AppCompatActivity {
         username = (EditText) findViewById(R.id.usernameText);
         email = (EditText) findViewById(R.id.emailText);
         phone = (EditText) findViewById(R.id.phoneText);
+
+        error = (TextView) findViewById(R.id.error);
 
         username.setText(user.getUsername());
         email.setText(user.getEmail());
@@ -39,11 +44,14 @@ public class EditUserProfile extends AppCompatActivity {
                     user.setUsername(username.getText().toString());
                     user.setEmail(email.getText().toString());
                     user.setPhoneNumber(phone.getText().toString());
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("user", user);
+                    setResult(1, resultIntent);
                     finish();
                 } catch (UsernameTooLongException e) {
-                    //todo
+                    error.setText("Username must be less then 8 characters");
                 } catch (InvalidEmailException e) {
-                    //todo
+                    error.setText("Email must be in a valid format");
                 }
             }
         });
@@ -52,6 +60,7 @@ public class EditUserProfile extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(0, null);
                 finish();
             }
         });

@@ -108,7 +108,9 @@ public class User implements Parcelable{
      */
 
     //make sure format is in the right format
-    public void setPhoneNumber(String number) { this.phoneNumber = number; }
+    public void setPhoneNumber(String number) {
+        this.phoneNumber = number;
+    }
 
     /**
      *
@@ -117,7 +119,9 @@ public class User implements Parcelable{
      * Getter
      */
     
-    public String getPhoneNumber() { return this.phoneNumber; }
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
 
     /**
      *
@@ -193,7 +197,10 @@ public class User implements Parcelable{
      */
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(mData);
+        out.writeString(this.username);
+        out.writeString(this.email);
+        out.writeString(this.phoneNumber);
+        out.writeFloat(this.rating);
     }
 
 
@@ -212,6 +219,9 @@ public class User implements Parcelable{
      * @param in: parcel type object (IN)
      */
     private User(Parcel in) {
-        mData = in.readInt();
+        this.username = in.readString();
+        this.email = in.readString();
+        this.phoneNumber = in.readString();
+        this.rating = in.readFloat();
     }
 }

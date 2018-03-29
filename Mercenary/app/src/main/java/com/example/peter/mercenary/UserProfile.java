@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UserProfile extends AppCompatActivity {
     User curUser; //the user currently logging in
@@ -27,8 +28,8 @@ public class UserProfile extends AppCompatActivity {
         curUser = getIntent().getParcelableExtra("user");
         pUser = getIntent().getParcelableExtra("clicked_user");
 
-        if (curUser == pUser) {
-            edit = (Button) findViewById(R.id.editBtn);
+        if (curUser.getUsername().equals(pUser.getUsername())) {
+            edit = (Button) findViewById(R.id.editButton);
             edit.setVisibility(View.VISIBLE);
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -49,5 +50,16 @@ public class UserProfile extends AppCompatActivity {
         emailText.setText(pUser.getEmail());
         phoneText.setText(pUser.getPhoneNumber());
         ratings.setRating(pUser.getRating());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1) {
+            pUser = data.getParcelableExtra("user");
+            usernameText.setText(pUser.getUsername());
+            emailText.setText(pUser.getEmail());
+            phoneText.setText(pUser.getPhoneNumber());
+            ratings.setRating(pUser.getRating());
+        }
     }
 }
