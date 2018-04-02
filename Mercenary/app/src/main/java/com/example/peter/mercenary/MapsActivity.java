@@ -1,5 +1,8 @@
 package com.example.peter.mercenary;
 
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -9,6 +12,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -49,5 +56,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.addMarker(new MarkerOptions().position(coord).title("Task coords"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coord));
+    }
+
+    //https://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
+    public LatLng getLocationFromAddress(String strAddress) {
+        Geocoder coder = new Geocoder(getApplicationContext());
+        List<Address> address;
+        LatLng loc = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+
+            Address location = address.get(0);
+            loc = new LatLng(location.getLatitude(), location.getLongitude());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return loc;
+    }
+
+    public ArrayList<LatLng> getNearbyTasks(LatLng latLng) {
+        //returns all tasks within 5 km
+        ArrayList<LatLng> nearby = new ArrayList<LatLng>();
+
+        //todo
+        //for all items in the task list find the distance
+        //if less then 5 km add to nearby
+
+        return nearby;
     }
 }

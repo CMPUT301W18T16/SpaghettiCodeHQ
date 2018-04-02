@@ -21,6 +21,7 @@ public class Task implements Parcelable {
     private float geoLoc;
     private byte picture;
     private String status;
+    User user;
     private int mData;
 
 
@@ -137,6 +138,10 @@ public class Task implements Parcelable {
      * @see public Task(String title, String description, String status) (Task constructor)
      */
     public String getStatus(){return this.status;}
+
+    public User getUser() {
+        return this.user;
+    }
 
     @Override
     public int describeContents() {
