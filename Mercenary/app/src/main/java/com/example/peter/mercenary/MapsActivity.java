@@ -14,12 +14,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private MarkerOptions options = new MarkerOptions();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +82,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return loc;
     }
 
-    public ArrayList<LatLng> getNearbyTasks(LatLng latLng) {
+    public ArrayList<Task> getNearbyTasks(LatLng latLng, Tasklist tasks) {
         //returns all tasks within 5 km
-        ArrayList<LatLng> nearby = new ArrayList<LatLng>();
+        ArrayList<Task> nearby = new ArrayList<>();
 
-        //todo
-        //for all items in the task list find the distance
-        //if less then 5 km add to nearby
+        for (int i = 0; i < tasks.length(); i++) {
+            if (tasks.getTask(i).getStatus().equals("requested") ||
+                    tasks.getTask(i).getStatus().equals("bidded")) {
+                float[] results = new float[1];
+                LatLng current = tasks.getTask(i).getGeoLoc();
+                Location.distanceBetween(latLng.latitude, latLng.longitude, current.latitude,
+                        current.longitude, results);
+                if (results[0] <= 5000) {
+                    nearby.add(tasks.getTask(i));
 
+                    options.position(current);
+                    options.title(tasks.getTask(i).getTitle());
+                    options.snippet(tasks.getTask(i).getDescription());
+                    mMap.addMarker(options);
+                }
+            }
+        }
         return nearby;
     }
 }
