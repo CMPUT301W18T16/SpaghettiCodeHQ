@@ -5,6 +5,8 @@ import android.media.Image;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by peter on 2018-02-22.
  * Edited by Jason L. and Shardul S. on 2018-05-15
@@ -18,9 +20,10 @@ public class Task implements Parcelable {
     private String title;
     private String description;
     private BidList listBids;
-    private float geoLoc;
+    private LatLng geoLoc;
     private byte picture;
     private String status;
+    User user;
     private int mData;
 
 
@@ -84,7 +87,7 @@ public class Task implements Parcelable {
      * @param geoLoc: the geolocation (most likely a pair of float coordinates) the user will assign to the task
      * Setter
      */
-    public void setGeo(float geoLoc){ this.geoLoc=geoLoc;}
+    public void setGeo(LatLng geoLoc){ this.geoLoc=geoLoc;}
 
     /**
      *
@@ -128,7 +131,7 @@ public class Task implements Parcelable {
      * Getter.
      * @see public void setGeo(...)
      */
-    public float getGeoLoc(){return this.geoLoc;}
+    public LatLng getGeoLoc(){return this.geoLoc;}
 
     /**
      *
@@ -137,6 +140,10 @@ public class Task implements Parcelable {
      * @see public Task(String title, String description, String status) (Task constructor)
      */
     public String getStatus(){return this.status;}
+
+    public User getUser() {
+        return this.user;
+    }
 
     @Override
     public int describeContents() {

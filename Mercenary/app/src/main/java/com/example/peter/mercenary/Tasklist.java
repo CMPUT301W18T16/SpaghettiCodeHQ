@@ -30,6 +30,10 @@ public class Tasklist {
 
     }
 
+    public int length() {
+        return tasks.size();
+    }
+
     public void delTask(Task task) {
 
         tasks.remove(task);

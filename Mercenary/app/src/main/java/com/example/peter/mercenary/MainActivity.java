@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String FILENAME = "file.sav";
     private EditText bodyText;
     private ListView oldTaskList;
     private ArrayList<Task> taskList = new ArrayList<Task>();
@@ -82,7 +81,13 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
 
+        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+        intent.putExtra("Lat", 53.526f);
+        intent.putExtra("Long", -113.525f);
+        startActivity(intent);
+
         user = getIntent().getExtras().getParcelable("USER");
+
         String query = "{\n" + " \"query\": { \"term\": {\"message\":\"" + "text" + "\"} }\n" + "}";
 
         ElasticFactory.getListOfTask getTaskList
