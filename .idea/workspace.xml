@@ -11,12 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fa20cb87-897c-48ad-a522-1b7c79edfe97" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/ElasticFactory.java" afterPath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/ElasticFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/MainActivity.java" afterPath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/MapsActivity.java" afterPath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/MapsActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/SingleTaskActivity.java" afterPath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/SingleTaskActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/User.java" afterPath="$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/User.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Mercenary/app/src/main/res/layout/single_task_activity.xml" afterPath="$PROJECT_DIR$/Mercenary/app/src/main/res/layout/single_task_activity.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -64,7 +59,7 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-102">
+            <state relative-caret-position="17">
               <caret line="94" column="32" lean-forward="false" selection-start-line="94" selection-start-column="32" selection-end-line="94" selection-end-column="32" />
               <folding />
             </state>
@@ -112,23 +107,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SpaghettiCodeHQ" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SpaghettiCodeHQ" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.other.NonAndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -269,6 +249,21 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SpaghettiCodeHQ" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SpaghettiCodeHQ" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.other.NonAndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -360,7 +355,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522854789116" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522855420900" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -408,7 +403,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522854789116" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1522855420900" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -624,7 +619,14 @@
       <option name="project" value="LOCAL" />
       <updated>1522780828740</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Users and maps">
+      <created>1522854805775</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1522854805775</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView">
@@ -638,7 +640,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -712,7 +713,8 @@
     <MESSAGE value="Started maps" />
     <MESSAGE value="Working on maps" />
     <MESSAGE value="Show all tasks within 5 km" />
-    <option name="LAST_COMMIT_MESSAGE" value="Show all tasks within 5 km" />
+    <MESSAGE value="Users and maps" />
+    <option name="LAST_COMMIT_MESSAGE" value="Users and maps" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1027,7 +1029,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Mercenary/app/src/main/java/com/example/peter/mercenary/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
+        <state relative-caret-position="17">
           <caret line="94" column="32" lean-forward="false" selection-start-line="94" selection-start-column="32" selection-end-line="94" selection-end-column="32" />
           <folding />
         </state>

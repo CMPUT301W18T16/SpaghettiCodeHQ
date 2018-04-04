@@ -62,8 +62,10 @@ public class SingleTaskActivity extends AppCompatActivity {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo
-                //view the task on the map when clicked
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("Lat", 53.526f); //needs to pass task location
+                intent.putExtra("Long", -113.525f);
+                startActivity(intent);
             }
         });
     }
