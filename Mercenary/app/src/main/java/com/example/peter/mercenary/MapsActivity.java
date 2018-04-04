@@ -5,6 +5,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -82,27 +83,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return loc;
     }
 
-    public ArrayList<Task> getNearbyTasks(LatLng latLng, Tasklist tasks) {
+    public ArrayList<Task> getNearbyTasks(LatLng latLng) {
         //returns all tasks within 5 km
         ArrayList<Task> nearby = new ArrayList<>();
 
-        for (int i = 0; i < tasks.length(); i++) {
-            if (tasks.getTask(i).getStatus().equals("requested") ||
-                    tasks.getTask(i).getStatus().equals("bidded")) {
-                float[] results = new float[1];
-                LatLng current = tasks.getTask(i).getGeoLoc();
-                Location.distanceBetween(latLng.latitude, latLng.longitude, current.latitude,
-                        current.longitude, results);
-                if (results[0] <= 5000) {
-                    nearby.add(tasks.getTask(i));
+        ElasticFactory.getListOfTask getTaskList
+                = new ElasticFactory.getListOfTask();
+        getTaskList.execute("");
 
-                    options.position(current);
-                    options.title(tasks.getTask(i).getTitle());
-                    options.snippet(tasks.getTask(i).getDescription());
-                    mMap.addMarker(options);
+        try {
+            ArrayList<Task> tasks = getTaskList.get();
+            for (int i = 0; i < tasks.size(); i++) {
+                if (tasks.get(i).getStatus().equals("requested") ||
+                        tasks.get(i).getStatus().equals("bidded")) {
+                    float[] results = new float[1];
+                    LatLng current = tasks.get(i).getGeoLoc();
+                    Location.distanceBetween(latLng.latitude, latLng.longitude, current.latitude,
+                            current.longitude, results);
+                    if (results[0] <= 5000) {
+                        nearby.add(tasks.get(i));
+
+                        options.position(current);
+                        options.title(tasks.get(i).getTitle());
+                        options.snippet(tasks.get(i).getDescription());
+                        mMap.addMarker(options);
+                    }
                 }
             }
+            return nearby;
         }
-        return nearby;
+        catch (Exception e)
+        {
+            Log.i("Error","Failed to get the tweets from the async object");
+        }
+
+        return null;
     }
 }

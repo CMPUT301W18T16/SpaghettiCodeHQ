@@ -81,10 +81,11 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
 
-        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+        //testing maps
+        /*Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
         intent.putExtra("Lat", 53.526f);
         intent.putExtra("Long", -113.525f);
-        startActivity(intent);
+        startActivity(intent); */
 
         user = getIntent().getExtras().getParcelable("USER");
 
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("task_id",task.getId());
                 intent.putExtra("task_geo_loc",task.getGeoLoc());
                 intent.putExtra("task_img",task.getPhoto());
+                intent.putExtra("user", user);
 
                 startActivityForResult(intent,0);
 

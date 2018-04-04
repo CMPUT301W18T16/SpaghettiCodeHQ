@@ -22,6 +22,7 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 
 
 public class ElasticFactory {
@@ -82,6 +83,23 @@ public class ElasticFactory {
         }
     }
 
+    public static class UpdateUser extends AsyncTask<String, Void, Void>{
+        protected Void doInBackground(String...search_parameters){
+            verifySettings();
+
+            try {
+                client.execute(new Update.Builder(search_parameters[0])
+                        .index(elasticIndex)
+                        .type("user")
+                        .id("1")
+                        .build());
+            } catch(Exception e){
+                Log.i("Error", "The application failed to build and send the user");
+            }
+            return null;
+        }
+    }
+
     public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
         @Override
         protected Boolean doInBackground(String...search_parameters){
@@ -101,7 +119,6 @@ public class ElasticFactory {
                 {
                     Log.i("Error","The search query failed");
                     return false;
-
                 }
             }
             catch (Exception e){
@@ -112,10 +129,6 @@ public class ElasticFactory {
 
         }
     }
-
-
-
-
 
     public static class getListOfTask extends AsyncTask<String, Void, ArrayList<Task>>{
             @Override
@@ -170,10 +183,7 @@ public class ElasticFactory {
 
     }
 
-
-
-
-        public static void verifySettings() {
+    public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
             DroidClientConfig config = builder.build();

@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.widget.ImageView;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -24,7 +26,7 @@ import org.apache.commons.lang3.ObjectUtils;
  */
 
 public class SingleTaskActivity extends AppCompatActivity {
-
+    User currentUser; //currently logged in user
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -37,6 +39,9 @@ public class SingleTaskActivity extends AppCompatActivity {
         TextView taskTitle = findViewById(R.id.task_title);
         TextView taskDesc = findViewById(R.id.task_desc);
         TextView taskStatus = findViewById(R.id.task_status);
+        TextView userText = findViewById(R.id.usernameText);
+
+        ImageButton map = findViewById(R.id.mapBtn);
 
         ImageView imgByte = findViewById(R.id.byte_img);
 
@@ -62,11 +67,25 @@ public class SingleTaskActivity extends AppCompatActivity {
             }
 
         }
+
+        userText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo
+                //when the user clicks on the username go to the userprofile
+            }
+        });
+
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("Lat", 53.526f); //needs to pass task location
+                intent.putExtra("Long", -113.525f);
+                startActivity(intent);
+            }
+        });
     }
-
-
-
-
 
     @Override
     public void onBackPressed() {
