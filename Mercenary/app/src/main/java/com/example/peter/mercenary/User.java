@@ -131,6 +131,13 @@ public class User implements Parcelable{
         this.id = id;
     }
 
+    /**
+     *
+     * @return user id
+     */
+    public void getId() {
+        this.id = id;
+    }
 
     /**
      * @return rating of user.
