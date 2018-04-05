@@ -81,13 +81,14 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
 
-        //testing maps
-        /*Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-        intent.putExtra("Lat", 53.526f);
-        intent.putExtra("Long", -113.525f);
-        startActivity(intent); */
-
         user = getIntent().getExtras().getParcelable("USER");
+
+        user.addReview("Kinda good");
+        user.addReview("Kinda sucks");
+        Intent intent = new Intent(MainActivity.this, UserProfile.class);
+        intent.putExtra("user", user);
+        intent.putExtra("clicked_user", user);
+        startActivity(intent);
 
         String query = "{\n" + " \"query\": { \"term\": {\"message\":\"" + "text" + "\"} }\n" + "}";
 
@@ -105,7 +106,6 @@ public class MainActivity extends AppCompatActivity
         adapter = new ArrayAdapter<Task>(this,
                 R.layout.list_item, taskList);
         oldTaskList.setAdapter(adapter);
-
 
         // listen to task clicks
         oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

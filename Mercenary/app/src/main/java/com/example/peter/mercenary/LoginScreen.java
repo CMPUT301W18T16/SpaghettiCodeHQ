@@ -51,7 +51,8 @@ public class LoginScreen extends AppCompatActivity {
 
                 try {
                     if (checkUser.execute(query).get()) {
-
+                        ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
+                        user = getUser.execute(query).get();
                         Intent intent = new Intent(LoginScreen.this, MainActivity.class);
                         intent.putExtra("USER", user);
                         startActivity(intent);
@@ -79,37 +80,5 @@ public class LoginScreen extends AppCompatActivity {
                 errorText.setText("");
             }
         });
-    }
-
-    /**
-     * Checks if the username entered by the user is valid
-     * @param name Username entered by the user
-     * @return True is the username is valid, otherwise returns false
-     */
-    private boolean isValid(String name) {
-        try {
-            FileInputStream fis = openFileInput("users.sav");
-            BufferedReader in =  new BufferedReader(new InputStreamReader(fis));
-            String line = in.readLine();
-            while (line != null) {
-                String[] parts = line.split("\\|");
-                if (parts[0].equals(name)) {
-                    try {
-                        user = new User(parts[0], parts[1], parts[2], Float.parseFloat(parts[3]));
-                    } catch (UsernameTooLongException e) {
-                        e.printStackTrace();
-                    } catch (InvalidEmailException e) {
-                        e.printStackTrace();
-                    }
-                    return true;
-                }
-                line = in.readLine();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 }
