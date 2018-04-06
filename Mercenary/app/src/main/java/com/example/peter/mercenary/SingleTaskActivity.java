@@ -44,7 +44,7 @@ public class SingleTaskActivity extends AppCompatActivity {
 
         ImageButton map = findViewById(R.id.mapBtn);
 
-        ImageView imgByte = findViewById(R.id.byte_img);
+        //ImageView imgByte = findViewById(R.id.byte_img);
 
         Bundle bundle = getIntent().getExtras();
 
@@ -62,7 +62,7 @@ public class SingleTaskActivity extends AppCompatActivity {
 
                 byte[] decodedString = Base64.decode(bundle.getString("task_img"), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                imgByte.setImageBitmap(decodedByte);
+                //imgByte.setImageBitmap(decodedByte);
 
 
             }
