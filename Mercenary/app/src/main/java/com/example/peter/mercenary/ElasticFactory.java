@@ -199,7 +199,7 @@ public class ElasticFactory {
                 {
                     return true;
                 }
-                else
+                else // including multiple duplicated username in the db
                 {
                     Log.i("Error","checkUserExist: The search query failed");
                     return false;

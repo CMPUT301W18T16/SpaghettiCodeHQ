@@ -56,7 +56,7 @@ public class LoginScreen extends AppCompatActivity {
                         // build user from es returned JSON
                         Log.i("query",query);
                         ElasticFactory.returnUser returnedUser = new ElasticFactory.returnUser();
-                        String userQuery = "{\n" + " \"query\": { \"match\": {\"username\":\"" + usernameText + "\"} }\n" + "}";
+                        String userQuery = query;
                         User loginUser = returnedUser.execute(userQuery).get();
                         intent.putExtra("USER", loginUser);
                         startActivity(intent);

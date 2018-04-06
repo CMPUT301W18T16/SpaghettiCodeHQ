@@ -1,10 +1,12 @@
 package com.example.peter.mercenary;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.view.GravityCompat;
@@ -13,12 +15,19 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.ObjectUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 
 /**
@@ -40,10 +49,11 @@ public class SingleTaskActivity extends AppCompatActivity {
         TextView taskDesc = findViewById(R.id.task_desc);
         TextView taskStatus = findViewById(R.id.task_status);
         TextView userText = findViewById(R.id.usernameText);
-
+        Button addImgButton = findViewById(R.id.add_img_button);
         ImageButton map = findViewById(R.id.mapBtn);
 
         ImageView imgByte = findViewById(R.id.byte_img);
+
 
         Bundle bundle = getIntent().getExtras();
 
@@ -57,19 +67,31 @@ public class SingleTaskActivity extends AppCompatActivity {
 
 
             // deal with single image first
-            if (bundle.getString("task_img") == null){
-                taskTitle.setText("OMG THERES NO IMG");
+            Log.i("!taskimg", "is " + bundle.get("task_img").getClass().getName());
+            if (bundle.getByteArray("task_img") == null){
+                Log.i("!taskimg", "is empty" );
+
             }
             else{
-
                 byte[] decodedString = Base64.decode(bundle.getString("task_img"), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 imgByte.setImageBitmap(decodedByte);
 
-
             }
 
         }
+        addImgButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+
+            public void onClick(View v){
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select an image"), PICK_IMAGE);
+
+            }
+        });
 
         userText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +110,69 @@ public class SingleTaskActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    // picking img (one)
+    // reference: https://stackoverflow.com/questions/5309190/android-pick-images-from-gallery
+    //
+    public static final int PICK_IMAGE = 1;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            try {
+                // TODO:
+                // {
+                // minci: check img size. if img size is less than 64kb then ignore compression
+                // go straightly to bytes converting
+                // }
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                // check image size
+                int selectedImageSize = selectedImage.getByteCount();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                Bitmap compressedImage = selectedImage.copy(selectedImage.getConfig(), true);
+                int compressedImageSize = selectedImageSize;
+
+                if (compressedImageSize > 65536){
+                    int compressedImgWidth = compressedImage.getWidth();
+                    int compressedImgHeight = compressedImage.getHeight();
+
+                    while (compressedImageSize > 65536){
+                         compressedImgWidth = (int)(compressedImgWidth*0.9);
+                         compressedImgHeight = (int)(compressedImgHeight*0.9);
+                         compressedImage = Bitmap.createScaledBitmap(compressedImage,compressedImgWidth, compressedImgHeight, true);
+
+                         compressedImageSize = compressedImage.getByteCount();
+                         Log.i("compressing", "size: " + Integer.toString(compressedImageSize));
+                    }
+                }
+                else{
+                    // don't compress
+                }
+
+                final ImageView bitmapView = findViewById(R.id.byte_img);
+                bitmapView.setImageBitmap(compressedImage);
+                selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                Log.i("!!HUGE!!", byteArray.toString());
+                Log.i("!!SIZE!!",Integer.toString(selectedImageSize) );
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+
+            }
+        }
+        else{
+            Log.i("NO", "no image selected!!");
+
+        }
+
     }
 
     @Override
