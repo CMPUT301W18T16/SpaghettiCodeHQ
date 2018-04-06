@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.google.common.base.Objects;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -35,6 +36,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import io.searchbox.core.DocumentResult;
 
 import static com.google.common.base.Objects.equal;
 
@@ -99,6 +102,9 @@ public class SingleTaskActivity extends AppCompatActivity {
                 Log.i("check","img equal didnt pass");
                 Log.i("currentimg",taskImgString);
                 String imgFromServer = bundle.getString("task_img");
+
+                // StringEscapeUtils is extremely slow
+                //String unescapedImg = StringEscapeUtils.unescapeJson(imgFromServer);
                 Log.i("checking","img from server has "+imgFromServer.length());
                 byte[] decodedBase64 = Base64.decode(imgFromServer, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedBase64, 0, decodedBase64.length);
@@ -161,6 +167,7 @@ public class SingleTaskActivity extends AppCompatActivity {
                 addTask.execute(currentTask);
 
 
+
             }
         });
 
@@ -215,7 +222,7 @@ public class SingleTaskActivity extends AppCompatActivity {
 
                     while (compressedImageSize > 65536){
                         // toast for long time image processing
-                        Toast toast = Toast.makeText(getApplicationContext(), "Your image is being processed",
+                        Toast toast = Toast.makeText(getApplicationContext(), "Your image is processed",
                                 Toast.LENGTH_SHORT);
                         toast.show();
 

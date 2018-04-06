@@ -7,6 +7,7 @@ package com.example.peter.mercenary;
 import android.os.AsyncTask;
 import android.system.Os;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
@@ -156,6 +157,9 @@ public class ElasticFactory {
                 String imageToBeUpdated = task.getPhoto();
                 if (!StringUtils.isEmpty(imageToBeUpdated)) {
                     String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(imageToBeUpdated);
+
+                    // StringEscapeUtils is extremely slow
+                    //String escapedImg = StringEscapeUtils.escapeJson(imageToBeUpdated);
                     task.setPhoto(escapedImg);
                 }
                 else{
@@ -163,6 +167,10 @@ public class ElasticFactory {
                 }
 
                 try {
+                    // minci: changed Update to Index;
+                    // Error:
+                    // nested: ScriptException[scripts of type [indexed], operation [update] and lang [groovy] are disabled]
+                    // The ES server disabled update and lang groovy
                     DocumentResult result = client.execute(new Index.Builder(task)
                             .index(elasticIndex)
                             .type("minciTestTask1")
@@ -171,16 +179,25 @@ public class ElasticFactory {
                     Log.i("YOU TRIED", "to update a task");
                     if(result.getJsonString() != null)
                     {
-                        Log.i("RESULT:", result.getJsonString());
+                        if (result.isSucceeded()){
+                            // make a toast, havent figured out how to do this in non-activity class
+                            Log.i("RESULT:", result.getJsonString());
+                        }
+                        else {
+                            // find out what's going on with our query
+                            Log.i("RESULT:", result.getJsonString());
+                        }
                     }
+
                     else
                     {
                         JSONObject obj = new JSONObject(result.getSourceAsString());
                         Log.i("Error","UpdateTask FAILED" + obj);
                     }
                 } catch(Exception e){
-                    e.printStackTrace();
                     Log.i("Error", "UpdateTask: The application failed to update task");
+                    e.printStackTrace();
+
                 }
             }
 
