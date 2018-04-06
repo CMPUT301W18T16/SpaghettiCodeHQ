@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
     private EditText bodyText;
     private ListView oldTaskList;
     private ArrayList<Task> taskList = new ArrayList<Task>();
-    private ArrayAdapter<Task> adapter;
+    private TaskAdapter adapter;
     private User user; //currently logged in user
 
     @Override
@@ -102,8 +102,7 @@ public class MainActivity extends AppCompatActivity
         {
             Log.i("Error","Failed to get the tweets from the async object");
         }
-        adapter = new ArrayAdapter<Task>(this,
-                R.layout.list_item, taskList);
+        adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
 

@@ -19,13 +19,11 @@ import com.google.android.gms.maps.model.LatLng;
 public class Task implements Parcelable {
     private String title;
     private String description;
-    private BidList listBids;
     private LatLng geoLoc;
     private byte picture;
     private String status;
     User user;
     private int mData;
-
 
     @JestId
     private String id;
