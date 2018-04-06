@@ -14,6 +14,7 @@ import io.searchbox.annotations.JestId;
 public class Bid {
     private String username;
     private float value;
+    private int version;
 	
     @JestId
     private String id; //id is equivalent to bidID
@@ -26,9 +27,9 @@ public class Bid {
      * @param value: User's bid amount in dollars
      *
      */
-    public Bid(String username, float value, String taskId){
+    public Bid(String username, float value, String taskId, int version){
 		
-		
+		this.version = version;
         this.username=username;
         this.value=value;
 		this.taskId = taskId;

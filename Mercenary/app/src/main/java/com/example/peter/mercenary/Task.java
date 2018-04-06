@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Task implements Parcelable {
     private String title;
+    private int version;
     private String description;
     private LatLng geoLoc;
     private byte picture;
