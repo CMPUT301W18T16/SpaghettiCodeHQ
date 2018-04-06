@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("task_geo_loc",task.getGeoLoc());
                 intent.putExtra("task_img",task.getPhoto());
                 intent.putExtra("user", user);
+                intent.putExtra("task", task);
 
                 startActivityForResult(intent,0);
 

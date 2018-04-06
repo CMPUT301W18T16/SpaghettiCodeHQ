@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.ImageButton;
@@ -40,12 +41,15 @@ public class SingleTaskActivity extends AppCompatActivity {
         TextView taskDesc = findViewById(R.id.task_desc);
         TextView taskStatus = findViewById(R.id.task_status);
         TextView userText = findViewById(R.id.usernameText);
+        Button editTask = findViewById(R.id.edit_task);
 
         ImageButton map = findViewById(R.id.mapBtn);
 
         ImageView imgByte = findViewById(R.id.byte_img);
 
         Bundle bundle = getIntent().getExtras();
+
+        final Task task = getIntent().getExtras().getParcelable("task");
 
         if (bundle != null){
             taskTitle.setText(bundle.getString("task_title"));
@@ -74,6 +78,15 @@ public class SingleTaskActivity extends AppCompatActivity {
                 //todo
                 //when the user clicks on the username go to the userprofile
             }
+        });
+
+        editTask.setOnClickListener(new View.OnClickListener(){
+           @Override
+            public void onClick(View view){
+               Intent intentEdit = new Intent(getApplicationContext(), EditTaskActivity.class);
+               startActivity(intentEdit);
+               intentEdit.putExtra("task", task);
+           }
         });
 
         map.setOnClickListener(new View.OnClickListener() {
