@@ -36,6 +36,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import io.searchbox.core.DocumentResult;
 
@@ -54,7 +55,7 @@ public class SingleTaskActivity extends AppCompatActivity {
     String taskDescriptionString;
     String taskStatusString;
     String taskTitleString;
-    String taskImgString;
+    ArrayList<String> taskImgStringList;
     String taskIDString;
     Task currentTask;
     @Override
@@ -82,7 +83,7 @@ public class SingleTaskActivity extends AppCompatActivity {
             taskTitleString = bundle.getString("task_title");
             taskDescriptionString = bundle.getString("task_desc");
             taskStatusString = bundle.getString("task_status");
-            taskImgString = bundle.getString("task_img");
+            taskImgStringList = bundle.getStringArrayList("task_img");
             currentTask = bundle.getParcelable("task");
             taskIDString = bundle.getString("task_id");
             taskTitle.setText(taskTitleString);
@@ -94,22 +95,24 @@ public class SingleTaskActivity extends AppCompatActivity {
 
             // deal with single image first
 
-            if (StringUtils.isEmpty(taskImgString))
+            if (taskImgStringList.isEmpty())
             {
                 Log.i("!taskimg", "is empty" );
             }
             else{
-                Log.i("check","img equal didnt pass");
-                Log.i("currentimg",taskImgString);
-                String imgFromServer = bundle.getString("task_img");
+                Log.i("check","there are some img(s)");
+
 
                 // StringEscapeUtils is extremely slow
                 //String unescapedImg = StringEscapeUtils.unescapeJson(imgFromServer);
-                Log.i("checking","img from server has "+imgFromServer.length());
-                byte[] decodedBase64 = Base64.decode(imgFromServer, Base64.DEFAULT);
+
+                Log.i("checking","img from server has "+taskImgStringList.size());
+
+                // let's just test first img from the img list
+                byte[] decodedBase64 = Base64.decode(taskImgStringList.get(0), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedBase64, 0, decodedBase64.length);
                 imgByte.setImageBitmap(decodedByte);
-                encoded = taskImgString;
+                encoded = taskImgStringList.get(0);
             }
         }
 
@@ -147,6 +150,9 @@ public class SingleTaskActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //create query
                 //and upload
+
+                //TODO: detect if photo list if empty; if empty then initialize it; if not then add photo to it
+                if (currentTask.getPhoto().isEmpty());
                 currentTask.setPhoto(encoded);
                 currentTask.setId(taskIDString);
                 currentTask.setStatus(taskStatusString);
@@ -216,11 +222,11 @@ public class SingleTaskActivity extends AppCompatActivity {
                 Log.i("I have an img!", "size: " + Long.toString(file.length()));
                 int selectedImageSize = Math.toIntExact(file.length());
                 int compressedImageSize = selectedImageSize;
-                if (compressedImageSize > 65536){
+                if (compressedImageSize > 65536*0.7){
                     int compressedImgWidth = compressedImage.getWidth();
                     int compressedImgHeight = compressedImage.getHeight();
 
-                    while (compressedImageSize > 65536){
+                    while (compressedImageSize > 65536*0.7){
                         // toast for long time image processing
                         Toast toast = Toast.makeText(getApplicationContext(), "Your image is processed",
                                 Toast.LENGTH_SHORT);

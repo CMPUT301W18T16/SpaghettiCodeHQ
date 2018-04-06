@@ -154,7 +154,9 @@ public class ElasticFactory {
 
                 taskID = task.getId();
                 Log.i("ID_in_ES", taskID);
-                String imageToBeUpdated = task.getPhoto();
+                ArrayList<String> imageListToBeUpdated = task.getPhoto();
+                // last element of img list
+                String imageToBeUpdated = imageListToBeUpdated.get(imageListToBeUpdated.size()-1);
                 if (!StringUtils.isEmpty(imageToBeUpdated)) {
                     String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(imageToBeUpdated);
 
@@ -163,7 +165,7 @@ public class ElasticFactory {
                     task.setPhoto(escapedImg);
                 }
                 else{
-                    task.setPhoto("");
+
                 }
 
                 try {

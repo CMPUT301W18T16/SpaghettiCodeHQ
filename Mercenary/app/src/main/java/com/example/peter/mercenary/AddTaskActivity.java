@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AddTaskActivity extends AppCompatActivity {
     EditText title;
@@ -49,10 +50,10 @@ public class AddTaskActivity extends AppCompatActivity {
                 status = (EditText) findViewById(R.id.status);
                 error1 = (TextView) findViewById(R.id.error1);
 
-
+                ArrayList<String> emptyImgList = new ArrayList<>();
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
-                        status.getText().toString(), taskRequester.getUsername(), ""
+                        status.getText().toString(), taskRequester.getUsername(), emptyImgList
                 );
 
 

@@ -1,11 +1,13 @@
 package com.example.peter.mercenary;
 
 import io.searchbox.annotations.JestId;
-import android.media.Image;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 /**
  * Created by peter on 2018-02-22.
@@ -21,7 +23,7 @@ public class Task implements Parcelable {
     private String description;
     private BidList listBids;
     private LatLng geoLoc;
-    private String picture;
+    private ArrayList<String> pictureArray;
     private String status;
     private String taskProvider;
     private String taskRequester;
@@ -32,12 +34,12 @@ public class Task implements Parcelable {
     @JestId
     private String id;
 
-    public Task(String title, String description, String status, String taskRequester, String picture) {
+    public Task(String title, String description, String status, String taskRequester, ArrayList<String> pictureArray) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.taskRequester = taskRequester;
-        this.picture = picture;
+        this.pictureArray = pictureArray;
     }
 
     /**
@@ -82,7 +84,8 @@ public class Task implements Parcelable {
      * Setter
      */
     public void setPhoto(String picture){
-        this.picture=picture;
+
+        this.pictureArray.add(picture);
     }
 
     /**
@@ -126,7 +129,7 @@ public class Task implements Parcelable {
      * Getter.
      * @see public void setPhoto(...)
      */
-    public String getPhoto(){return this.picture;}
+    public ArrayList<String> getPhoto(){return this.pictureArray;}
 
     /**
      *
