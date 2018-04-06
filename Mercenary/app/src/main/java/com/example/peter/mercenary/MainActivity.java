@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity
     private ListView oldTaskList;
     private ArrayList<Task> taskList = new ArrayList<Task>();
     private TaskAdapter adapter;
-    private String userId; //currently logged in userid
+    private User user;
     private TimerTask timerTask;
     private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userId = getIntent().getStringExtra("userId");
+        user = getIntent().getParcelableExtra("user");
         setContentView(R.layout.drawer_layout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
-                intent.putExtra("userId", userId);
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
             /*public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("clicked_user", user);
         startActivity(intent);*/
 
-        String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + userId + "\"} }\n" + "}";
+        String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
         if(NetworkStatus.connectionStatus(this)) {
 
@@ -163,9 +163,9 @@ public class MainActivity extends AppCompatActivity
 
     public void onResume() {
         super.onResume();
-        Log.i("CHECK THIS VALUE", ""+userId);
+        Log.i("CHECK THIS VALUE", ""+user.getId());
 
-        String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + userId + "\"} }\n" + "}";
+        String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
         if (NetworkStatus.connectionStatus(this)) {
 

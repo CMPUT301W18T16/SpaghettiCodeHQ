@@ -3,6 +3,7 @@ package com.example.peter.mercenary;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -251,6 +252,7 @@ public class User implements Parcelable{
         out.writeString(this.phoneNumber);
         out.writeFloat(this.rating);
         out.writeList(this.reviews);
+        out.writeString(this.id);
     }
 
 
@@ -274,5 +276,6 @@ public class User implements Parcelable{
         this.phoneNumber = in.readString();
         this.rating = in.readFloat();
         this.reviews = in.readArrayList(null);
+        this.id = in.readString();
     }
 }
