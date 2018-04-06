@@ -3,6 +3,7 @@ package com.example.peter.mercenary;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,10 +23,39 @@ public class User implements Parcelable{
     private float rating;
     private Tasklist biddedTask;
     private Tasklist tasks;
+    private ArrayList<String> reviews;
     private int mData;
     @JestId
     private String id;
 
+
+    /**
+     *
+     * @param username: user's username
+     * @param email: user's email address
+     * @param phoneNumber: user's phone #
+     * @throws UsernameTooLongException: if username is too long (greater than 8 characters)
+     * @throws InvalidEmailException: if email address is not valid and does not fit email address syntax
+     * Constructor
+     */
+
+    //Email format check from https://stackoverflow.com/questions/42266148/email-validation-regex-java
+    public User(String username, String email, String phoneNumber) throws UsernameTooLongException, InvalidEmailException {
+        if (username.length() > 8) {
+            throw new UsernameTooLongException();
+        }
+        String regex = "^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{1,6}))?$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            throw new InvalidEmailException();
+        }
+        this.username=username;
+        this.email=email;
+        this.phoneNumber = phoneNumber;
+        this.rating= 0.0f;
+        this.reviews = new ArrayList<>();
+    }
 
     /**
      *
@@ -37,7 +67,6 @@ public class User implements Parcelable{
      * @throws InvalidEmailException: if email address is not valid and does not fit email address syntax
      * Constructor
      */
-
     //Email format check from https://stackoverflow.com/questions/42266148/email-validation-regex-java
     public User(String username, String email, String phoneNumber, float rating) throws UsernameTooLongException, InvalidEmailException {
         if (username.length() > 8) {
@@ -135,8 +164,8 @@ public class User implements Parcelable{
      *
      * @return user id
      */
-    public void getId() {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
     /**
@@ -178,6 +207,19 @@ public class User implements Parcelable{
         return this.tasks;
     }
 
+    public void addReview(String newReview) {
+        if (reviews != null) {
+            this.reviews.add(newReview);
+        } else {
+            this.reviews = new ArrayList<>();
+            this.reviews.add(newReview);
+        }
+    }
+
+    public ArrayList<String> getReviews() {
+        return this.reviews;
+    }
+
     /**
      *
      * @param task: a task to be added to the TaskList of a user
@@ -208,6 +250,7 @@ public class User implements Parcelable{
         out.writeString(this.email);
         out.writeString(this.phoneNumber);
         out.writeFloat(this.rating);
+        out.writeList(this.reviews);
     }
 
 
@@ -230,5 +273,6 @@ public class User implements Parcelable{
         this.email = in.readString();
         this.phoneNumber = in.readString();
         this.rating = in.readFloat();
+        this.reviews = in.readArrayList(null);
     }
 }

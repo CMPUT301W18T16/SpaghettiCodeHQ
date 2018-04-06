@@ -83,15 +83,37 @@ public class ElasticFactory {
         }
     }
 
+    public static class GetUser extends AsyncTask<String, Void, User>{
+        @Override
+        protected User doInBackground(String...search_paramters) {
+            verifySettings();
+
+            Search search = new Search.Builder("" + search_paramters[0] + "")
+                    .addIndex(elasticIndex)
+                    .addType("User")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                User user = result.getSourceAsObject(User.class);
+                return user;
+            } catch (Exception e) {
+                Log.i("Error", "Failed to find user");
+            }
+            return null;
+        }
+    }
+
     public static class UpdateUser extends AsyncTask<String, Void, Void>{
+        @Override
         protected Void doInBackground(String...search_parameters){
             verifySettings();
 
             try {
-                client.execute(new Update.Builder(search_parameters[0])
+                client.execute(new Update.Builder("" + search_parameters[0] + "")
                         .index(elasticIndex)
                         .type("user")
-                        .id("1")
+                        .id(search_parameters[1])
                         .build());
             } catch(Exception e){
                 Log.i("Error", "The application failed to build and send the user");
@@ -105,28 +127,23 @@ public class ElasticFactory {
         protected Boolean doInBackground(String...search_parameters){
             verifySettings();
 
-            Search search = new Search.Builder(""+search_parameters[0]+"")
-                    .addIndex(elasticIndex)
-                    .addType("User")
-                    .build();
-            try{
-                SearchResult result = client.execute(search);
-                if(result.getTotal()==1)
-                {
-                    return true;
-                }
-                else
-                {
-                    Log.i("Error","The search query failed");
+            Search search = new Search.Builder("" + search_parameters[0] + "")
+                        .addIndex(elasticIndex)
+                        .addType("User")
+                        .build();
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.getTotal() == 1) {
+                        return true;
+                    } else {
+                        Log.i("Error", "The search query failed");
+                        return false;
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
                     return false;
+
                 }
-            }
-            catch (Exception e){
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                return false;
-
-            }
-
         }
     }
 

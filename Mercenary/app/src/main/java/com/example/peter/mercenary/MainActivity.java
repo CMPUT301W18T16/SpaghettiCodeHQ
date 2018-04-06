@@ -1,6 +1,8 @@
 package com.example.peter.mercenary;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,16 +24,35 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TASKFILE = "taskfile.sav";
+    private static final String ELASTICFILE = "elasticfile.sav";
 
     private EditText bodyText;
     private ListView oldTaskList;
     private ArrayList<Task> taskList = new ArrayList<Task>();
     private TaskAdapter adapter;
     private User user; //currently logged in user
+    private TimerTask timerTask;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +68,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
+                intent.putExtra("USER", user);
                 startActivity(intent);
             }
             /*public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -74,34 +96,61 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
+
+
     }
 
     protected void onStart() {
-        // TODO Auto-generated method stub
         super.onStart();
-        //loadFromFile(); // TODO replace this with elastic search
-
-        //testing maps
-        /*Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-        intent.putExtra("Lat", 53.526f);
-        intent.putExtra("Long", -113.525f);
-        startActivity(intent); */
 
         user = getIntent().getExtras().getParcelable("USER");
+        /*
+        user.addReview("Kinda good");
+        user.addReview("Kinda sucks");
+        Intent intent = new Intent(MainActivity.this, UserProfile.class);
+        intent.putExtra("user", user);
+        intent.putExtra("clicked_user", user);
+        startActivity(intent);*/
 
-        String query = "{\n" + " \"query\": { \"term\": {\"message\":\"" + "text" + "\"} }\n" + "}";
+        //String query = "{\n" + " \"query\": { \"match\": {\"message\":\"" + "text" + "\"} }\n" + "}";
 
-        ElasticFactory.getListOfTask getTaskList
-                = new ElasticFactory.getListOfTask();
-        getTaskList.execute("");
+        if(NetworkStatus.connectionStatus(this)) {
 
-        try {
-            taskList = getTaskList.get();
+            ElasticFactory.getListOfTask getTaskList
+                    = new ElasticFactory.getListOfTask();
+            getTaskList.execute(user.getId());
+
+            try {
+                taskList = getTaskList.get();
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the tweets from the async object");
+            }
+            adapter = new ArrayAdapter<Task>(this,
+                    R.layout.list_item, taskList);
+            oldTaskList.setAdapter(adapter);
+
+            // listen to task clicks
+            oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Task task = (Task) oldTaskList.getAdapter().getItem(position);
+
+                    Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
+                    intent.putExtra("task_title", task.getTitle());
+                    intent.putExtra("task_desc", task.getDescription());
+                    intent.putExtra("task_status", task.getStatus());
+                    intent.putExtra("task_id", task.getId());
+                    intent.putExtra("task_geo_loc", task.getGeoLoc());
+                    intent.putExtra("task_img", task.getPhoto());
+                    intent.putExtra("user", user);
+
+                    startActivityForResult(intent, 0);
+
+                }
+            });
         }
-        catch (Exception e)
-        {
-            Log.i("Error","Failed to get the tweets from the async object");
-        }
+<<<<<<< HEAD
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
@@ -111,22 +160,16 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Task task = (Task) oldTaskList.getAdapter().getItem(position);
+=======
+        else{
+            Toast.makeText(getApplicationContext(),"Lmao",Toast.LENGTH_LONG).show();
+>>>>>>> 8bef41872957f8b2553b757a50467031740cba73
 
-                Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
-                intent.putExtra("task_title",task.getTitle());
-                intent.putExtra("task_desc",task.getDescription());
-                intent.putExtra("task_status",task.getStatus());
-                intent.putExtra("task_id",task.getId());
-                intent.putExtra("task_geo_loc",task.getGeoLoc());
-                intent.putExtra("task_img",task.getPhoto());
-                intent.putExtra("user", user);
-
-                startActivityForResult(intent,0);
-
-            }
-        });
-
+        }
     }
+
+
+
 
     /*public void onResume(){
 
@@ -202,4 +245,48 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    private void loadFromFile(String FILENAME) {
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+            //Code taken from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt Sept.22,2016
+            Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+            taskList = gson.fromJson(in, listType);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            taskList = new ArrayList<Task>();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    private void saveInFile(String FILENAME) {
+        try {
+
+            FileOutputStream fos = openFileOutput(FILENAME,0);
+            OutputStreamWriter writer = new OutputStreamWriter(fos);
+            Gson gson = new Gson();
+            gson.toJson(taskList, writer);
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+
+
+
+
+
+
+
+
 }
