@@ -2,6 +2,7 @@ package com.example.peter.mercenary;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,36 +21,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class AddTaskActivity extends AppCompatActivity {
-<<<<<<< HEAD
     private EditText title;
     private EditText description;
     private EditText status;
     private TextView error1;
+    private EditText location;
     private Button done;
     private Task newTask;
     private User user; //currently logged in userid
-=======
-    EditText title;
-    EditText description;
-    EditText status;
-    EditText location;
-    TextView error1;
-    Button done;
-    Task newTask;
-    MapsActivity map;
->>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-        map = new MapsActivity();
+        final MapsActivity map = new MapsActivity();
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-<<<<<<< HEAD
         user = getIntent().getParcelableExtra("user");
-=======
->>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
+
 
 
         done = (Button) findViewById(R.id.done1);
@@ -66,12 +56,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 LatLng geoLocation = map.getLocationFromAddress(location.getText().toString());
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
-<<<<<<< HEAD
-                        status.getText().toString(), user.getId() );
-=======
-                        geoLocation,
-                        status.getText().toString());
->>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
+                        geoLocation, user.getId() );
 
                 //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                 //Toast.LENGTH_LONG);

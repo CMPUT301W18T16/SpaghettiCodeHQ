@@ -23,7 +23,7 @@ public class Task implements Parcelable {
     private LatLng geoLoc;
     private byte picture;
     private String status;
-    User user;
+    private User user;
     private int mData;
 
 

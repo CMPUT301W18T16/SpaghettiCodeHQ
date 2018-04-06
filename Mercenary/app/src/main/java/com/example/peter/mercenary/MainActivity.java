@@ -22,31 +22,37 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private static final String TASKFILE = "taskfile.sav";
+    private static final String ELASTICFILE = "elasticfile.sav";
     private EditText bodyText;
     private ListView oldTaskList;
     private ArrayList<Task> taskList = new ArrayList<Task>();
-<<<<<<< HEAD
     private TaskAdapter adapter;
-    private User user;
     private TimerTask timerTask;
     private Timer timer;
-=======
-    private ArrayAdapter<Task> adapter;
     private User user; //currently logged in user
->>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
         user = getIntent().getParcelableExtra("user");
-=======
->>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
         setContentView(R.layout.drawer_layout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,10 +64,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
-<<<<<<< HEAD
                 intent.putExtra("user", user);
-=======
->>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
                 startActivity(intent);
             }
             /*public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -96,7 +99,6 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
 
-<<<<<<< HEAD
         /*
         user.addReview("Kinda good");
         user.addReview("Kinda sucks");
@@ -119,42 +121,34 @@ public class MainActivity extends AppCompatActivity
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
 
-=======
-        user = getIntent().getExtras().getParcelable("USER");
->>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
 
-        String query = "{\n" + " \"query\": { \"term\": {\"message\":\"" + "text" + "\"} }\n" + "}";
-
-        ElasticFactory.getListOfTask getTaskList
-                = new ElasticFactory.getListOfTask();
-        getTaskList.execute("");
-
-        try {
-            taskList = getTaskList.get();
-        }
-        catch (Exception e)
-        {
-            Log.i("Error","Failed to get the tweets from the async object");
-        }
-        adapter = new ArrayAdapter<Task>(this,
-                R.layout.list_item, taskList);
+        adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
-        // listen to task clicks
-        oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Task task = (Task) oldTaskList.getAdapter().getItem(position);
+            // listen to task clicks
+            oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Task task = (Task) oldTaskList.getAdapter().getItem(position);
 
-                Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
-                intent.putExtra("task", task);
+                    Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
+                    intent.putExtra("task", task);
+                    intent.putExtra("user", user);
 
-                startActivityForResult(intent,0);
+                    startActivityForResult(intent, 0);
 
-<<<<<<< HEAD
+                }
+            });
+
+        }
+
+        else{
+            Toast.makeText(getApplicationContext(),"Lmao",Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void onResume() {
         super.onResume();
-        Log.i("CHECK THIS VALUE", ""+user.getId());
 
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
@@ -168,30 +162,13 @@ public class MainActivity extends AppCompatActivity
                 taskList = getTaskList.get();
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");
-=======
->>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
             }
-        });
+            adapter = new TaskAdapter(this, taskList);
+            oldTaskList.setAdapter(adapter);
+        }
 
     }
 
-    /*public void onResume(){
-
-    }
-*/
-
- /*   /**
-     * Get the user data for the logged in user
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data user
-     */
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        user = data.getExtras().getParcelable("USER");
-    }
-    */
 
     @Override
     public void onBackPressed() {
@@ -249,4 +226,42 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+    private void loadFromFile(String FILENAME) {
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+            //Code taken from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt Sept.22,2016
+            Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+            taskList = gson.fromJson(in, listType);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            taskList = new ArrayList<Task>();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    private void saveInFile(String FILENAME) {
+        try {
+
+            FileOutputStream fos = openFileOutput(FILENAME,0);
+            OutputStreamWriter writer = new OutputStreamWriter(fos);
+            Gson gson = new Gson();
+            gson.toJson(taskList, writer);
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+
 }

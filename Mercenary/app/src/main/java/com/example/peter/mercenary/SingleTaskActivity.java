@@ -26,8 +26,8 @@ import org.apache.commons.lang3.ObjectUtils;
  */
 
 public class SingleTaskActivity extends AppCompatActivity {
-    User currentUser; //currently logged in user
-    Task task;
+    private User user; //currently logged in user
+    private Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -69,7 +69,7 @@ public class SingleTaskActivity extends AppCompatActivity {
 
         }*/
         task = bundle.getParcelable("task");
-        currentUser = bundle.getParcelable("current_user");
+        user = bundle.getParcelable("user");
 
         taskTitle.setText(task.getTitle());
         taskDesc.setText(task.getDescription());
@@ -82,7 +82,7 @@ public class SingleTaskActivity extends AppCompatActivity {
                 //todo
                 //when the user clicks on the username go to the userprofile
                 Intent intent = new Intent(SingleTaskActivity.this, UserProfile.class);
-                intent.putExtra("user", currentUser);
+                intent.putExtra("user", user);
                 intent.putExtra("clicked_user", task.getUser());
                 startActivity(intent);
             }
