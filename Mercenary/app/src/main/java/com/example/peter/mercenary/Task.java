@@ -30,9 +30,10 @@ public class Task implements Parcelable {
     @JestId
     private String id;
 
-    public Task(String title, String description, String status) {
+    public Task(String title, String description, LatLng geoLoc, String status) {
         this.title = title;
         this.description = description;
+        this.geoLoc = geoLoc;
         this.status = status;
 
     }
@@ -87,7 +88,9 @@ public class Task implements Parcelable {
      * @param geoLoc: the geolocation (most likely a pair of float coordinates) the user will assign to the task
      * Setter
      */
-    public void setGeo(LatLng geoLoc){ this.geoLoc=geoLoc;}
+    public void setGeo(LatLng geoLoc){
+        this.geoLoc=geoLoc;
+    }
 
     /**
      *
@@ -152,7 +155,12 @@ public class Task implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(mData);
+        out.writeString(title);
+        out.writeString(description);
+        out.writeDouble(geoLoc.latitude);
+        out.writeDouble(geoLoc.longitude);
+        out.writeString(status);
+        out.writeParcelable(user, 0);
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
@@ -165,10 +173,12 @@ public class Task implements Parcelable {
     };
 
     private Task(Parcel in) {
-        mData = in.readInt();
+        this.title = in.readString();
+        this.description = in.readString();
+        this.geoLoc = new LatLng(in.readDouble(), in.readDouble());
+        this.status = in.readString();
+        this.user = in.readParcelable(null);
     }
-
-
 
     //public BidList getBids(){return this.listBids;}
 

@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,14 +23,17 @@ public class AddTaskActivity extends AppCompatActivity {
     EditText title;
     EditText description;
     EditText status;
+    EditText location;
     TextView error1;
     Button done;
     Task newTask;
+    MapsActivity map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+        map = new MapsActivity();
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
@@ -42,9 +47,12 @@ public class AddTaskActivity extends AppCompatActivity {
                 description = (EditText) findViewById(R.id.desc);
                 status = (EditText) findViewById(R.id.status);
                 error1 = (TextView) findViewById(R.id.error1);
+                location = (EditText) findViewById(R.id.location);
 
+                LatLng geoLocation = map.getLocationFromAddress(location.getText().toString());
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
+                        geoLocation,
                         status.getText().toString());
 
                 //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),

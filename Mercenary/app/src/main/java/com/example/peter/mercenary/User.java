@@ -21,10 +21,9 @@ public class User implements Parcelable{
     private String email;
     private String phoneNumber;
     private float rating;
-    private Tasklist biddedTask;
-    private Tasklist tasks;
     private ArrayList<String> reviews;
     private int mData;
+    private int numRatings;
     @JestId
     private String id;
 
@@ -186,25 +185,10 @@ public class User implements Parcelable{
 
     //make sure rating is in the corrrect range
     public void setRating(float rate) {
-        this.rating = rate;
-    }
-
-    /**
-     *
-     * @param task: a task to be bid on by the user
-     */
-
-    public void bidTask(Task task) {
-        this.biddedTask.add(task);
-    }
-
-    /**
-     *
-     * @return the entire Tasklist of a user
-     */
-
-    public Tasklist getTask() {
-        return this.tasks;
+        float newRating;
+        newRating = ((this.rating*this.numRatings)+rate)/(numRatings+1);
+        this.rating = newRating;
+        this.numRatings++;
     }
 
     public void addReview(String newReview) {
@@ -218,15 +202,6 @@ public class User implements Parcelable{
 
     public ArrayList<String> getReviews() {
         return this.reviews;
-    }
-
-    /**
-     *
-     * @param task: a task to be added to the TaskList of a user
-     */
-
-    public void addTask(Task task) {
-        this.tasks.add(task);
     }
 
     /**
@@ -250,6 +225,7 @@ public class User implements Parcelable{
         out.writeString(this.email);
         out.writeString(this.phoneNumber);
         out.writeFloat(this.rating);
+        out.writeInt(this.numRatings);
         out.writeList(this.reviews);
     }
 
@@ -273,6 +249,7 @@ public class User implements Parcelable{
         this.email = in.readString();
         this.phoneNumber = in.readString();
         this.rating = in.readFloat();
+        this.numRatings = in.readInt();
         this.reviews = in.readArrayList(null);
     }
 }

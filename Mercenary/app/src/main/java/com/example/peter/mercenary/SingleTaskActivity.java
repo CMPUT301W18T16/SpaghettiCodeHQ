@@ -27,6 +27,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 public class SingleTaskActivity extends AppCompatActivity {
     User currentUser; //currently logged in user
+    Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -47,7 +48,7 @@ public class SingleTaskActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        if (bundle != null){
+        /*if (bundle != null){
             taskTitle.setText(bundle.getString("task_title"));
             taskDesc.setText(bundle.getString("task_desc"));
             taskStatus.setText(bundle.getString("task_status"));
@@ -66,13 +67,24 @@ public class SingleTaskActivity extends AppCompatActivity {
 
             }
 
-        }
+        }*/
+        task = bundle.getParcelable("task");
+        currentUser = bundle.getParcelable("current_user");
 
+        taskTitle.setText(task.getTitle());
+        taskDesc.setText(task.getDescription());
+        taskStatus.setText(task.getStatus());
+
+        userText.setText(task.getUser().getUsername());
         userText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //todo
                 //when the user clicks on the username go to the userprofile
+                Intent intent = new Intent(SingleTaskActivity.this, UserProfile.class);
+                intent.putExtra("user", currentUser);
+                intent.putExtra("clicked_user", task.getUser());
+                startActivity(intent);
             }
         });
 
@@ -80,8 +92,9 @@ public class SingleTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putExtra("Lat", 53.526f); //needs to pass task location
-                intent.putExtra("Long", -113.525f);
+                intent.putExtra("goal", "single");
+                intent.putExtra("lat", task.getGeoLoc().latitude);
+                intent.putExtra("long", task.getGeoLoc().longitude);
                 startActivity(intent);
             }
         });
@@ -89,14 +102,8 @@ public class SingleTaskActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);
         super.onBackPressed();
     }
-
-
 }
-
-
-

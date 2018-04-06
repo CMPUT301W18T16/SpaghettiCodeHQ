@@ -83,13 +83,6 @@ public class MainActivity extends AppCompatActivity
 
         user = getIntent().getExtras().getParcelable("USER");
 
-        user.addReview("Kinda good");
-        user.addReview("Kinda sucks");
-        Intent intent = new Intent(MainActivity.this, UserProfile.class);
-        intent.putExtra("user", user);
-        intent.putExtra("clicked_user", user);
-        startActivity(intent);
-
         String query = "{\n" + " \"query\": { \"term\": {\"message\":\"" + "text" + "\"} }\n" + "}";
 
         ElasticFactory.getListOfTask getTaskList
@@ -114,13 +107,7 @@ public class MainActivity extends AppCompatActivity
                 Task task = (Task) oldTaskList.getAdapter().getItem(position);
 
                 Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
-                intent.putExtra("task_title",task.getTitle());
-                intent.putExtra("task_desc",task.getDescription());
-                intent.putExtra("task_status",task.getStatus());
-                intent.putExtra("task_id",task.getId());
-                intent.putExtra("task_geo_loc",task.getGeoLoc());
-                intent.putExtra("task_img",task.getPhoto());
-                intent.putExtra("user", user);
+                intent.putExtra("task", task);
 
                 startActivityForResult(intent,0);
 
