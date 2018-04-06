@@ -13,6 +13,7 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,17 +42,37 @@ public class ElasticFactory {
             //String uniqueID = UUID.randomUUID().toString();
 
             for(Task task : tasks){
-                Index index = new Index.Builder(task).index(elasticIndex).type("minciTestTask").build();
+
+                JSONObject json = new JSONObject();
+
+                try {
+                    json = new JSONObject()
+                            .put("description", task.getDescription())
+                            .put("mData", 0)
+                            .put("picture", task.getPhoto())
+                            .put("status", task.getStatus())
+                            .put("title",task.getTitle())
+                            .put("taskRequester",task.getRequester())
+                    ;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i("json created:",json.toString());
+
+                Index index = new Index.Builder(task).index(elasticIndex).type("minciTestTask1").build();
 
 
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
                     {
+                        Log.i("ADDID", result.getId());
                         task.setId(result.getId());
+
                     }
                     else{
                         Log.i("Error","Elasticsearch was not able to add the task");
+                        Log.i("addTask", result.getJsonString());
                     }
                 }
                 catch(Exception e){
@@ -77,7 +98,8 @@ public class ElasticFactory {
                                   .put("email", user.getEmail())
                                   .put("mData", 0)
                                   .put("phoneNumber", user.getPhoneNumber())
-                                  .put("username", user.getUsername())
+                                  .put("username", user.getUsername()
+                                  )
                                   ;
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -124,50 +146,44 @@ public class ElasticFactory {
     public static class UpdateTask extends AsyncTask<Task, Void, Void> {
         protected Void doInBackground(Task...tasks) {
             verifySettings();
-            Task taskToBeUpdated = null;
-            String taskID = null;
+
+            String taskID;
             for (Task task : tasks){
+
+
                 taskID = task.getId();
-                taskToBeUpdated = task;
-                String imageToBeUpdated = taskToBeUpdated.getPhoto();
-                String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(imageToBeUpdated);
-                taskToBeUpdated.setPhoto(escapedImg);
-
-
-
-                if (Objects.equals(escapedImg, imageToBeUpdated)) {
-                    Log.i("ESCAPE","escape util is not working");
-
+                Log.i("ID_in_ES", taskID);
+                String imageToBeUpdated = task.getPhoto();
+                if (!StringUtils.isEmpty(imageToBeUpdated)) {
+                    String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(imageToBeUpdated);
+                    task.setPhoto(escapedImg);
+                }
+                else{
+                    task.setPhoto("");
                 }
 
-                Log.i("original", imageToBeUpdated);
-
+                try {
+                    DocumentResult result = client.execute(new Index.Builder(task)
+                            .index(elasticIndex)
+                            .type("minciTestTask1")
+                            .id(taskID)
+                            .build());
+                    Log.i("YOU TRIED", "to update a task");
+                    if(result.getJsonString() != null)
+                    {
+                        Log.i("RESULT:", result.getJsonString());
+                    }
+                    else
+                    {
+                        JSONObject obj = new JSONObject(result.getSourceAsString());
+                        Log.i("Error","UpdateTask FAILED" + obj);
+                    }
+                } catch(Exception e){
+                    e.printStackTrace();
+                    Log.i("Error", "UpdateTask: The application failed to update task");
+                }
             }
 
-            try {
-                DocumentResult result = client.execute(new Update.Builder(taskToBeUpdated)
-                        .index(elasticIndex)
-                        .type("minciTestTask")
-                        .id(taskID)
-                        .build());
-                Log.i("YOU TRIED", "to update a task");
-
-                if(result.getJsonString() != null)
-                {
-                    Log.i("RESULT:", result.getJsonString());
-
-                }
-                else
-                {
-                    JSONObject obj = new JSONObject(result.getSourceAsString());
-                    Log.i("Error","UpdateTask FAILED" + obj);
-
-                }
-
-            } catch(Exception e){
-                e.printStackTrace();
-                Log.i("Error", "UpdateTask: The application failed to update task");
-            }
             return null;
         }
     }
@@ -266,7 +282,7 @@ public class ElasticFactory {
 
                 Search search = new Search.Builder(search_parameters[0])
                         .addIndex(elasticIndex)
-                        .addType("minciTestTask")
+                        .addType("minciTestTask1")
                         .build();
                 try{
                     SearchResult result = client.execute(search);
@@ -298,7 +314,7 @@ public class ElasticFactory {
             try {
                 client.execute(new Delete.Builder(search_parameters[0])
                         .index(elasticIndex)
-                        .type("minciTestTask")
+                        .type("minciTestTask1")
                         .build());
 
             } catch (IOException e) {

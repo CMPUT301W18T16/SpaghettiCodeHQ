@@ -24,7 +24,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.base.Objects;
+
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -32,6 +35,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static com.google.common.base.Objects.equal;
 
 
 /**
@@ -47,6 +52,7 @@ public class SingleTaskActivity extends AppCompatActivity {
     String taskStatusString;
     String taskTitleString;
     String taskImgString;
+    String taskIDString;
     Task currentTask;
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -71,27 +77,33 @@ public class SingleTaskActivity extends AppCompatActivity {
 
             taskRequester = bundle.getParcelable("user");
             taskTitleString = bundle.getString("task_title");
-            taskDescriptionString = bundle.getString("task_desc")+taskRequester.getUsername();
+            taskDescriptionString = bundle.getString("task_desc");
             taskStatusString = bundle.getString("task_status");
             taskImgString = bundle.getString("task_img");
             currentTask = bundle.getParcelable("task");
-
+            taskIDString = bundle.getString("task_id");
             taskTitle.setText(taskTitleString);
             taskDesc.setText(taskDescriptionString);
             taskStatus.setText(taskStatusString);
+            Log.i("singletTaskID", taskIDString);
 
 
 
             // deal with single image first
-            if (currentTask.getPhoto() == null){
+
+            if (StringUtils.isEmpty(taskImgString))
+            {
                 Log.i("!taskimg", "is empty" );
             }
             else{
+                Log.i("check","img equal didnt pass");
+                Log.i("currentimg",taskImgString);
                 String imgFromServer = bundle.getString("task_img");
                 Log.i("checking","img from server has "+imgFromServer.length());
                 byte[] decodedBase64 = Base64.decode(imgFromServer, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedBase64, 0, decodedBase64.length);
                 imgByte.setImageBitmap(decodedByte);
+                encoded = taskImgString;
             }
         }
 
@@ -130,7 +142,21 @@ public class SingleTaskActivity extends AppCompatActivity {
                 //create query
                 //and upload
                 currentTask.setPhoto(encoded);
-                //Log.i("saveTaskButton_size", String.valueOf(encoded.length()));
+                currentTask.setId(taskIDString);
+                currentTask.setStatus(taskStatusString);
+                currentTask.setRequester(taskRequester.getUsername());
+                try {
+                    currentTask.setDescription(taskDescriptionString);
+                } catch (DescTooLongException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    currentTask.setTitle(taskTitleString);
+                } catch (TitleTooLongException e) {
+                    e.printStackTrace();
+                }
+                Log.i("after", currentTask.getId());
+
                 ElasticFactory.UpdateTask addTask = new ElasticFactory.UpdateTask();
                 addTask.execute(currentTask);
 
@@ -245,11 +271,7 @@ public class SingleTaskActivity extends AppCompatActivity {
 
         // time to save your stuffs
 
-
-
     }
-
-
 
     @Override
     public void onBackPressed() {
