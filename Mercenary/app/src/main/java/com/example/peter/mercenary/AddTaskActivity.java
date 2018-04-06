@@ -18,13 +18,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class AddTaskActivity extends AppCompatActivity {
-    EditText title;
-    EditText description;
-    EditText status;
-    TextView error1;
-    Button done;
-    Task newTask;
-    User user;
+    private EditText title;
+    private EditText description;
+    private EditText status;
+    private TextView error1;
+    private Button done;
+    private Task newTask;
+    private String userId; //currently logged in userid
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-        user = getIntent().getExtras().getParcelable("USER");
+        userId = getIntent().getStringExtra("userId");
 
 
         done = (Button) findViewById(R.id.done1);
@@ -47,8 +47,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
-                        status.getText().toString());
-                newTask.setUserId(user.getId());
+                        status.getText().toString(), userId );
 
                 //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                 //Toast.LENGTH_LONG);
@@ -59,18 +58,22 @@ public class AddTaskActivity extends AppCompatActivity {
                 ElasticFactory.AddingTasks addTask = new ElasticFactory.AddingTasks();
                 addTask.execute(newTask);
 
+
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        super.onBackPressed();
     }
 
 }

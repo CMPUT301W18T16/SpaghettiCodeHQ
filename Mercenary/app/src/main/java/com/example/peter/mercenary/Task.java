@@ -24,15 +24,16 @@ public class Task implements Parcelable {
     private String status;
     User user;
     private int mData;
+    private String userId;
 
     @JestId
     private String id;
-    private String userId;
 
-    public Task(String title, String description, String status) {
+    public Task(String title, String description, String status, String userId) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.userId = userId;
 
     }
 
@@ -74,7 +75,7 @@ public class Task implements Parcelable {
 
     public void setUserId(String userId){this.userId=userId;};
 
-    public String getUserId(String userId){return userId;};
+    public String getUserId(){return this.userId;};
 
     /**
      *

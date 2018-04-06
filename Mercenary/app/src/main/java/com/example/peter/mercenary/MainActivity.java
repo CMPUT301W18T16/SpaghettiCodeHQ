@@ -50,13 +50,14 @@ public class MainActivity extends AppCompatActivity
     private ListView oldTaskList;
     private ArrayList<Task> taskList = new ArrayList<Task>();
     private TaskAdapter adapter;
-    private User user; //currently logged in user
+    private String userId; //currently logged in userid
     private TimerTask timerTask;
     private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userId = getIntent().getStringExtra("userId");
         setContentView(R.layout.drawer_layout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
-                intent.putExtra("USER", user);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
             /*public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -104,7 +105,6 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        user = getIntent().getExtras().getParcelable("USER");
         /*
         user.addReview("Kinda good");
         user.addReview("Kinda sucks");
@@ -113,21 +113,22 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("clicked_user", user);
         startActivity(intent);*/
 
-        //String query = "{\n" + " \"query\": { \"match\": {\"message\":\"" + "text" + "\"} }\n" + "}";
+        String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + userId + "\"} }\n" + "}";
 
         if(NetworkStatus.connectionStatus(this)) {
 
             ElasticFactory.getListOfTask getTaskList
                     = new ElasticFactory.getListOfTask();
-            getTaskList.execute(user.getId());
+            getTaskList.execute(query);
 
             try {
                 taskList = getTaskList.get();
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
-            adapter = new ArrayAdapter<Task>(this,
-                    R.layout.list_item, taskList);
+
+
+            adapter = new TaskAdapter(this, taskList);
             oldTaskList.setAdapter(adapter);
 
             // listen to task clicks
@@ -143,27 +144,16 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("task_id", task.getId());
                     intent.putExtra("task_geo_loc", task.getGeoLoc());
                     intent.putExtra("task_img", task.getPhoto());
-                    intent.putExtra("user", user);
+                    //intent.putExtra("user", user);
 
                     startActivityForResult(intent, 0);
 
                 }
             });
         }
-<<<<<<< HEAD
-        adapter = new TaskAdapter(this, taskList);
-        oldTaskList.setAdapter(adapter);
 
-
-        // listen to task clicks
-        oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Task task = (Task) oldTaskList.getAdapter().getItem(position);
-=======
         else{
             Toast.makeText(getApplicationContext(),"Lmao",Toast.LENGTH_LONG).show();
->>>>>>> 8bef41872957f8b2553b757a50467031740cba73
 
         }
     }
@@ -171,10 +161,31 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    /*public void onResume(){
+    public void onResume() {
+        super.onResume();
+        Log.i("CHECK THIS VALUE", ""+userId);
+
+        String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + userId + "\"} }\n" + "}";
+
+        if (NetworkStatus.connectionStatus(this)) {
+
+            ElasticFactory.getListOfTask getTaskList
+                    = new ElasticFactory.getListOfTask();
+            getTaskList.execute(query);
+
+            try {
+                taskList = getTaskList.get();
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the tweets from the async object");
+            }
+
+            adapter = new TaskAdapter(this, taskList);
+            oldTaskList.setAdapter(adapter);
+
+        }
 
     }
-*/
+
 
  /*   /**
      * Get the user data for the logged in user

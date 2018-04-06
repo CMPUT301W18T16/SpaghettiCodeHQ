@@ -165,7 +165,7 @@ public class User implements Parcelable{
      * @return user id
      */
     public String getId() {
-        return id;
+        return this.id;
     }
 
     /**

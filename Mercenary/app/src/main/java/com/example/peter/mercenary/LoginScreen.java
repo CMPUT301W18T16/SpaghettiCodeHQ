@@ -57,7 +57,7 @@ public class LoginScreen extends AppCompatActivity {
                         ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
                         user = getUser.execute(query).get();
                         Intent intent = new Intent(LoginScreen.this, MainActivity.class);
-                        intent.putExtra("USER", user);
+                        intent.putExtra("userId", user.getId());
                         startActivity(intent);
 
                     } else {
