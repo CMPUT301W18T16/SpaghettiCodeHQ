@@ -21,7 +21,7 @@ public class Task implements Parcelable {
     private String description;
     private BidList listBids;
     private LatLng geoLoc;
-    private byte picture;
+    private String picture;
     private String status;
     private String taskProvider;
     private String taskRequester;
@@ -32,12 +32,12 @@ public class Task implements Parcelable {
     @JestId
     private String id;
 
-    public Task(String title, String description, String status, String taskRequester) {
+    public Task(String title, String description, String status, String taskRequester, String picture) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.taskRequester = taskRequester;
-
+        this.picture = picture;
     }
 
     /**
@@ -81,7 +81,7 @@ public class Task implements Parcelable {
      * @param picture: the photo the user wishes to assign to the task
      * Setter
      */
-    public void setPhoto(byte picture){
+    public void setPhoto(String picture){
         this.picture=picture;
     }
 
@@ -126,7 +126,7 @@ public class Task implements Parcelable {
      * Getter.
      * @see public void setPhoto(...)
      */
-    public byte getPhoto(){return this.picture;}
+    public String getPhoto(){return this.picture;}
 
     /**
      *

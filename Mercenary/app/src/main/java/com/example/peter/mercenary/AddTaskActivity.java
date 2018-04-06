@@ -52,7 +52,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
-                        status.getText().toString(), taskRequester.getUsername().toString()
+                        status.getText().toString(), taskRequester.getUsername().toString(), null
                 );
 
 

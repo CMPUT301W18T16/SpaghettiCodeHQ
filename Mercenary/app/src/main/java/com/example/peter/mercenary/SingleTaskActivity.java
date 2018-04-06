@@ -42,6 +42,12 @@ public class SingleTaskActivity extends AppCompatActivity {
     User currentUser; //currently logged in user
     byte[] byteArray;  // base64 byte array of the compressed img
     String encoded;  //  base64 byte array encoded to string for simple storage
+    User taskRequester;
+    String taskDescriptionString;
+    String taskStatusString;
+    String taskTitleString;
+    String taskImgString;
+    Task currentTask;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -50,51 +56,53 @@ public class SingleTaskActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TextView taskTitle = findViewById(R.id.task_title);
-        TextView taskDesc = findViewById(R.id.task_desc);
-        TextView taskStatus = findViewById(R.id.task_status);
+        final TextView taskTitle = findViewById(R.id.task_title);
+        final TextView taskDesc = findViewById(R.id.task_desc);
+        final TextView taskStatus = findViewById(R.id.task_status);
         TextView userText = findViewById(R.id.usernameText);
         Button addImgButton = findViewById(R.id.add_img_button);
         ImageButton map = findViewById(R.id.mapBtn);
-
+        Button saveTaskButton = findViewById(R.id.task_save_button);
         ImageView imgByte = findViewById(R.id.byte_img);
 
-
-        Bundle bundle = getIntent().getExtras();
+         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null){
 
+            taskRequester = bundle.getParcelable("user");
+            taskTitleString = bundle.getString("task_title");
+            taskDescriptionString = bundle.getString("task_desc")+taskRequester.getUsername();
+            taskStatusString = bundle.getString("task_status");
+            taskImgString = bundle.getString("task_img");
+            currentTask = bundle.getParcelable("task");
 
-            User taskRequester = bundle.getParcelable("user");
-            taskTitle.setText(bundle.getString("task_title"));
-            taskDesc.setText(bundle.getString("task_desc:")+taskRequester.getUsername());
-            taskStatus.setText(bundle.getString("task_status"));
+            taskTitle.setText(taskTitleString);
+            taskDesc.setText(taskDescriptionString);
+            taskStatus.setText(taskStatusString);
+
 
 
             // deal with single image first
-            Log.i("!taskimg", "is " + bundle.get("task_img").getClass().getName());
-            if (bundle.getByteArray("task_img") == null){
+            if (currentTask.getPhoto() == null){
                 Log.i("!taskimg", "is empty" );
-
             }
             else{
-                byte[] decodedString = Base64.decode(bundle.getString("task_img"), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                String imgFromServer = bundle.getString("task_img");
+                Log.i("checking","img from server has "+imgFromServer.length());
+                byte[] decodedBase64 = Base64.decode(imgFromServer, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedBase64, 0, decodedBase64.length);
                 imgByte.setImageBitmap(decodedByte);
-
             }
-
         }
+
         addImgButton.setOnClickListener(new View.OnClickListener(){
             @Override
-
             public void onClick(View v){
 
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select an image"), PICK_IMAGE);
-
             }
         });
 
@@ -115,6 +123,21 @@ public class SingleTaskActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        saveTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create query
+                //and upload
+                currentTask.setPhoto(encoded);
+                //Log.i("saveTaskButton_size", String.valueOf(encoded.length()));
+                ElasticFactory.UpdateTask addTask = new ElasticFactory.UpdateTask();
+                addTask.execute(currentTask);
+
+
+            }
+        });
+
     }
 
 
@@ -219,7 +242,7 @@ public class SingleTaskActivity extends AppCompatActivity {
             Log.i("NO", "no image selected!!");
 
         }
-        Log.i("BIG stuff!", encoded);
+
         // time to save your stuffs
 
 

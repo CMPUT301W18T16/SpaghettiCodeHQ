@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity
                 Task task = (Task) oldTaskList.getAdapter().getItem(position);
 
                 Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
+                intent.putExtra("task",task);
                 intent.putExtra("task_title",task.getTitle());
                 intent.putExtra("task_desc",task.getDescription());
                 intent.putExtra("task_status",task.getStatus());

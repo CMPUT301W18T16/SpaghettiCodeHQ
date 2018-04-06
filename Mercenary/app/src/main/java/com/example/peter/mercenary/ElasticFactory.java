@@ -12,6 +12,7 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
@@ -120,15 +122,50 @@ public class ElasticFactory {
     }
 
     public static class UpdateTask extends AsyncTask<Task, Void, Void> {
-        protected Void doInBackground(Task...search_parameters) {
+        protected Void doInBackground(Task...tasks) {
             verifySettings();
+            Task taskToBeUpdated = null;
+            String taskID = null;
+            for (Task task : tasks){
+                taskID = task.getId();
+                taskToBeUpdated = task;
+                String imageToBeUpdated = taskToBeUpdated.getPhoto();
+                String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(imageToBeUpdated);
+                taskToBeUpdated.setPhoto(escapedImg);
+
+
+
+                if (Objects.equals(escapedImg, imageToBeUpdated)) {
+                    Log.i("ESCAPE","escape util is not working");
+
+                }
+
+                Log.i("original", imageToBeUpdated);
+
+            }
+
             try {
-                client.execute(new Update.Builder(search_parameters[0])
+                DocumentResult result = client.execute(new Update.Builder(taskToBeUpdated)
                         .index(elasticIndex)
                         .type("minciTestTask")
-                        .id("1")
+                        .id(taskID)
                         .build());
+                Log.i("YOU TRIED", "to update a task");
+
+                if(result.getJsonString() != null)
+                {
+                    Log.i("RESULT:", result.getJsonString());
+
+                }
+                else
+                {
+                    JSONObject obj = new JSONObject(result.getSourceAsString());
+                    Log.i("Error","UpdateTask FAILED" + obj);
+
+                }
+
             } catch(Exception e){
+                e.printStackTrace();
                 Log.i("Error", "UpdateTask: The application failed to update task");
             }
             return null;
@@ -283,4 +320,6 @@ public class ElasticFactory {
             client = (JestDroidClient) factory.getObject();
         }
     }
+
+
 }
