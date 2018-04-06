@@ -24,11 +24,12 @@ import java.util.concurrent.ExecutionException;
  * @Version 1.0
  */
 public class LoginScreen extends AppCompatActivity {
-    EditText username;
-    Button login;
-    Button signup;
-    TextView errorText;
-    User user;
+    private EditText username;
+    private Button login;
+    private Button signup;
+    private TextView errorText;
+    private User user;
+    private NetworkStatus status;
 
     //Code for returning user is from here:
     //https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
@@ -41,6 +42,8 @@ public class LoginScreen extends AppCompatActivity {
         login = (Button) findViewById(R.id.loginBtn);
         signup = (Button) findViewById(R.id.signupBtn);
         errorText = (TextView) findViewById(R.id.error);
+
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override

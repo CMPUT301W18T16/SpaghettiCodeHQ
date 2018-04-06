@@ -24,6 +24,7 @@ public class AddTaskActivity extends AppCompatActivity {
     TextView error1;
     Button done;
     Task newTask;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+        user = getIntent().getExtras().getParcelable("USER");
 
 
         done = (Button) findViewById(R.id.done1);
@@ -46,6 +48,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
                         status.getText().toString());
+                newTask.setUserId(user.getId());
 
                 //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                 //Toast.LENGTH_LONG);
