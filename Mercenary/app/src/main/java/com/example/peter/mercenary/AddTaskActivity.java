@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,6 +24,7 @@ public class AddTaskActivity extends AppCompatActivity {
     EditText description;
     EditText status;
     TextView error1;
+    TextView user;
     Button done;
     Task newTask;
 
@@ -34,6 +37,9 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
         done = (Button) findViewById(R.id.done1);
+        final User taskRequester;
+        Bundle extras = getIntent().getExtras();
+        taskRequester = (User) extras.getParcelable("user");
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,9 +49,12 @@ public class AddTaskActivity extends AppCompatActivity {
                 status = (EditText) findViewById(R.id.status);
                 error1 = (TextView) findViewById(R.id.error1);
 
+
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
-                        status.getText().toString());
+                        status.getText().toString(), taskRequester.getUsername().toString()
+                );
+
 
                 //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                 //Toast.LENGTH_LONG);
@@ -57,6 +66,9 @@ public class AddTaskActivity extends AppCompatActivity {
                 addTask.execute(newTask);
 
                 finish();
+                //minci: we need to refresh main activity to see the new task after an task is added;
+                //one need to manually refresh task if he is back from add_task_activity
+                startActivity(getIntent());
             }
         });
 

@@ -48,8 +48,11 @@ public class SingleTaskActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null){
+
+
+            User taskRequester = bundle.getParcelable("user");
             taskTitle.setText(bundle.getString("task_title"));
-            taskDesc.setText(bundle.getString("task_desc"));
+            taskDesc.setText(bundle.getString("task_desc:")+taskRequester.getUsername());
             taskStatus.setText(bundle.getString("task_status"));
 
 

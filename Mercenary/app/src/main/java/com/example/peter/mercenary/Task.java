@@ -23,6 +23,8 @@ public class Task implements Parcelable {
     private LatLng geoLoc;
     private byte picture;
     private String status;
+    private String taskProvider;
+    private String taskRequester;
     User user;
     private int mData;
 
@@ -30,10 +32,11 @@ public class Task implements Parcelable {
     @JestId
     private String id;
 
-    public Task(String title, String description, String status) {
+    public Task(String title, String description, String status, String taskRequester) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.taskRequester = taskRequester;
 
     }
 
@@ -163,6 +166,28 @@ public class Task implements Parcelable {
             return new Task[size];
         }
     };
+
+    // TODO: taskProvider and taskRequester of a task, getters and setters
+
+    public String getRequester(){
+        return this.taskRequester;
+    }
+
+    public String getProvider(){
+        return this.taskProvider;
+
+    }
+
+    public void setRequester(String taskRequester){
+        this.taskRequester = taskRequester;
+    }
+
+    public void setTaskProvider(String taskProvider){
+        this.taskRequester = taskProvider;
+    }
+
+
+
 
     private Task(Parcel in) {
         mData = in.readInt();

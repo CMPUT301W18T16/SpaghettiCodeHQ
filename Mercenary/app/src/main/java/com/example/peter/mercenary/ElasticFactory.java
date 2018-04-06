@@ -5,19 +5,22 @@ package com.example.peter.mercenary;
  */
 
 import android.os.AsyncTask;
+import android.system.Os;
 import android.util.Log;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 import io.searchbox.core.Delete;
-import io.searchbox.core.DeleteByQuery;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -36,7 +39,9 @@ public class ElasticFactory {
             //String uniqueID = UUID.randomUUID().toString();
 
             for(Task task : tasks){
-                Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
+                Index index = new Index.Builder(task).index(elasticIndex).type("minciTestTask").build();
+
+
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
@@ -63,7 +68,21 @@ public class ElasticFactory {
             //String uniqueID = UUID.randomUUID().toString();
 
             for(User user : users){
-                Index index = new Index.Builder(user).index(elasticIndex).type("User").build();
+                JSONObject json = new JSONObject();
+
+                try {
+                     json = new JSONObject()
+                                  .put("email", user.getEmail())
+                                  .put("mData", 0)
+                                  .put("phoneNumber", user.getPhoneNumber())
+                                  .put("username", user.getUsername())
+                                  ;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i("json created:",json.toString());
+
+                Index index = new Index.Builder(user).index(elasticIndex).type("minciTestUser").build();
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
@@ -90,7 +109,7 @@ public class ElasticFactory {
             try {
                 client.execute(new Update.Builder(search_parameters[0])
                         .index(elasticIndex)
-                        .type("user")
+                        .type("minciTestUser")
                         .id("1")
                         .build());
             } catch(Exception e){
@@ -100,35 +119,106 @@ public class ElasticFactory {
         }
     }
 
-    public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
-        @Override
-        protected Boolean doInBackground(String...search_parameters){
+    public static class UpdateTask extends AsyncTask<Task, Void, Void> {
+        protected Void doInBackground(Task...search_parameters) {
             verifySettings();
+            try {
+                client.execute(new Update.Builder(search_parameters[0])
+                        .index(elasticIndex)
+                        .type("minciTestTask")
+                        .id("1")
+                        .build());
+            } catch(Exception e){
+                Log.i("Error", "UpdateTask: The application failed to update task");
+            }
+            return null;
+        }
+    }
 
+
+
+
+    // search for a user and reuturn the User object if there's one in database
+    public static class returnUser extends AsyncTask<String, Void, User>{
+        @Override
+        protected User doInBackground(String...search_parameters){
+            verifySettings();
+            
             Search search = new Search.Builder(""+search_parameters[0]+"")
                     .addIndex(elasticIndex)
-                    .addType("User")
+                    .addType("minciTestUser")
                     .build();
             try{
                 SearchResult result = client.execute(search);
                 if(result.getTotal()==1)
                 {
-                    return true;
+                    Log.i("RESULT:", result.getSourceAsString());
+                    String searchResult = result.getSourceAsString();
+
+                    JSONObject obj = new JSONObject(searchResult);
+                    String loginUserName = obj.getString("username");
+                    String loginUserEMail = obj.getString("email");
+                    String loginUserPhoneNumber = obj.getString("phoneNumber");
+                    float loginUserRating = Float.valueOf(obj.getString("rating"));
+                    User loginUser = new User(loginUserName, loginUserEMail,loginUserPhoneNumber,loginUserRating);
+                    return loginUser;
                 }
                 else
                 {
                     Log.i("Error","The search query failed");
-                    return false;
+                    User loginUser = null;
+                    return loginUser;
                 }
             }
             catch (Exception e){
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                return false;
+                Log.i("Error: ", "invoking returnUser: Something went wrong when we tried to communicate with the elasticsearch server!");
+                User loginUser = null;
+                return loginUser;
 
             }
 
         }
     }
+
+
+
+    public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
+        @Override
+        protected Boolean doInBackground(String...search_parameters){
+            verifySettings();
+
+            Search search = new Search.Builder(search_parameters[0])
+                    .addIndex(elasticIndex)
+                    .addType("minciTestUser")
+                    .build();
+
+            try{
+                SearchResult result = client.execute(search);
+
+                if(result.getTotal() == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    Log.i("Error","checkUserExist: The search query failed");
+                    return false;
+                }
+            }
+            catch (Exception e){
+
+                Log.i("Error", "checkUserExist: Something went wrong when we tried to communicate with the elasticsearch server!");
+                Log.i("exfeption", e.toString());
+                e.printStackTrace();
+                return false;
+
+            }
+
+
+        }
+    }
+
+
 
     public static class getListOfTask extends AsyncTask<String, Void, ArrayList<Task>>{
             @Override
@@ -139,7 +229,7 @@ public class ElasticFactory {
 
                 Search search = new Search.Builder(search_parameters[0])
                         .addIndex(elasticIndex)
-                        .addType("task")
+                        .addType("minciTestTask")
                         .build();
                 try{
                     SearchResult result = client.execute(search);
@@ -151,11 +241,11 @@ public class ElasticFactory {
                     }
                     else
                     {
-                        Log.i("Error","The search query failed");
+                        Log.i("Error","getListOfTask: The search query failed");
                     }
                 }
                 catch (Exception e){
-                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                    Log.i("Error", "getListOfTask: Something went wrong when we tried to communicate with the elasticsearch server!");
 
                 }
               return taskList;
@@ -171,7 +261,7 @@ public class ElasticFactory {
             try {
                 client.execute(new Delete.Builder(search_parameters[0])
                         .index(elasticIndex)
-                        .type("task")
+                        .type("minciTestTask")
                         .build());
 
             } catch (IOException e) {

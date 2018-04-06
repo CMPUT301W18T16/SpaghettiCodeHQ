@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
+                // minci: we need to know who is adding the task
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
             /*public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -121,7 +123,6 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("task_geo_loc",task.getGeoLoc());
                 intent.putExtra("task_img",task.getPhoto());
                 intent.putExtra("user", user);
-
                 startActivityForResult(intent,0);
 
             }

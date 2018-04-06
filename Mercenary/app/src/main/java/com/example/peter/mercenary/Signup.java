@@ -3,6 +3,7 @@ package com.example.peter.mercenary;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,10 +46,11 @@ public class Signup extends AppCompatActivity {
                 email = (EditText) findViewById(R.id.emailText);
                 phone = (EditText) findViewById(R.id.phoneText);
                 ElasticFactory.checkUserExist userExists = new ElasticFactory.checkUserExist();
-                userExists.execute(username.getText().toString());
+                userExists.execute("{\n" + " \"query\": { \"match\": {\"username\":\"" + username.getText().toString() + "\"} }\n" + "}");
 
                 try {
                     alreadyExist = userExists.get();
+                    Log.i("check:", "singup Screen: is user exist?" + Boolean.toString(alreadyExist));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
@@ -56,7 +58,7 @@ public class Signup extends AppCompatActivity {
                 }
 
                 try {
-                    if(alreadyExist==true){
+                    if(alreadyExist){
                         errorText.setText("This user already exist, please pick a new name.");
                     }
                     else {
