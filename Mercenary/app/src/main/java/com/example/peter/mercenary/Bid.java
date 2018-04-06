@@ -1,6 +1,8 @@
 package com.example.peter.mercenary;
 
-import java.text.DecimalFormat;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import io.searchbox.annotations.JestId;
 
 /**
@@ -11,104 +13,80 @@ import io.searchbox.annotations.JestId;
  *
  */
 
-public class Bid {
+public class Bid implements Parcelable {
     private String username;
     private float value;
-	
     @JestId
-    private String id; //id is equivalent to bidID
-    private String userId;
-	private String taskId;
+    private String id;
+    private String UserId;
+
+    public static final Creator<Bid> CREATOR = new Creator<Bid>() {
+        @Override
+        public Bid createFromParcel(Parcel in) {
+            return new Bid(in);
+        }
+
+        @Override
+        public Bid[] newArray(int size) {
+            return new Bid[size];
+        }
+    };
 
     /**
-     * Default constructor of bid
-     * @param username: User's username
-     * @param value: User's bid amount in dollars
-     *
-     */
-    public Bid(String username, float value, String taskId){
-		
-		
-        this.username=username;
-        this.value=value;
-		this.taskId = taskId;
-		
-    }
-
-    public String getUserId()
-	{
-		return this.userId;
-	}
-
-    /**
-	 * Setting bid ID
-     * @param id: the bid ID
+     * @param id: the ID of User's username
      */
     public void setId(String id) {
         this.id = id;
     }
-	
-	/**
-	* Getting bid ID
-	* @return id: the bid ID
-	*/
-	
-	public String getID(){
-		return this.id;
-	}
-	
-	
-	/**
-	* Getting taskId
-	* @return taskId: the ID of the task
-	*/
-	public String getTaskId(){
-		return this.taskId;
-	}
 
 
     /**
      *
-     * @return User's username of the bid
-     * @see: method Bid(String username, float value, String taskId) [constructor]
+     * @return: User's username of the bid
+     * @see: method Bid(string username, float value) [constructor]
      */
-		
-		
     public String getUsername(){
         return this.username;
     }
 
     /**
      *
-     * @return User's bid value
-     * @see: method Bid(String username, float value, String taskId) [constructor]
+     * @return: User's bid amount
+     * @see: method Bid(string username, float value) [constructor]
      */
-		
     public float getValue(){
         return this.value;
     }
-	
-	
-    /**
-     * Function used for comparision
-     * @return
-		
-		-1 if the current bid value is greater than the new bid value
-		0 if the current bid value is the same as the new bid value
-		1 if the current bid value is less than the new bid value
 
-     * @param: a new Bid
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(username);
+        dest.writeFloat(value);
+        dest.writeString(id);
+        dest.writeString(UserId);
+    }
+
+    /**
+     *
+     * @param username: User's username
+     * @param value: User's bid amount in dollars
+     *
      */
-		
-	public int compareFxn(Bid bid) {
-	        if (this.value > bid.value)
-	            return -1;
-	        else if (this.value == bid.value)
-	            return 0;
-	        else
-	            return 1;
-	    }
+    public Bid(String username, float value){
+        this.username=username;
+        this.value=value;
+    }
+
+    protected Bid(Parcel in) {
+        username = in.readString();
+        value = in.readFloat();
+        id = in.readString();
+        UserId = in.readString();
+    }
 
 }
-
-
