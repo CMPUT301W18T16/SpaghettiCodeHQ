@@ -35,7 +35,10 @@ public class AddTaskActivity extends AppCompatActivity {
         map = new MapsActivity();
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+<<<<<<< HEAD
         user = getIntent().getParcelableExtra("user");
+=======
+>>>>>>> da4d0daf000ba3d6843353be49173f07a30ab2cf
 
 
         done = (Button) findViewById(R.id.done1);
