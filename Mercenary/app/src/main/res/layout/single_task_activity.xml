@@ -4,40 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:parentActivityName="activity_main"
     tools:context="com.example.peter.mercenary.SingleTaskActivity"
-    android:parentActivityName="activity_main" >
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/task_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="68dp"
         android:fontFamily="sans-serif"
         android:text="Task title here"
         android:textColor="@android:color/holo_blue_dark"
         android:textSize="30sp"
         android:typeface="sans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/task_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Task description here"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_title" />
 
@@ -45,8 +38,8 @@
         android:id="@+id/task_status_str"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
         android:text="Task Status: "
         android:textColor="@android:color/holo_red_light"
         android:textSize="18sp"
@@ -57,8 +50,8 @@
         android:id="@+id/task_status"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:layout_marginBottom="32dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
         android:text="task status here"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,12 +68,9 @@
         android:id="@+id/usernameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.055"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_desc" />
 
@@ -88,40 +78,42 @@
         android:id="@+id/mapBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_map" />
+        app:layout_constraintStart_toEndOf="@+id/task_title"
+        app:srcCompat="@android:drawable/ic_dialog_map"
+        tools:layout_editor_absoluteY="68dp" />
 
     <ImageView
         android:id="@+id/byte_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="292dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.025"
+        android:layout_marginTop="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameText"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal_background" />
 
     <Button
         android:id="@+id/add_img_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="292dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="16dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="64dp"
         android:text="add_img_b"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
+
+    <Button
+        android:id="@+id/task_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="SAVE"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

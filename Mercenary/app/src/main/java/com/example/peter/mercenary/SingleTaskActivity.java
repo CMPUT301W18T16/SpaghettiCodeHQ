@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,10 @@ import android.widget.Toast;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 
@@ -36,7 +40,8 @@ import java.io.InputStream;
 
 public class SingleTaskActivity extends AppCompatActivity {
     User currentUser; //currently logged in user
-
+    byte[] byteArray;  // base64 byte array of the compressed img
+    String encoded;  //  base64 byte array encoded to string for simple storage
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -133,22 +138,61 @@ public class SingleTaskActivity extends AppCompatActivity {
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
-                // check image size
-                int selectedImageSize = selectedImage.getByteCount();
+
+
+
+                // make temp storage for our image
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 Bitmap compressedImage = selectedImage.copy(selectedImage.getConfig(), true);
-                int compressedImageSize = selectedImageSize;
+                FileOutputStream out = null;
+                String cacheDir = getCacheDir().toString();
+                File dir = new File(cacheDir);
+                if(!dir.exists())
+                    dir.mkdirs();
+                // store img to cache file
+                File file = new File(dir, "cached"  + ".png");
+                out = new FileOutputStream(file,false);
+                compressedImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+                out.flush();
+                out.close();
 
+
+                Log.i("I have an img!", "size: " + Long.toString(file.length()));
+                int selectedImageSize = Math.toIntExact(file.length());
+                int compressedImageSize = selectedImageSize;
                 if (compressedImageSize > 65536){
                     int compressedImgWidth = compressedImage.getWidth();
                     int compressedImgHeight = compressedImage.getHeight();
 
                     while (compressedImageSize > 65536){
-                         compressedImgWidth = (int)(compressedImgWidth*0.9);
-                         compressedImgHeight = (int)(compressedImgHeight*0.9);
-                         compressedImage = Bitmap.createScaledBitmap(compressedImage,compressedImgWidth, compressedImgHeight, true);
+                        // toast for long time image processing
+                        Toast toast = Toast.makeText(getApplicationContext(), "Your image is being processed",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
 
-                         compressedImageSize = compressedImage.getByteCount();
+                        // iteratively reduces image size
+                        compressedImgWidth = (int)(compressedImgWidth*0.9);
+                        compressedImgHeight = (int)(compressedImgHeight*0.9);
+                        compressedImage = Bitmap.createScaledBitmap(compressedImage,compressedImgWidth, compressedImgHeight, true);
+
+                        // save the reduced file to mobile cache storage
+                        try {
+                            out = new FileOutputStream(file,false);
+                            compressedImage.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                            // PNG is a lossless format, the compression factor (100) is ignored
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                if (out != null) {
+                                    out.flush();
+                                    out.close();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                         compressedImageSize = Math.toIntExact(file.length());
                          Log.i("compressing", "size: " + Integer.toString(compressedImageSize));
                     }
                 }
@@ -158,22 +202,31 @@ public class SingleTaskActivity extends AppCompatActivity {
 
                 final ImageView bitmapView = findViewById(R.id.byte_img);
                 bitmapView.setImageBitmap(compressedImage);
-                selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                compressedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteArray = stream.toByteArray();
+                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
                 Log.i("!!HUGE!!", byteArray.toString());
                 Log.i("!!SIZE!!",Integer.toString(selectedImageSize) );
+                Log.i("!!BYTE_SIZE!!", Integer.toString(byteArray.length));
+                Log.i("STRING_LEN!", String.valueOf(encoded.length()));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         else{
             Log.i("NO", "no image selected!!");
 
         }
+        Log.i("BIG stuff!", encoded);
+        // time to save your stuffs
+
+
 
     }
+
+
 
     @Override
     public void onBackPressed() {
