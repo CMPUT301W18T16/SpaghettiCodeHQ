@@ -80,12 +80,12 @@ public class Task implements Parcelable {
 
     /**
      *
-     * @param picture: the photo the user wishes to assign to the task
+     * @param pictureList: the photo the user wishes to assign to the task
      * Setter
      */
-    public void setPhoto(String picture){
+    public void setPhoto(ArrayList<String> pictureList){
 
-        this.pictureArray.add(picture);
+        this.pictureArray = pictureList;
     }
 
     /**
@@ -129,6 +129,7 @@ public class Task implements Parcelable {
      * Getter.
      * @see public void setPhoto(...)
      */
+
     public ArrayList<String> getPhoto(){return this.pictureArray;}
 
     /**
