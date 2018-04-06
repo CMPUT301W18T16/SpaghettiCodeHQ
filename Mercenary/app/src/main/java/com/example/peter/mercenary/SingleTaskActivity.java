@@ -150,13 +150,15 @@ public class SingleTaskActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //create query
                 //and upload
-
                 //TODO: detect if photo list if empty; if empty then initialize it; if not then add photo to it
-                if (currentTask.getPhoto().isEmpty());
-                currentTask.setPhoto(encoded);
-                currentTask.setId(taskIDString);
+                String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(encoded);
+                taskImgStringList.add(escapedImg);
+
+                currentTask.setPhoto(taskImgStringList);
                 currentTask.setStatus(taskStatusString);
                 currentTask.setRequester(taskRequester.getUsername());
+                currentTask.setId(taskIDString);
+
                 try {
                     currentTask.setDescription(taskDescriptionString);
                 } catch (DescTooLongException e) {
@@ -167,7 +169,7 @@ public class SingleTaskActivity extends AppCompatActivity {
                 } catch (TitleTooLongException e) {
                     e.printStackTrace();
                 }
-                Log.i("after", currentTask.getId());
+                //Log.i("after", currentTask.getId());
 
                 ElasticFactory.UpdateTask addTask = new ElasticFactory.UpdateTask();
                 addTask.execute(currentTask);

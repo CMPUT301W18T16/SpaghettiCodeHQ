@@ -78,7 +78,6 @@ public class ElasticFactory {
                 }
                 catch(Exception e){
                     Log.i("Error", "The application failed to build and send the task");
-
                 }
             }
             return null;
@@ -154,6 +153,8 @@ public class ElasticFactory {
 
                 taskID = task.getId();
                 Log.i("ID_in_ES", taskID);
+
+                /*
                 ArrayList<String> imageListToBeUpdated = task.getPhoto();
                 // last element of img list
                 String imageToBeUpdated = imageListToBeUpdated.get(imageListToBeUpdated.size()-1);
@@ -167,7 +168,7 @@ public class ElasticFactory {
                 else{
 
                 }
-
+                */
                 try {
                     // minci: changed Update to Index;
                     // Error:

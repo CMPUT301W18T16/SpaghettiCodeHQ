@@ -51,6 +51,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 error1 = (TextView) findViewById(R.id.error1);
 
                 ArrayList<String> emptyImgList = new ArrayList<>();
+
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
                         status.getText().toString(), taskRequester.getUsername(), emptyImgList

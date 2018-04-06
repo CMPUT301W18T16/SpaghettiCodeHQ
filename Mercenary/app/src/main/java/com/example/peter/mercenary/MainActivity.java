@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Task task = (Task) oldTaskList.getAdapter().getItem(position);
+                Log.i("TASK", String.valueOf(task.getPhoto()));
 
                 Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
                 intent.putExtra("task",task);
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("task_status",task.getStatus());
                 intent.putExtra("task_id",task.getId());
                 intent.putExtra("task_geo_loc",task.getGeoLoc());
-                intent.putExtra("task_img",task.getPhoto());
+                intent.putStringArrayListExtra("task_img",task.getPhoto());
                 intent.putExtra("user", user);
                 startActivityForResult(intent,0);
 
