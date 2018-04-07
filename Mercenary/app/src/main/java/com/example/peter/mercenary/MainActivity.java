@@ -1,9 +1,15 @@
 package com.example.peter.mercenary;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -48,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     private TimerTask timerTask;
     private Timer timer;
     private User user; //currently logged in user
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,22 +97,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
-
-        /*
-        user.addReview("Kinda good");
-        user.addReview("Kinda sucks");
-        Intent intent = new Intent(MainActivity.this, UserProfile.class);
-        intent.putExtra("user", user);
-        intent.putExtra("clicked_user", user);
-        startActivity(intent);*/
 
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
@@ -168,7 +165,6 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-
 
     @Override
     public void onBackPressed() {

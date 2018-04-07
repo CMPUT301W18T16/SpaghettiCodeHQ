@@ -1,36 +1,42 @@
 package com.example.peter.mercenary;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
+
+import android.Manifest;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+//http://blog.teamtreehouse.com/beginners-guide-location-android
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
+    private GoogleApiClient mGoogleApiClient;
     private MarkerOptions options = new MarkerOptions();
-    LatLng currentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +44,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
         mapFragment.getMapAsync(this);
     }
 
@@ -54,11 +65,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
         String goal = getIntent().getStringExtra("goal");
 
         if (goal.equals("single")) {
@@ -69,14 +75,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().position(coord).title("Task coords"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(coord));
         } else if (goal.equals("5km")) {
-            getNearbyTasks();
+                mGoogleApiClient.connect();
         }
-    }
-
-    //https://stackoverflow.com/questions/9510741/how-to-get-the-current-location-of-my-device
-    @Override
-    public void onLocationChanged(Location location) {
-        currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
     //https://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
@@ -101,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return loc;
     }
 
-    public ArrayList<Task> getNearbyTasks() {
+    public ArrayList<Task> getNearbyTasks(Location currentLocation) {
         //returns all tasks within 5 km
         ArrayList<Task> nearby = new ArrayList<>();
 
@@ -109,15 +109,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 = new ElasticFactory.getListOfTask();
         getTaskList.execute("");
 
+        LatLng cur = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(cur).title("Current position"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(cur));
+
         try {
             ArrayList<Task> tasks = getTaskList.get();
+            tasks.add(new Task("Snow", "Please shovel the snow",
+                    new LatLng(53.5424028, -113.5095353), "requested"));
+            tasks.add(new Task("Fix my xbox", "My xbox is broken please fix it",
+                    new LatLng(53.4658257, -113.4946275), "requested"));
             for (int i = 0; i < tasks.size(); i++) {
                 if (tasks.get(i).getStatus().equals("requested") ||
                         tasks.get(i).getStatus().equals("bidded")) {
                     float[] results = new float[1];
                     LatLng current = tasks.get(i).getGeoLoc();
-                    Location.distanceBetween(currentLocation.latitude, currentLocation.longitude,
-                            current.latitude, current.longitude, results);
+                    Location.distanceBetween(currentLocation.getLatitude(),
+                            currentLocation.getLongitude(),
+                            current.latitude,
+                            current.longitude, results);
                     if (results[0] <= 5000) {
                         nearby.add(tasks.get(i));
 
@@ -129,19 +139,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
             return nearby;
-        }
-        catch (Exception e)
-        {
-            Log.i("Error","Failed to get the tweets from the async object");
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the tweets from the async object");
         }
 
         return null;
     }
 
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i("Connected", "Location services connected");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MapsActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (location != null) {
+            getNearbyTasks(location);
+        } else {
+            Toast.makeText(getApplicationContext(), "cannot find location", Toast.LENGTH_LONG).show();
+        };
+    }
+
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onConnectionSuspended(int i) {
+        Log.i("Suspended", "Location services suspended");
+    }
+
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }

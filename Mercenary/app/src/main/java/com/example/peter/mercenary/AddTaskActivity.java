@@ -40,8 +40,6 @@ public class AddTaskActivity extends AppCompatActivity {
         //setSupportActionBar(toolbar);
         user = getIntent().getParcelableExtra("user");
 
-
-
         done = (Button) findViewById(R.id.done1);
 
         done.setOnClickListener(new View.OnClickListener() {

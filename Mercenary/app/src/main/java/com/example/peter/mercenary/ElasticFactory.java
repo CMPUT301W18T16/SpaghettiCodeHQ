@@ -14,8 +14,10 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DeleteByQuery;
 import io.searchbox.core.DocumentResult;
@@ -23,7 +25,6 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
-
 
 public class ElasticFactory {
     private static String elasticIndex = "cmput301w18t16";
@@ -104,9 +105,9 @@ public class ElasticFactory {
         }
     }
 
-    public static class UpdateUser extends AsyncTask<String, Void, Void>{
+    public static class UpdateUser extends AsyncTask<String, Void, Void> {
         @Override
-        protected Void doInBackground(String...search_parameters){
+        protected Void doInBackground(String... search_parameters) {
             verifySettings();
 
             try {
@@ -115,10 +116,10 @@ public class ElasticFactory {
                         .type("user")
                         .id(search_parameters[1])
                         .build());
-            } catch(Exception e){
-                Log.i("Error", "The application failed to build and send the user");
-            }
-            return null;
+        } catch(Exception e) {
+            Log.i("Error", "The application failed to build and find user");
+        }
+        return null;
         }
     }
 
