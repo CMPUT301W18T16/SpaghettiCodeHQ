@@ -23,18 +23,20 @@ public class Task implements Parcelable {
     private LatLng geoLoc;
     private byte picture;
     private String status;
-    private User user;
+    private String userId;
     private int mData;
-
+    private String userName;
 
     @JestId
     private String id;
 
-    public Task(String title, String description, LatLng geoLoc, String status) {
+    public Task(String title, String description, LatLng geoLoc, String status, String userId, String userName) {
         this.title = title;
         this.description = description;
         this.geoLoc = geoLoc;
         this.status = status;
+        this.userId = userId;
+        this.userName=userName;
 
     }
 
@@ -144,8 +146,12 @@ public class Task implements Parcelable {
      */
     public String getStatus(){return this.status;}
 
-    public User getUser() {
-        return this.user;
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public String getUserName() {
+        return this.userName;
     }
 
     @Override
@@ -160,7 +166,9 @@ public class Task implements Parcelable {
         out.writeDouble(geoLoc.latitude);
         out.writeDouble(geoLoc.longitude);
         out.writeString(status);
-        out.writeParcelable(user, 0);
+        out.writeString(userId);
+        out.writeString(userName);
+
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
@@ -177,7 +185,8 @@ public class Task implements Parcelable {
         this.description = in.readString();
         this.geoLoc = new LatLng(in.readDouble(), in.readDouble());
         this.status = in.readString();
-        this.user = in.readParcelable(null);
+        this.userId = in.readString();
+        this.userName = in.readString();
     }
 
     //public BidList getBids(){return this.listBids;}

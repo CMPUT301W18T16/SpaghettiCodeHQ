@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
 
-
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
@@ -147,15 +146,26 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
+        try {
+            Thread.sleep(500);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
+        oldTaskList = (ListView) findViewById(R.id.myTaskView);
+
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
         if (NetworkStatus.connectionStatus(this)) {
 
             ElasticFactory.getListOfTask getTaskList
                     = new ElasticFactory.getListOfTask();
+
             getTaskList.execute(query);
 
             try {
+                Log.i("Resuming", "Check If resuming");
+
                 taskList = getTaskList.get();
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");

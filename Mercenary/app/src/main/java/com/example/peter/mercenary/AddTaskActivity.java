@@ -51,10 +51,10 @@ public class AddTaskActivity extends AppCompatActivity {
                 error1 = (TextView) findViewById(R.id.error1);
                 location = (EditText) findViewById(R.id.location);
 
-                LatLng geoLocation = map.getLocationFromAddress(location.getText().toString());
+                LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
-                        geoLocation, user.getId() );
+                        geoLocation, status.getText().toString(), user.getId(), user.getUsername() );
 
                 //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                 //Toast.LENGTH_LONG);
@@ -65,18 +65,10 @@ public class AddTaskActivity extends AppCompatActivity {
                 ElasticFactory.AddingTasks addTask = new ElasticFactory.AddingTasks();
                 addTask.execute(newTask);
 
-                finish();
+                onBackPressed();
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
 }

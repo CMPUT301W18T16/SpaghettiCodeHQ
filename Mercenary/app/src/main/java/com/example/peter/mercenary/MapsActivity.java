@@ -1,5 +1,6 @@
 package com.example.peter.mercenary;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -80,8 +81,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //https://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
-    public LatLng getLocationFromAddress(String strAddress) {
-        Geocoder coder = new Geocoder(getApplicationContext());
+    public LatLng getLocationFromAddress(Context context, String strAddress) {
+        Geocoder coder = new Geocoder(context);
         List<Address> address;
         LatLng loc = null;
 
@@ -116,9 +117,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             ArrayList<Task> tasks = getTaskList.get();
             tasks.add(new Task("Snow", "Please shovel the snow",
-                    new LatLng(53.5424028, -113.5095353), "requested"));
+                    new LatLng(53.5424028, -113.5095353), "requested","91223123141","SnowWhite"));
             tasks.add(new Task("Fix my xbox", "My xbox is broken please fix it",
-                    new LatLng(53.4658257, -113.4946275), "requested"));
+                    new LatLng(53.4658257, -113.4946275), "requested","132254577878","PCMaster"));
             for (int i = 0; i < tasks.size(); i++) {
                 if (tasks.get(i).getStatus().equals("requested") ||
                         tasks.get(i).getStatus().equals("bidded")) {

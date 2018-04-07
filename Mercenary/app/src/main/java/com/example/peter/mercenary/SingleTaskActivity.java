@@ -13,12 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.ObjectUtils;
+
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -28,9 +31,10 @@ import org.apache.commons.lang3.ObjectUtils;
 public class SingleTaskActivity extends AppCompatActivity {
     private User user; //currently logged in user
     private Task task;
+    private User clickedUser; //target user
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_task_activity);
 
@@ -75,29 +79,48 @@ public class SingleTaskActivity extends AppCompatActivity {
         taskDesc.setText(task.getDescription());
         taskStatus.setText(task.getStatus());
 
-        userText.setText(task.getUser().getUsername());
-        userText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //todo
-                //when the user clicks on the username go to the userprofile
-                Intent intent = new Intent(SingleTaskActivity.this, UserProfile.class);
-                intent.putExtra("user", user);
-                intent.putExtra("clicked_user", task.getUser());
-                startActivity(intent);
-            }
-        });
+        String query = "{\n" + " \"query\": { \"match\": {\"_id\":\"" + task.getUserId() + "\"} }\n" + "}";
 
-        map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putExtra("goal", "single");
-                intent.putExtra("lat", task.getGeoLoc().latitude);
-                intent.putExtra("long", task.getGeoLoc().longitude);
-                startActivity(intent);
+        if (NetworkStatus.connectionStatus(this)) {
+
+            try {
+                    ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
+                    clickedUser = getUser.execute(query).get();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
-        });
+
+            userText.setText(clickedUser.getUsername());
+            userText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //todo
+                    //when the user clicks on the username go to the userprofile
+                    Intent intent = new Intent(SingleTaskActivity.this, UserProfile.class);
+                    intent.putExtra("user", user);
+                    intent.putExtra("clicked_user", clickedUser);
+                    startActivity(intent);
+                }
+            });
+
+            map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    intent.putExtra("goal", "single");
+                    intent.putExtra("lat", task.getGeoLoc().latitude);
+                    intent.putExtra("long", task.getGeoLoc().longitude);
+                    startActivity(intent);
+                }
+            });
+        }
+        else{
+            //offline support
+        }
+
     }
 
     @Override
