@@ -63,6 +63,10 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".EditTaskActivity"
+            android:label="@string/title_activity_edit_task"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".RateAndReviewActivity" />
         <activity android:name=".RateReviewActivity"></activity>
     </application>

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.widget.Button;
 import android.util.Log;
 import android.widget.ImageView;
 import android.view.View;
@@ -48,33 +49,39 @@ public class SingleTaskActivity extends AppCompatActivity {
         TextView taskDesc = findViewById(R.id.task_desc);
         TextView taskStatus = findViewById(R.id.task_status);
         TextView userText = findViewById(R.id.usernameText);
+        Button editTask = findViewById(R.id.edit_task);
 
         ImageButton map = findViewById(R.id.mapBtn);
 
-        //ImageView imgByte = findViewById(R.id.byte_img);
-
-        /*if (bundle != null){
-            taskTitle.setText(bundle.getString("task_title"));
-            taskDesc.setText(bundle.getString("task_desc"));
-            taskStatus.setText(bundle.getString("task_status"));
-
-
-            // deal with single image first
-            if (bundle.getString("task_img") == null){
-                taskTitle.setText("OMG THERES NO IMG");
-            }
-            else{
-
-                byte[] decodedString = Base64.decode(bundle.getString("task_img"), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                //imgByte.setImageBitmap(decodedByte);
-
-            }
-
-        }*/
+        if (bundle != null){
         task = getIntent().getParcelableExtra("task");
         user = getIntent().getStringExtra("user");
 
+        userText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo
+                //when the user clicks on the username go to the userprofile
+            }
+        });
+
+        editTask.setOnClickListener(new View.OnClickListener(){
+           @Override
+            public void onClick(View view){
+               Intent intentEdit = new Intent(getApplicationContext(), EditTaskActivity.class);
+               startActivity(intentEdit);
+               intentEdit.putExtra("task", task);
+           }
+        });
+
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("Lat", 53.526f); //needs to pass task location
+                intent.putExtra("Long", -113.525f);
+                startActivity(intent);
+              
         taskTitle.setText(task.getTitle());
         taskDesc.setText(task.getDescription());
         taskStatus.setText(task.getStatus());

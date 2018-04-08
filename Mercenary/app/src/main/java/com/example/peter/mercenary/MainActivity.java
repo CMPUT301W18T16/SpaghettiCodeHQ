@@ -176,6 +176,15 @@ public class MainActivity extends AppCompatActivity
             Thread.currentThread().interrupt();
         }
 
+        // listen to task clicks
+        oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Task task = (Task) oldTaskList.getAdapter().getItem(position);
+
+                Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
+                intent.putExtra("user", user);
+                intent.putExtra("task", task);
         oldTaskList = (ListView) findViewById(R.id.myTaskView);
 
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
