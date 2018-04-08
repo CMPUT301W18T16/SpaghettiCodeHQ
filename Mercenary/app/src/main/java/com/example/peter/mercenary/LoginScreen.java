@@ -24,11 +24,12 @@ import java.util.concurrent.ExecutionException;
  * @Version 1.0
  */
 public class LoginScreen extends AppCompatActivity {
-    EditText username;
-    Button login;
-    Button signup;
-    TextView errorText;
-    User user;
+    private EditText username;
+    private Button login;
+    private Button signup;
+    private TextView errorText;
+    private User user;
+    private NetworkStatus status;
 
     //Code for returning user is from here:
     //https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
@@ -53,8 +54,11 @@ public class LoginScreen extends AppCompatActivity {
                     if (checkUser.execute(query).get()) {
                         ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
                         user = getUser.execute(query).get();
+
                         Intent intent = new Intent(LoginScreen.this, MainActivity.class);
-                        intent.putExtra("USER", user);
+                        intent.putExtra("user", user);
+                        //intent.putExtra("username", user.getUsername());
+
                         startActivity(intent);
 
                     } else {

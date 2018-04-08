@@ -23,17 +23,20 @@ public class Task implements Parcelable {
     private LatLng geoLoc;
     private byte picture;
     private String status;
-    User user;
+    private String userId;
     private int mData;
-
+    private String userName;
 
     @JestId
     private String id;
 
-    public Task(String title, String description, String status) {
+    public Task(String title, String description, LatLng geoLoc, String status, String userId, String userName) {
         this.title = title;
         this.description = description;
+        this.geoLoc = geoLoc;
         this.status = status;
+        this.userId = userId;
+        this.userName = userName;
 
     }
 
@@ -87,7 +90,9 @@ public class Task implements Parcelable {
      * @param geoLoc: the geolocation (most likely a pair of float coordinates) the user will assign to the task
      * Setter
      */
-    public void setGeo(LatLng geoLoc){ this.geoLoc=geoLoc;}
+    public void setGeo(LatLng geoLoc){
+        this.geoLoc=geoLoc;
+    }
 
     /**
      *
@@ -141,8 +146,12 @@ public class Task implements Parcelable {
      */
     public String getStatus(){return this.status;}
 
-    public User getUser() {
-        return this.user;
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public String getUserName() {
+        return this.userName;
     }
 
     @Override
@@ -152,7 +161,14 @@ public class Task implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(mData);
+        out.writeString(title);
+        out.writeString(description);
+        out.writeDouble(geoLoc.latitude);
+        out.writeDouble(geoLoc.longitude);
+        out.writeString(status);
+        out.writeString(userId);
+        out.writeString(userName);
+
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
@@ -165,10 +181,13 @@ public class Task implements Parcelable {
     };
 
     private Task(Parcel in) {
-        mData = in.readInt();
+        this.title = in.readString();
+        this.description = in.readString();
+        this.geoLoc = new LatLng(in.readDouble(), in.readDouble());
+        this.status = in.readString();
+        this.userId = in.readString();
+        this.userName = in.readString();
     }
-
-
 
     //public BidList getBids(){return this.listBids;}
 

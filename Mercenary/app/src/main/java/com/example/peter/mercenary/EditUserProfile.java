@@ -26,13 +26,11 @@ public class EditUserProfile extends AppCompatActivity {
 
         user = getIntent().getParcelableExtra("user");
 
-        username = (EditText) findViewById(R.id.usernameText);
         email = (EditText) findViewById(R.id.emailText);
         phone = (EditText) findViewById(R.id.phoneText);
 
         error = (TextView) findViewById(R.id.error);
 
-        username.setText(user.getUsername());
         email.setText(user.getEmail());
         phone.setText(user.getPhoneNumber());
 
@@ -41,15 +39,20 @@ public class EditUserProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    user.setUsername(username.getText().toString());
                     user.setEmail(email.getText().toString());
                     user.setPhoneNumber(phone.getText().toString());
+
+                    String[] query = {"{\n" + " \"query\": { \"match\": {\"email\":\"" + user.getEmail()
+                            + "\"phone\":\"" + user.getPhoneNumber() + "} }\n" + "}",
+                            user.getId()};
+
+                    ElasticFactory.UpdateUser update = new ElasticFactory.UpdateUser();
+                    update.execute(query);
+
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("user", user);
                     setResult(1, resultIntent);
                     finish();
-                } catch (UsernameTooLongException e) {
-                    error.setText("Username must be less then 8 characters");
                 } catch (InvalidEmailException e) {
                     error.setText("Email must be in a valid format");
                 }
