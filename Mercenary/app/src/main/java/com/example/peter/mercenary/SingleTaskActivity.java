@@ -93,8 +93,8 @@ public class SingleTaskActivity extends AppCompatActivity {
 
         if (NetworkStatus.connectionStatus(this)) {
             try {
-                    ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
-                    clickedUser = getUser.execute(query).get();
+                ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
+                clickedUser = getUser.execute(query).get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -108,7 +108,7 @@ public class SingleTaskActivity extends AppCompatActivity {
                     //todo
                     //when the user clicks on the username go to the userprofile
                     Intent intent = new Intent(SingleTaskActivity.this, UserProfile.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra("user", user.getUsername());
                     intent.putExtra("clicked_user", clickedUser.getUsername());
                     startActivity(intent);
                 }
