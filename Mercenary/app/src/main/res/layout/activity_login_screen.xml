@@ -2,14 +2,14 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#4682B4"
+    android:background="@drawable/spaghettibkg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.peter.mercenary.LoginScreen">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="271dp"
+        android:layout_height="257dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -36,9 +36,10 @@
             android:id="@+id/usernameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView"
-            android:layout_below="@id/textView"
+            android:layout_alignEnd="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:background="@color/cast_intro_overlay_button_background_color"
+            android:backgroundTint="@color/cast_intro_overlay_button_background_color"
             android:ems="10"
             android:hint="Username"
             android:inputType="textPersonName"
@@ -60,17 +61,17 @@
             android:id="@+id/loginBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/error"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_below="@+id/error"
+            android:layout_centerHorizontal="true"
             android:text="Login" />
 
         <Button
             android:id="@+id/signupBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/loginBtn"
-            android:layout_marginTop="16dp"
+            android:layout_alignStart="@+id/loginBtn"
+            android:layout_below="@+id/loginBtn"
+            android:layout_marginTop="15dp"
             android:text="Signup" />
     </RelativeLayout>
 

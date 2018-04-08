@@ -47,14 +47,14 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
     }
 
     @Test
-    public void setRating() throws Exception {
+    public void addRating() throws Exception {
         //int test
         User newUser = new User("HelloWorld");
-        newUser.setRating(4);
+        newUser.addRating(4);
         assertTrue(newUser.getRating() == 4.0);
 
         //float test
-        newUser.setRating(4.15f);
-        assertTrue(newUser.getRating() == 4.15);
+        newUser.addRating(3.0f);
+        assertTrue(newUser.getRating() == 3.5);
     }
 }
