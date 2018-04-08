@@ -38,6 +38,7 @@ public class ElasticFactory {
 
             for(Task task : tasks){
                 Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
+
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
@@ -56,6 +57,13 @@ public class ElasticFactory {
             return null;
         }
     }
+
+    public static Index buildTaskOffline(Task task){
+        Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
+        return index;
+    }
+
+
 
     public static class AddingUser extends AsyncTask<User, Void, Void>{
         @Override

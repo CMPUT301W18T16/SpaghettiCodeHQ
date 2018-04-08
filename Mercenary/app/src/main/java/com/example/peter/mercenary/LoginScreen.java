@@ -43,8 +43,6 @@ public class LoginScreen extends AppCompatActivity {
         signup = (Button) findViewById(R.id.signupBtn);
         errorText = (TextView) findViewById(R.id.error);
 
-
-
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

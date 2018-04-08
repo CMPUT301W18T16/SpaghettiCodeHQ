@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -32,6 +33,8 @@ public class SingleTaskActivity extends AppCompatActivity {
     private User user; //currently logged in user
     private Task task;
     private User clickedUser; //target user
+    private static final String TASKFILE = "taskfile.sav";
+    private static final String ELASTICFILE = "elasticfile.sav";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,6 @@ public class SingleTaskActivity extends AppCompatActivity {
                 byte[] decodedString = Base64.decode(bundle.getString("task_img"), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 //imgByte.setImageBitmap(decodedByte);
-
 
             }
 
@@ -118,7 +120,7 @@ public class SingleTaskActivity extends AppCompatActivity {
             });
         }
         else{
-            //offline support
+            Toast toast = Toast.makeText(getApplicationContext(), "Currently offline, functionalities may not be available.", Toast.LENGTH_LONG);
         }
 
     }

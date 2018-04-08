@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 public class NetworkStatus{
 
+
+
+
     public static boolean connectionStatus(Context context){
 
         ConnectivityManager conMng =
@@ -20,6 +23,10 @@ public class NetworkStatus{
         NetworkInfo activeNetwork= conMng.getActiveNetworkInfo();
         if (null!=activeNetwork) {
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                
+
+
+
                 return true;
             }
             if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {

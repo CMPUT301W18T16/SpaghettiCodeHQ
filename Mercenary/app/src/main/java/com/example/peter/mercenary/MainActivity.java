@@ -1,6 +1,7 @@
 package com.example.peter.mercenary;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity
     private static final String ELASTICFILE = "elasticfile.sav";
     private EditText bodyText;
     private ListView oldTaskList;
-    private ArrayList<Task> taskList = new ArrayList<Task>();
+    private ArrayList<Task> taskList;
+    private ArrayList<Task> offlineAddedTaskList;
     private TaskAdapter adapter;
     private TimerTask timerTask;
     private Timer timer;
@@ -59,7 +61,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        taskList= new ArrayList<Task>();
+        offlineAddedTaskList = new ArrayList<Task>();
         user = getIntent().getParcelableExtra("user");
         setContentView(R.layout.drawer_layout);
 
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
                 intent.putExtra("user", user);
+                intent.putParcelableArrayListExtra("taskList",taskList);
+                intent.putParcelableArrayListExtra("offline",offlineAddedTaskList);
                 startActivity(intent);
             }
             /*public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -118,7 +123,11 @@ public class MainActivity extends AppCompatActivity
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
-
+        }
+        else{
+            loadTaskFile();
+        }
+        saveTaskFile();
         /*taskList.add(new Task("Snow", "Please shovel the snow",
                 new LatLng(53.5424028, -113.5095353), "requested"));
         taskList.add(new Task("Fix my xbox", "My xbox is broken please fix it",
@@ -151,11 +160,6 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
-        }
-
-        else{
-            Toast.makeText(getApplicationContext(),"Lmao",Toast.LENGTH_LONG).show();
-        }
     }
 
     public void onResume() {
@@ -185,9 +189,15 @@ public class MainActivity extends AppCompatActivity
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
-            adapter = new TaskAdapter(this, taskList);
-            oldTaskList.setAdapter(adapter);
         }
+        else{
+            loadTaskFile();
+        }
+        saveTaskFile();
+
+        adapter = new TaskAdapter(this, taskList);
+        oldTaskList.setAdapter(adapter);
+
 
     }
 
@@ -250,9 +260,9 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    private void loadFromFile(String FILENAME) {
+    private void loadTaskFile() {
         try {
-            FileInputStream fis = openFileInput(FILENAME);
+            FileInputStream fis = openFileInput(TASKFILE);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
             //Code taken from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt Sept.22,2016
@@ -267,10 +277,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void saveInFile(String FILENAME) {
+    private void saveTaskFile( ) {
         try {
 
-            FileOutputStream fos = openFileOutput(FILENAME,0);
+            FileOutputStream fos = openFileOutput(TASKFILE, Context.MODE_PRIVATE);
             OutputStreamWriter writer = new OutputStreamWriter(fos);
             Gson gson = new Gson();
             gson.toJson(taskList, writer);
