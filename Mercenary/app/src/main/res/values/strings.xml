@@ -11,4 +11,5 @@
     <string name="task_title" />
     <string name="null_img">No image found</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_rate_and_review">RateAndReviewActivity</string>
 </resources>
