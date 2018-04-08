@@ -175,16 +175,6 @@ public class MainActivity extends AppCompatActivity
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-
-        // listen to task clicks
-        oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Task task = (Task) oldTaskList.getAdapter().getItem(position);
-
-                Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
-                intent.putExtra("user", user);
-                intent.putExtra("task", task);
         oldTaskList = (ListView) findViewById(R.id.myTaskView);
 
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
@@ -203,8 +193,7 @@ public class MainActivity extends AppCompatActivity
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
-        }
-        else{
+        } else {
             loadTaskFile();
         }
         saveTaskFile();
@@ -212,8 +201,9 @@ public class MainActivity extends AppCompatActivity
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
-
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -344,3 +334,4 @@ public class MainActivity extends AppCompatActivity
 
 
 }
+
