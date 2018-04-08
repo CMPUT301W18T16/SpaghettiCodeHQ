@@ -119,19 +119,10 @@ public class MainActivity extends AppCompatActivity
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
 
-        /*taskList.add(new Task("Snow", "Please shovel the snow",
-                new LatLng(53.5424028, -113.5095353), "requested"));
-        taskList.add(new Task("Fix my xbox", "My xbox is broken please fix it",
-                new LatLng(53.4658257, -113.4946275), "requested"));*/
-
-        //Intent intent = new Intent(MainActivity.this, RateReviewActivity.class);
-        //intent.putExtra("user", user);
-        //startActivity(intent);
-
-        /*intent = new Intent(MainActivity.this, UserProfile.class);
-        intent.putExtra("user", user);
-        intent.putExtra("clicked_user", user);
-        startActivity(intent);*/
+        Intent intent = new Intent(MainActivity.this, UserProfile.class);
+        intent.putExtra("user", user.getUsername());
+        intent.putExtra("clicked_user", user.getUsername());
+        startActivity(intent);
 
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
