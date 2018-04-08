@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class SingleTaskActivity extends AppCompatActivity {
-    private User user; //currently logged in user
+    private String user; //currently logged in user
     private Task task;
     private User clickedUser; //target user
     private static final String TASKFILE = "taskfile.sav";
@@ -53,8 +53,6 @@ public class SingleTaskActivity extends AppCompatActivity {
 
         //ImageView imgByte = findViewById(R.id.byte_img);
 
-        Bundle bundle = getIntent().getExtras();
-
         /*if (bundle != null){
             taskTitle.setText(bundle.getString("task_title"));
             taskDesc.setText(bundle.getString("task_desc"));
@@ -74,8 +72,8 @@ public class SingleTaskActivity extends AppCompatActivity {
             }
 
         }*/
-        task = bundle.getParcelable("task");
-        user = bundle.getParcelable("user");
+        task = getIntent().getParcelableExtra("task");
+        user = getIntent().getStringExtra("user");
 
         taskTitle.setText(task.getTitle());
         taskDesc.setText(task.getDescription());
@@ -84,11 +82,9 @@ public class SingleTaskActivity extends AppCompatActivity {
         String query = "{\n" + " \"query\": { \"match\": {\"_id\":\"" + task.getUserId() + "\"} }\n" + "}";
 
         if (NetworkStatus.connectionStatus(this)) {
-
             try {
                     ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
                     clickedUser = getUser.execute(query).get();
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -103,7 +99,7 @@ public class SingleTaskActivity extends AppCompatActivity {
                     //when the user clicks on the username go to the userprofile
                     Intent intent = new Intent(SingleTaskActivity.this, UserProfile.class);
                     intent.putExtra("user", user);
-                    intent.putExtra("clicked_user", clickedUser);
+                    intent.putExtra("clicked_user", clickedUser.getUsername());
                     startActivity(intent);
                 }
             });
@@ -122,7 +118,6 @@ public class SingleTaskActivity extends AppCompatActivity {
         else{
             Toast toast = Toast.makeText(getApplicationContext(), "Currently offline, functionalities may not be available.", Toast.LENGTH_LONG);
         }
-
     }
 
     @Override

@@ -36,7 +36,7 @@ public class Task implements Parcelable {
         this.geoLoc = geoLoc;
         this.status = status;
         this.userId = userId;
-        this.userName=userName;
+        this.userName = userName;
 
     }
 
