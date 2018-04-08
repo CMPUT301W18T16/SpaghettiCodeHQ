@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
+        android:hint="Title"
         android:inputType="textPersonName"
-        android:text="Title"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="33dp" />
 
@@ -35,19 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
+        android:hint="Description"
         android:inputType="textPersonName"
-        android:text="Description"
-        app:layout_constraintTop_toBottomOf="@+id/location"
-        tools:layout_editor_absoluteX="33dp" />
-
-    <EditText
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Address"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:layout_editor_absoluteX="33dp" />
 
@@ -57,8 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
+        android:hint="Status"
         android:inputType="textPersonName"
-        android:text="Status"
         app:layout_constraintTop_toBottomOf="@+id/desc"
         tools:layout_editor_absoluteX="33dp" />
 
@@ -66,8 +55,19 @@
         android:id="@+id/error1"
         android:layout_width="236dp"
         android:layout_height="27dp"
+        android:layout_marginTop="36dp"
         android:text="Error Message"
-        tools:layout_editor_absoluteX="33dp"
-        tools:layout_editor_absoluteY="256dp" />
+        app:layout_constraintTop_toBottomOf="@+id/status"
+        tools:layout_editor_absoluteX="33dp" />
+
+    <ImageButton
+        android:id="@+id/mapBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_dialog_map" />
 
 </android.support.constraint.ConstraintLayout>
