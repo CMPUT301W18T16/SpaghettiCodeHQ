@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class SingleTaskActivity extends AppCompatActivity {
-    private String user; //currently logged in user
+    private User user; //currently logged in user
     private Task task;
     private User clickedUser; //target user
     private static final String TASKFILE = "taskfile.sav";
@@ -52,35 +52,38 @@ public class SingleTaskActivity extends AppCompatActivity {
         Button editTask = findViewById(R.id.edit_task);
 
         ImageButton map = findViewById(R.id.mapBtn);
-
-        if (bundle != null){
         task = getIntent().getParcelableExtra("task");
-        user = getIntent().getStringExtra("user");
+        user = getIntent().getParcelableExtra("user");
 
-        userText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //todo
-                //when the user clicks on the username go to the userprofile
-            }
-        });
+        /*if (bundle != null) {
 
-        editTask.setOnClickListener(new View.OnClickListener(){
-           @Override
-            public void onClick(View view){
-               Intent intentEdit = new Intent(getApplicationContext(), EditTaskActivity.class);
-               startActivity(intentEdit);
-               intentEdit.putExtra("task", task);
-           }
-        });
+            userText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //todo
+                    //when the user clicks on the username go to the userprofile
+                }
+            });
 
-        map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putExtra("Lat", 53.526f); //needs to pass task location
-                intent.putExtra("Long", -113.525f);
-                startActivity(intent);
+            editTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intentEdit = new Intent(getApplicationContext(), EditTaskActivity.class);
+                    startActivity(intentEdit);
+                    intentEdit.putExtra("task", task);
+                }
+            });
+
+            map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    intent.putExtra("Lat", 53.526f); //needs to pass task location
+                    intent.putExtra("Long", -113.525f);
+                    startActivity(intent);
+                }
+            });
+        }*/
               
         taskTitle.setText(task.getTitle());
         taskDesc.setText(task.getDescription());
