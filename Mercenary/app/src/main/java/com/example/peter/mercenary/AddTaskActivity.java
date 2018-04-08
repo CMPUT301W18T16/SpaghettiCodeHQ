@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,22 +26,32 @@ public class AddTaskActivity extends AppCompatActivity {
     private EditText description;
     private EditText status;
     private TextView error1;
-    private EditText location;
+    private ImageButton maps;
     private Button done;
     private Task newTask;
     private User user; //currently logged in userid
 
+    private LatLng geoLocation = new LatLng(0, 0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-        final MapsActivity map = new MapsActivity();
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
         user = getIntent().getParcelableExtra("user");
 
         done = (Button) findViewById(R.id.done1);
+
+        maps = (ImageButton) findViewById(R.id.mapBtn);
+        maps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddTaskActivity.this, MapsActivity.class);
+                intent.putExtra("goal", "getGeoLocation");
+                startActivityForResult(intent, 0);
+            }
+        });
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,12 +60,17 @@ public class AddTaskActivity extends AppCompatActivity {
                 description = (EditText) findViewById(R.id.desc);
                 status = (EditText) findViewById(R.id.status);
                 error1 = (TextView) findViewById(R.id.error1);
-                location = (EditText) findViewById(R.id.location);
 
+<<<<<<< HEAD
                 LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
                         geoLocation, status.getText().toString(), user.getId(), user.getUsername() );
+=======
+                newTask = new Task(title.getText().toString(),
+                        description.getText().toString(),
+                        geoLocation, user.getId());
+>>>>>>> cd126ff1d0678778e5a2ffc3eefc83886c9ba4ab
 
                 //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                 //Toast.LENGTH_LONG);
@@ -71,4 +87,10 @@ public class AddTaskActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+           geoLocation = data.getParcelableExtra("location");
+        }
+    }
 }

@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -54,11 +55,11 @@ public class MainActivity extends AppCompatActivity
     private TimerTask timerTask;
     private Timer timer;
     private User user; //currently logged in user
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         user = getIntent().getParcelableExtra("user");
         setContentView(R.layout.drawer_layout);
 
@@ -118,6 +119,23 @@ public class MainActivity extends AppCompatActivity
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
 
+<<<<<<< HEAD
+=======
+        /*taskList.add(new Task("Snow", "Please shovel the snow",
+                new LatLng(53.5424028, -113.5095353), "requested"));
+        taskList.add(new Task("Fix my xbox", "My xbox is broken please fix it",
+                new LatLng(53.4658257, -113.4946275), "requested"));*/
+
+        Intent intent = new Intent(MainActivity.this, RateReviewActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+
+        /*intent = new Intent(MainActivity.this, UserProfile.class);
+        intent.putExtra("user", user);
+        intent.putExtra("clicked_user", user);
+        startActivity(intent);*/
+
+>>>>>>> cd126ff1d0678778e5a2ffc3eefc83886c9ba4ab
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
