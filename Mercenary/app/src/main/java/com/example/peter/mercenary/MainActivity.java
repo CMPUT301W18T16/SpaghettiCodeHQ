@@ -137,10 +137,10 @@ public class MainActivity extends AppCompatActivity
         //intent.putExtra("user", user);
         //startActivity(intent);
 
-        /*intent = new Intent(MainActivity.this, UserProfile.class);
-        intent.putExtra("user", user);
-        intent.putExtra("clicked_user", user);
-        startActivity(intent);*/
+        Intent intent = new Intent(MainActivity.this, UserProfile.class);
+        intent.putExtra("user", user.getUsername());
+        intent.putExtra("clicked_user", user.getUsername());
+        startActivity(intent);
 
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);

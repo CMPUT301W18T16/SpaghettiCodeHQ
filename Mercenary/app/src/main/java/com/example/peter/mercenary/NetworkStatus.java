@@ -23,7 +23,7 @@ public class NetworkStatus{
         NetworkInfo activeNetwork= conMng.getActiveNetworkInfo();
         if (null!=activeNetwork) {
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                
+
 
 
 
