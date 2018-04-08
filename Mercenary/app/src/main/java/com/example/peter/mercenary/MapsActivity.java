@@ -1,18 +1,12 @@
 package com.example.peter.mercenary;
 
-<<<<<<< HEAD
 import android.content.Context;
-=======
 import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
-import android.content.SharedPreferences;
->>>>>>> cd126ff1d0678778e5a2ffc3eefc83886c9ba4ab
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -36,7 +30,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 //http://blog.teamtreehouse.com/beginners-guide-location-android
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -92,9 +85,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-<<<<<<< HEAD
     //https://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address
-    public LatLng getLocationFromAddress(Context context, String strAddress) {
+  /*  public void getLocationFromAddress(Context context, String strAddress) {
         Geocoder coder = new Geocoder(context);
         List<Address> address;
         LatLng loc = null;
@@ -103,8 +95,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             address = coder.getFromLocationName(strAddress, 5);
             if (address == null) {
                 return null;
-=======
+            }
+        }
+        catch(IOException e){}
+    }*/
+
     private void getGeoLocation() {
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -112,10 +109,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 intent.putExtra("location", latLng);
                 setResult(Activity.RESULT_OK, intent);
                 finish();
->>>>>>> cd126ff1d0678778e5a2ffc3eefc83886c9ba4ab
             }
         });
     }
+
 
     private ArrayList<Task> getNearbyTasks(Location currentLocation) {
         //returns all tasks within 5 km
@@ -131,13 +128,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             ArrayList<Task> tasks = getTaskList.get();
-<<<<<<< HEAD
             tasks.add(new Task("Snow", "Please shovel the snow",
                     new LatLng(53.5424028, -113.5095353), "requested","91223123141","SnowWhite"));
             tasks.add(new Task("Fix my xbox", "My xbox is broken please fix it",
                     new LatLng(53.4658257, -113.4946275), "requested","132254577878","PCMaster"));
-=======
->>>>>>> cd126ff1d0678778e5a2ffc3eefc83886c9ba4ab
+
             for (int i = 0; i < tasks.size(); i++) {
                 if (tasks.get(i).getStatus().equals("requested") ||
                         tasks.get(i).getStatus().equals("bidded")) {

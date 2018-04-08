@@ -61,16 +61,12 @@ public class AddTaskActivity extends AppCompatActivity {
                 status = (EditText) findViewById(R.id.status);
                 error1 = (TextView) findViewById(R.id.error1);
 
-<<<<<<< HEAD
-                LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
+
+               // LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
                         geoLocation, status.getText().toString(), user.getId(), user.getUsername() );
-=======
-                newTask = new Task(title.getText().toString(),
-                        description.getText().toString(),
-                        geoLocation, user.getId());
->>>>>>> cd126ff1d0678778e5a2ffc3eefc83886c9ba4ab
+
 
                 //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                 //Toast.LENGTH_LONG);
