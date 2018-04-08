@@ -27,6 +27,7 @@
 
         <RatingBar
             android:id="@+id/ratingBar"
+            android:isIndicator="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textView8"

@@ -185,7 +185,7 @@ public class User implements Parcelable{
      */
 
     //make sure rating is in the corrrect range
-    public void setRating(float rate) {
+    public void addRating(float rate) {
         float newRating;
         newRating = ((this.rating*this.numRatings)+rate)/(numRatings+1);
         this.rating = newRating;

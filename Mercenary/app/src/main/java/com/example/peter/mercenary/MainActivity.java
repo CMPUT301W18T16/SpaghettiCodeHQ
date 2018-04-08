@@ -124,6 +124,15 @@ public class MainActivity extends AppCompatActivity
         taskList.add(new Task("Fix my xbox", "My xbox is broken please fix it",
                 new LatLng(53.4658257, -113.4946275), "requested"));*/
 
+        Intent intent = new Intent(MainActivity.this, RateReviewActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+
+        /*intent = new Intent(MainActivity.this, UserProfile.class);
+        intent.putExtra("user", user);
+        intent.putExtra("clicked_user", user);
+        startActivity(intent);*/
+
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
