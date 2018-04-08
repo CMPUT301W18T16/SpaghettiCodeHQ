@@ -48,7 +48,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TASKFILE = "taskfile.sav";
-    private static final String ELASTICFILE = "elasticfile.sav";
+    private static final String ADDTASKFILE = "addTaskFile.sav";
     private EditText bodyText;
     private ListView oldTaskList;
     private ArrayList<Task> taskList;
@@ -63,7 +63,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         taskList= new ArrayList<Task>();
         offlineAddedTaskList = new ArrayList<Task>();
-        user = getIntent().getParcelableExtra("user");
+        loadOfflineTaskFile();
+        addOfflineToOnline();
+
+            user = getIntent().getParcelableExtra("user");
         setContentView(R.layout.drawer_layout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -109,7 +112,8 @@ public class MainActivity extends AppCompatActivity
         // TODO Auto-generated method stub
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
-
+        loadOfflineTaskFile();
+        addOfflineToOnline();
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
         if(NetworkStatus.connectionStatus(this)) {
@@ -137,6 +141,11 @@ public class MainActivity extends AppCompatActivity
         //intent.putExtra("user", user);
         //startActivity(intent);
 
+        /*Intent intent = new Intent(MainActivity.this, UserProfile.class);
+        intent.putExtra("user", user.getUsername());
+        intent.putExtra("clicked_user", user.getUsername());
+        startActivity(intent);*/
+
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
@@ -148,7 +157,7 @@ public class MainActivity extends AppCompatActivity
 
                     Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
                     intent.putExtra("task", task);
-                    intent.putExtra("user", user.getUsername());
+                    intent.putExtra("user", user);
 
                     startActivityForResult(intent, 0);
 
@@ -159,7 +168,8 @@ public class MainActivity extends AppCompatActivity
 
     public void onResume() {
         super.onResume();
-
+        loadOfflineTaskFile();
+        addOfflineToOnline();
         try {
             Thread.sleep(500);
         } catch(InterruptedException ex) {
@@ -286,6 +296,40 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();
+        }
+    }
+
+
+    private void loadOfflineTaskFile() {
+        try {
+            FileInputStream fis = openFileInput(ADDTASKFILE);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+            //Code taken from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt Sept.22,2016
+            Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+            offlineAddedTaskList = gson.fromJson(in, listType);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            offlineAddedTaskList = new ArrayList<Task>();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    public void addOfflineToOnline(){
+
+        if(NetworkStatus.connectionStatus(this)) {
+            if (offlineAddedTaskList.isEmpty()) {
+
+            } else {
+                for (Task task : offlineAddedTaskList) {
+                    ElasticFactory.AddingTasks addTask = new ElasticFactory.AddingTasks();
+                    addTask.execute(task);
+                }
+                offlineAddedTaskList.clear();
+                getApplicationContext().deleteFile(ADDTASKFILE);
+            }
         }
     }
 

@@ -110,8 +110,6 @@ public class AddTaskActivity extends AppCompatActivity {
                             description.getText().toString(),
                             geoLocation, status.getText().toString(), user.getId(), user.getUsername());
 
-
-
                  //   Log.i("SOURCECHECK",source);
 
                     //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),

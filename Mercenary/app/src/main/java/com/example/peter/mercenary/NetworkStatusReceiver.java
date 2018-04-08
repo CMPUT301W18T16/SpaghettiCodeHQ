@@ -20,7 +20,7 @@ public class NetworkStatusReceiver extends BroadcastReceiver {
                 false);
         if (isConnected) {
             Toast.makeText(context, "Connection Lost", Toast.LENGTH_LONG).show();
-            //execute all server activity stored here
+
 
         } else {
             Toast.makeText(context, "Connected", Toast.LENGTH_LONG).show();
@@ -28,4 +28,5 @@ public class NetworkStatusReceiver extends BroadcastReceiver {
 
         }
     }
+
 }
