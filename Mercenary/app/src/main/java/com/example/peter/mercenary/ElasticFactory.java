@@ -356,6 +356,4 @@ public class ElasticFactory {
             client = (JestDroidClient) factory.getObject();
         }
     }
-
-
 }

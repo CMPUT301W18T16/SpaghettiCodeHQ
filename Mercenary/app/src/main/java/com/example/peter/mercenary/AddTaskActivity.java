@@ -40,6 +40,7 @@ public class AddTaskActivity extends AppCompatActivity {
         done = (Button) findViewById(R.id.done1);
         final User taskRequester;
         Bundle extras = getIntent().getExtras();
+        assert extras != null;
         taskRequester = (User) extras.getParcelable("user");
 
         done.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +53,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 ArrayList<String> emptyImgList = new ArrayList<>();
 
+                assert taskRequester != null;
                 newTask = new Task(title.getText().toString(),
                         description.getText().toString(),
                         status.getText().toString(), taskRequester.getUsername(), emptyImgList

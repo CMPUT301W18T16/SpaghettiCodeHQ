@@ -4,6 +4,7 @@ import io.searchbox.annotations.JestId;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Base64;
 
 import com.google.android.gms.maps.model.LatLng;
 

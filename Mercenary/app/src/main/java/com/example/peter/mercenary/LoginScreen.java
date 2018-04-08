@@ -48,7 +48,6 @@ public class LoginScreen extends AppCompatActivity {
                 String usernameText = username.getText().toString();
                 ElasticFactory.checkUserExist checkUser = new ElasticFactory.checkUserExist();
                 String query = "{\n" + " \"query\": { \"match\": {\"username\":\"" + usernameText + "\"} }\n" + "}";
-
                 try {
                     if (checkUser.execute(query).get()) {
 

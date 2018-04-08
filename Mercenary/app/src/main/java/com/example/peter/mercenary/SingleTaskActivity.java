@@ -2,11 +2,13 @@ package com.example.peter.mercenary;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.v4.graphics.BitmapCompat;
@@ -17,10 +19,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,10 +55,10 @@ import static com.google.common.base.Objects.equal;
  * Created by minci on 2018/3/19.
  */
 
-public class SingleTaskActivity extends AppCompatActivity {
+public class SingleTaskActivity extends AppCompatActivity  {
     User currentUser; //currently logged in user
     byte[] byteArray;  // base64 byte array of the compressed img
-    String encoded;  //  base64 byte array encoded to string for simple storage
+    String encoded;  //  bitmap encoded to string for simple storage
     User taskRequester;
     String taskDescriptionString;
     String taskStatusString;
@@ -58,6 +66,9 @@ public class SingleTaskActivity extends AppCompatActivity {
     ArrayList<String> taskImgStringList;
     String taskIDString;
     Task currentTask;
+    ArrayList<Bitmap> ImgBitmapArray = new ArrayList<Bitmap>();
+    private ArrayAdapter<String> imageArrayAdapter;
+    private GridView ImgGrid;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -74,6 +85,7 @@ public class SingleTaskActivity extends AppCompatActivity {
         ImageButton map = findViewById(R.id.mapBtn);
         Button saveTaskButton = findViewById(R.id.task_save_button);
         ImageView imgByte = findViewById(R.id.byte_img);
+        ImgGrid = (GridView) findViewById(R.id.gridView);
 
          Bundle bundle = getIntent().getExtras();
 
@@ -89,37 +101,68 @@ public class SingleTaskActivity extends AppCompatActivity {
             taskTitle.setText(taskTitleString);
             taskDesc.setText(taskDescriptionString);
             taskStatus.setText(taskStatusString);
-            Log.i("singletTaskID", taskIDString);
-
-
-
-            // deal with single image first
+            //Log.i("singletTaskID", taskIDString);
 
             if (taskImgStringList.isEmpty())
             {
-                Log.i("!taskimg", "is empty" );
+                //Log.i("!taskimg", "is empty" );
+
             }
             else{
-                Log.i("check","there are some img(s)");
-
+                //TODO: photo grid adapter goes here
+                //Log.i("check","there are some img(s)");
 
                 // StringEscapeUtils is extremely slow
                 //String unescapedImg = StringEscapeUtils.unescapeJson(imgFromServer);
 
-                Log.i("checking","img from server has "+taskImgStringList.size());
+                //Log.i("checking","img from server has "+taskImgStringList.size());
 
                 // let's just test first img from the img list
-                byte[] decodedBase64 = Base64.decode(taskImgStringList.get(0), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedBase64, 0, decodedBase64.length);
-                imgByte.setImageBitmap(decodedByte);
-                encoded = taskImgStringList.get(0);
+                assert(taskImgStringList != null);
+
+
+                //byte[] decodedBase64 = Base64.decode(taskImgStringList.get(0), Base64.DEFAULT);
+                //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedBase64, 0, decodedBase64.length);
+                //imgByte.setImageBitmap(decodedByte);
+                //encoded = taskImgStringList.get(0);
+                //ArrayList<Bitmap> ImgBitmapArray;
+                //ImgBitmapArray = new ArrayList<Bitmap>();
+
+
+                for (String S : taskImgStringList){
+                    //Log.i("array size is:",Integer.toString(taskImgStringList.size()));
+                    //Log.i("the img str is", taskImgStringList.get(i));
+                    //byte[] tempImgByte = Base64.decode(taskImgStringList.get(i), Base64.DEFAULT);
+                    //Bitmap tempBitmap = BitmapFactory.decodeByteArray(tempImgByte, 0, tempImgByte.length);
+                    Log.i("HUGE!!!",S);
+                    ImgBitmapArray.add(getBitmapFromString(S));
+                }
+
+                ImageAdapter myImageAdapter = new ImageAdapter(this);
+                myImageAdapter.setImgBitmapArray(ImgBitmapArray);
+                ImgGrid.setAdapter(myImageAdapter);
+
+
+                ImgGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View v,
+                                            int position, long id) {
+                        Toast.makeText(SingleTaskActivity.this, "" + position,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
+
+
             }
+
         }
 
         addImgButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -151,8 +194,11 @@ public class SingleTaskActivity extends AppCompatActivity {
                 //create query
                 //and upload
                 //TODO: detect if photo list if empty; if empty then initialize it; if not then add photo to it
-                String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(encoded);
-                taskImgStringList.add(escapedImg);
+                if (encoded != null ) {
+                    String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(encoded);
+                    taskImgStringList.add(escapedImg);
+                }
+
 
                 currentTask.setPhoto(taskImgStringList);
                 currentTask.setStatus(taskStatusString);
@@ -174,15 +220,22 @@ public class SingleTaskActivity extends AppCompatActivity {
                 ElasticFactory.UpdateTask addTask = new ElasticFactory.UpdateTask();
                 addTask.execute(currentTask);
 
-
+                // if task updated then toast success
+                // if no internet toast a fail message
+                // else toast a fail message
+                // TODO: we need to get result from the server and if internet is connected
+                Toast toast = Toast.makeText(getApplicationContext(), "Task updated",
+                        Toast.LENGTH_SHORT);
+                toast.show();
 
             }
+
         });
 
     }
 
 
-    // picking img (one)
+    // picking img
     // reference: https://stackoverflow.com/questions/5309190/android-pick-images-from-gallery
     //
     public static final int PICK_IMAGE = 1;
@@ -198,17 +251,15 @@ public class SingleTaskActivity extends AppCompatActivity {
                 // minci: check img size. if img size is less than 64kb then ignore compression
                 // go straightly to bytes converting
                 // }
+                //TODO: check if the img returned is a dup in our database; if dup then dont upload
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
-
-
-
                 // make temp storage for our image
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 Bitmap compressedImage = selectedImage.copy(selectedImage.getConfig(), true);
-                FileOutputStream out = null;
+                FileOutputStream out;
                 String cacheDir = getCacheDir().toString();
                 File dir = new File(cacheDir);
                 if(!dir.exists())
@@ -220,29 +271,32 @@ public class SingleTaskActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-
                 Log.i("I have an img!", "size: " + Long.toString(file.length()));
                 int selectedImageSize = Math.toIntExact(file.length());
                 int compressedImageSize = selectedImageSize;
-                if (compressedImageSize > 65536*0.7){
+                if (compressedImageSize > 65536){
                     int compressedImgWidth = compressedImage.getWidth();
                     int compressedImgHeight = compressedImage.getHeight();
 
-                    while (compressedImageSize > 65536*0.7){
+                    while (compressedImageSize > 65536){
                         // toast for long time image processing
-                        Toast toast = Toast.makeText(getApplicationContext(), "Your image is processed",
-                                Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                               "Your image is processed",
+                                                     Toast.LENGTH_SHORT);
                         toast.show();
 
                         // iteratively reduces image size
                         compressedImgWidth = (int)(compressedImgWidth*0.9);
                         compressedImgHeight = (int)(compressedImgHeight*0.9);
-                        compressedImage = Bitmap.createScaledBitmap(compressedImage,compressedImgWidth, compressedImgHeight, true);
+                        compressedImage = Bitmap.createScaledBitmap(compressedImage,
+                                                                    compressedImgWidth,
+                                                                    compressedImgHeight,
+                                                             true);
 
                         // save the reduced file to mobile cache storage
                         try {
                             out = new FileOutputStream(file,false);
-                            compressedImage.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                            compressedImage.compress(Bitmap.CompressFormat.PNG, 100, out);
                             // PNG is a lossless format, the compression factor (100) is ignored
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -257,7 +311,7 @@ public class SingleTaskActivity extends AppCompatActivity {
                             }
                         }
                          compressedImageSize = Math.toIntExact(file.length());
-                         Log.i("compressing", "size: " + Integer.toString(compressedImageSize));
+                        // Log.i("compressing", "size: " + Integer.toString(compressedImageSize));
                     }
                 }
                 else{
@@ -266,37 +320,120 @@ public class SingleTaskActivity extends AppCompatActivity {
 
                 final ImageView bitmapView = findViewById(R.id.byte_img);
                 bitmapView.setImageBitmap(compressedImage);
-                compressedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byteArray = stream.toByteArray();
-                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                Log.i("!!HUGE!!", byteArray.toString());
-                Log.i("!!SIZE!!",Integer.toString(selectedImageSize) );
-                Log.i("!!BYTE_SIZE!!", Integer.toString(byteArray.length));
-                Log.i("STRING_LEN!", String.valueOf(encoded.length()));
+                //compressedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                //byteArray = stream.toByteArray();
+                encoded = getStringFromBitmap(compressedImage);
+                //Log.i("!!HUGE!!", byteArray.toString());
+                //Log.i("!!SIZE!!",Integer.toString(selectedImageSize) );
+                //Log.i("!!BYTE_SIZE!!", Integer.toString(byteArray.length));
+                //Log.i("STRING_LEN!", String.valueOf(encoded.length()));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        else if (resultCode == Activity.RESULT_CANCELED){
+            //Log.i("NO", "no image selected!!");
+            Toast toast = Toast.makeText(getApplicationContext(), "No image selected",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+
+        }
+
+
+
         else{
-            Log.i("NO", "no image selected!!");
+
 
         }
 
         // time to save your stuffs
+        // maybe check some other return codes
 
     }
 
     @Override
     public void onBackPressed() {
 
+
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);
         super.onBackPressed();
+        finish();
+
+
+    }
+
+    // image adapter for our lists of images
+    public class ImageAdapter extends BaseAdapter {
+
+        private Context mContext;
+        private ArrayList<Bitmap> ImgBitmapArray;
+
+        public ImageAdapter(Context c) {
+            mContext = c;
+        }
+
+        public void setImgBitmapArray(ArrayList<Bitmap> myImgBitmapArray){
+            this.ImgBitmapArray = myImgBitmapArray;
+        }
+        public int getCount() {
+            return ImgBitmapArray.size();
+        }
+
+        public Object getItem(int position) {
+            return null;
+        }
+
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        // create a new ImageView for each item referenced by the Adapter
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ImageView imageView;
+            if (convertView == null) {
+                // if it's not recycled, initialize some attributes
+                imageView = new ImageView(mContext);
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(200, 200));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setPadding(3, 3, 3, 3);
+            } else {
+                imageView = (ImageView) convertView;
+            }
+
+            imageView.setImageBitmap(ImgBitmapArray.get(position));
+            return imageView;
+        }
     }
 
 
+    // TODO:reference
+    private String getStringFromBitmap(Bitmap bitmapPicture) {
+ /*
+ * This functions converts Bitmap picture to a string which can be
+ * JSONified.
+ * */
+        final int COMPRESSION_QUALITY = 100;
+        String encodedImage;
+        ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+        bitmapPicture.compress(Bitmap.CompressFormat.PNG, COMPRESSION_QUALITY,
+                byteArrayBitmapStream);
+        byte[] b = byteArrayBitmapStream.toByteArray();
+        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+    private Bitmap getBitmapFromString(String jsonString) {
+/*
+* This Function converts the String back to Bitmap
+* */
+        byte[] decodedString = Base64.decode(jsonString, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
+    }
 }
 
 

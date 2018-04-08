@@ -25,7 +25,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        //implements NavigationView.OnNavigationItemSelectedListener
+{
 
     private EditText bodyText;
     private ListView oldTaskList;
@@ -72,8 +73,8 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        //navigationView.setNavigationItemSelectedListener(this);
 
 
     }
@@ -110,12 +111,15 @@ public class MainActivity extends AppCompatActivity
 
 
         // listen to task clicks
+
+
         oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Task task = (Task) oldTaskList.getAdapter().getItem(position);
-                Log.i("TASK", String.valueOf(task.getPhoto()));
 
+
+
+                Task task = (Task) oldTaskList.getAdapter().getItem(position);
                 Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
                 intent.putExtra("task",task);
                 intent.putExtra("task_title",task.getTitle());
@@ -182,8 +186,10 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -206,4 +212,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    */
 }
