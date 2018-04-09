@@ -139,6 +139,7 @@ public class AddTaskActivity extends AppCompatActivity {
            geoLocation = data.getParcelableExtra("location");
 
            Log.i("checkGeolocation", String.valueOf( geoLocation.latitude)+"/"+String.valueOf( geoLocation.latitude) );
+
         }
     }
 
