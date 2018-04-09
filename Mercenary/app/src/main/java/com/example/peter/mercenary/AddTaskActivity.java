@@ -80,6 +80,8 @@ public class AddTaskActivity extends AppCompatActivity {
                     ArrayList<String> photoArray = new ArrayList<String>();
 
                     // LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
+                    //LatLng geoLocation = getIntent().getParcelableExtra("location");
+
                     newTask = new Task(title.getText().toString(),
                             description.getText().toString(),
                             geoLocation, "requested", user.getId(), user.getUsername(), photoArray);
@@ -104,7 +106,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     description = (EditText) findViewById(R.id.desc);
                     error1 = (TextView) findViewById(R.id.error1);
                     ArrayList<String> photoArray = new ArrayList<String>();
-                    // LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
+
                     newTask = new Task(title.getText().toString(),
                             description.getText().toString(),
                             geoLocation, "requested", user.getId(), user.getUsername(),photoArray);
@@ -135,6 +137,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
            geoLocation = data.getParcelableExtra("location");
+
+           Log.i("checkGeolocation", String.valueOf( geoLocation.latitude)+"/"+String.valueOf( geoLocation.latitude) );
         }
     }
 
