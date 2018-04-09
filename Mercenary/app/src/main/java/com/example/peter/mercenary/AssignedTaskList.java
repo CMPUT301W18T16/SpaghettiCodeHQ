@@ -39,24 +39,21 @@ import java.util.TimerTask;
 
 public class AssignedTaskList extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TASKFILE = "taskfile.sav";
+    private static final String ADDTASKFILE = "addTaskFile.sav";
     private EditText bodyText;
     private ListView oldTaskList;
     private ArrayList<Task> taskList;
-    private ArrayList<Task> offlineAddedTaskList;
-    private ArrayList<Task> assignedList;
+    private ArrayList<Task> assignedTask;
     private TaskAdapter adapter;
     private TimerTask timerTask;
     private Timer timer;
     private User user; //currently logged in user
-    private int length;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         taskList= new ArrayList<Task>();
-        offlineAddedTaskList = new ArrayList<Task>();
-        loadOfflineTaskFile();
-        addOfflineToOnline();
 
         user = getIntent().getParcelableExtra("user");
         setContentView(R.layout.drawer_layout_assigned);
@@ -66,31 +63,7 @@ public class AssignedTaskList extends AppCompatActivity
         oldTaskList = (ListView) findViewById(R.id.myTaskView);
         Button addButton = (Button) findViewById(R.id.add1);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
-                intent.putExtra("user", user);
-                intent.putParcelableArrayListExtra("taskList",taskList);
-                intent.putParcelableArrayListExtra("offline",offlineAddedTaskList);
-                startActivity(intent);
-            }
-            /*public void onActivityResult(int requestCode, int resultCode, Intent data){
-                String title = data.getStringExtra("title");
-                String desc = data.getStringExtra("description");
-                String status = data.getStringExtra("status");
-                String id = data.getStringExtra("id");
-                Task newTask = new Task(title, desc, status, id);
-                taskList.add(newTask);
-
-                Toast toast = Toast.makeText(getApplicationContext(), title+
-                        desc+status+id, Toast.LENGTH_LONG);
-                toast.show();
-                adapter.notifyDataSetChanged();
-            }*/
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_assigned);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -104,21 +77,16 @@ public class AssignedTaskList extends AppCompatActivity
         // TODO Auto-generated method stub
         super.onStart();
         //loadFromFile(); // TODO replace this with elastic search
-        loadOfflineTaskFile();
-        addOfflineToOnline();
-        String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
+
+        String query = "{\n" + " \"query\": { \"match\": {\"acceptedUser\":\"" + user.getId() + "\"} }\n" + "}";
 
         if(NetworkStatus.connectionStatus(this)) {
             ElasticFactory.getListOfTask getTaskList
                     = new ElasticFactory.getListOfTask();
             getTaskList.execute(query);
+
             try {
                 taskList = getTaskList.get();
-                length = taskList.size();
-                for (int i = 0; i<length; i++){
-                    if (user = Task.getAcceptedUser()){
-                        assignedList.add(taskList[i]);
-                    }
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
@@ -148,14 +116,13 @@ public class AssignedTaskList extends AppCompatActivity
 
     public void onResume() {
         super.onResume();
-        loadOfflineTaskFile();
-        addOfflineToOnline();
+
         try {
             Thread.sleep(500);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-        oldTaskList = (ListView) findViewById(R.id.assignedTaskView);
+        oldTaskList = (ListView) findViewById(R.id.myTaskView);
 
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
@@ -187,7 +154,7 @@ public class AssignedTaskList extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_assigned);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -237,7 +204,7 @@ public class AssignedTaskList extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_assigned);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -279,39 +246,6 @@ public class AssignedTaskList extends AppCompatActivity
     }
 
 
-    private void loadOfflineTaskFile() {
-        try {
-            FileInputStream fis = openFileInput(ADDTASKFILE);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-            Gson gson = new Gson();
-            //Code taken from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt Sept.22,2016
-            Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
-            offlineAddedTaskList = gson.fromJson(in, listType);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            offlineAddedTaskList = new ArrayList<Task>();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            throw new RuntimeException();
-        }
-    }
-
-    public void addOfflineToOnline(){
-
-        if(NetworkStatus.connectionStatus(this)) {
-            if (offlineAddedTaskList.isEmpty()) {
-
-            } else {
-                for (Task task : offlineAddedTaskList) {
-                    ElasticFactory.AddingTasks addTask = new ElasticFactory.AddingTasks();
-                    addTask.execute(task);
-                }
-                offlineAddedTaskList.clear();
-                getApplicationContext().deleteFile(ADDTASKFILE);
-            }
-        }
-    }
-
 
 }
-}
+

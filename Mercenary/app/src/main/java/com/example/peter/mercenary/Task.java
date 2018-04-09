@@ -26,7 +26,7 @@ public class Task implements Parcelable {
     private String userId;
     private int mData;
     private String userName;
-    private String acceptedUser;
+    private String acceptedUserId;
 
     @JestId
     private String id;
@@ -156,11 +156,11 @@ public class Task implements Parcelable {
     }
 
     public String getAcceptedUser() {
-        return this.acceptedUser;
+        return this.acceptedUserId;
     }
 
     public void setAcceptedUser(String username) {
-        this.acceptedUser = username;
+        this.acceptedUserId = acceptedUserId;
     }
 
     @Override
@@ -177,6 +177,7 @@ public class Task implements Parcelable {
         out.writeString(status);
         out.writeString(userId);
         out.writeString(userName);
+        out.writeString(acceptedUserId);
 
     }
 
@@ -196,6 +197,7 @@ public class Task implements Parcelable {
         this.status = in.readString();
         this.userId = in.readString();
         this.userName = in.readString();
+        this.acceptedUserId = in.readString();
     }
 
     //public BidList getBids(){return this.listBids;}
