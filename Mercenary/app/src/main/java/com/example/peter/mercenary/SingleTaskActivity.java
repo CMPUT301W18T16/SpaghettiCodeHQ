@@ -45,6 +45,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import io.searchbox.core.DocumentResult;
 
@@ -108,6 +110,8 @@ public class SingleTaskActivity extends AppCompatActivity  {
                 //Log.i("!taskimg", "is empty" );
 
             }
+
+
             else{
                 //TODO: photo grid adapter goes here
                 //Log.i("check","there are some img(s)");
@@ -134,7 +138,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
                     //Log.i("the img str is", taskImgStringList.get(i));
                     //byte[] tempImgByte = Base64.decode(taskImgStringList.get(i), Base64.DEFAULT);
                     //Bitmap tempBitmap = BitmapFactory.decodeByteArray(tempImgByte, 0, tempImgByte.length);
-                    Log.i("HUGE!!!",S);
+                    Log.i("HUGE!!!",Integer.toString(S.length()));
                     ImgBitmapArray.add(getBitmapFromString(S));
                 }
 
@@ -150,14 +154,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
-
-
-
             }
-
         }
 
         addImgButton.setOnClickListener(new View.OnClickListener(){
@@ -197,6 +194,14 @@ public class SingleTaskActivity extends AppCompatActivity  {
                 if (encoded != null ) {
                     String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(encoded);
                     taskImgStringList.add(escapedImg);
+                }
+
+                //10 is the min limit
+                if (taskImgStringList.size() > 11){
+                    Collections.rotate(taskImgStringList, taskImgStringList.size()-11);
+                    ArrayList<String> subItems = new ArrayList<String>(taskImgStringList.subList(0, 11));
+                    taskImgStringList = subItems;
+
                 }
 
 
@@ -274,11 +279,11 @@ public class SingleTaskActivity extends AppCompatActivity  {
                 Log.i("I have an img!", "size: " + Long.toString(file.length()));
                 int selectedImageSize = Math.toIntExact(file.length());
                 int compressedImageSize = selectedImageSize;
-                if (compressedImageSize > 65536){
+                if (compressedImageSize > 65536*0.7){
                     int compressedImgWidth = compressedImage.getWidth();
                     int compressedImgHeight = compressedImage.getHeight();
 
-                    while (compressedImageSize > 65536){
+                    while (compressedImageSize > 65536*0.7){
                         // toast for long time image processing
                         Toast toast = Toast.makeText(getApplicationContext(),
                                                "Your image is processed",
@@ -397,7 +402,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
             if (convertView == null) {
                 // if it's not recycled, initialize some attributes
                 imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new ViewGroup.LayoutParams(200, 200));
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(240,240));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(3, 3, 3, 3);
             } else {
