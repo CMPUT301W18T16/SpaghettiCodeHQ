@@ -15,6 +15,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="title should be less than 30 characters"
         android:inputType="textPersonName"
         android:maxLength="30"
         android:text="Title"
@@ -23,42 +24,46 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
+    <Button
+        android:id="@+id/task_delete_button"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="0dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="16dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:text="DELETE"
+        app:layout_constraintBottom_toTopOf="@+id/task_save_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <EditText
         android:id="@+id/task_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="285dp"
+        android:layout_height="64dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:ems="10"
-        android:text="Task desc"
-        app:layout_constraintBottom_toTopOf="@+id/usernameText"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:hint="task description should be less than 300 characters"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLength="300"
-        android:maxLines="2"/>
+        android:maxLines="2"
+        android:text="Task desc"
+        app:layout_constraintBottom_toTopOf="@+id/usernameText"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/task_status_str"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Task Status: "
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="4dp"
+        android:text="Status: "
         android:textColor="@android:color/holo_red_light"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/task_status"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:text="task status here"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/task_status_str" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -117,7 +122,7 @@
 
     <Button
         android:id="@+id/task_save_button"
-        android:layout_width="wrap_content"
+        android:layout_width="90dp"
         android:layout_height="37dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -128,22 +133,37 @@
     <GridView
 
         android:id="@+id/gridView"
-        android:layout_width="270dp"
+        android:layout_width="175dp"
         android:layout_height="200dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:gravity="center"
-        android:horizontalSpacing="-5dp"
 
-        android:numColumns="3"
+        android:horizontalSpacing="-5dp"
+        android:numColumns="2"
         android:verticalSpacing="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/task_status"
+        app:layout_constraintBottom_toTopOf="@+id/task_status_str"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/task_act_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="bidded, or done"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/task_save_button"
+        app:layout_constraintStart_toEndOf="@+id/task_status_str" />
 
 
 </android.support.constraint.ConstraintLayout>

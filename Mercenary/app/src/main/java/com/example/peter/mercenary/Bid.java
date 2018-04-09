@@ -13,6 +13,8 @@ import io.searchbox.annotations.JestId;
 public class Bid {
     private String username;
     private float value;
+    private String flag;  // is the bid declined or accepted
+
     @JestId
     private String id;
     private String UserId;
@@ -23,9 +25,10 @@ public class Bid {
      * @param value: User's bid amount in dollars
      *
      */
-    public Bid(String username, float value){
+    public Bid(String username, float value, String flag){
         this.username=username;
         this.value=value;
+        this.flag = flag;
     }
 
     /**
@@ -53,5 +56,9 @@ public class Bid {
     public float getValue(){
         return this.value;
     }
+
+
+    public void setFlag(String flag){this.flag = flag;}
+    public String getFlag(){return this.flag;}
 
 }

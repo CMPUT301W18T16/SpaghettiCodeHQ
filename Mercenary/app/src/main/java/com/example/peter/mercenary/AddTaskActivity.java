@@ -68,12 +68,13 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 ElasticFactory.AddingTasks addTask = new ElasticFactory.AddingTasks();
                 addTask.execute(newTask);
+                done.setAlpha(.5f);
+                done.setClickable(false);
+
 
 
                 //minci: we need to refresh main activity to see the new task after an task is added;
                 //one need to manually refresh task if he is back from add_task_activity
-                finish();
-                startActivity(getIntent());
             }
         });
 

@@ -2,6 +2,8 @@ package com.example.peter.mercenary;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -81,11 +83,12 @@ public class SingleTaskActivity extends AppCompatActivity  {
 
         EditText taskTitle = findViewById(R.id.task_title);
         EditText taskDesc = findViewById(R.id.task_desc);
-        TextView taskStatus = findViewById(R.id.task_status);
+        EditText taskStatus = findViewById(R.id.task_act_status);
         TextView userText = findViewById(R.id.usernameText);
         Button addImgButton = findViewById(R.id.add_img_button);
         ImageButton map = findViewById(R.id.mapBtn);
         Button saveTaskButton = findViewById(R.id.task_save_button);
+        Button deleteTaskButton = findViewById(R.id.task_delete_button);
         ImageView imgByte = findViewById(R.id.byte_img);
         GridView imgGrid = (GridView) findViewById(R.id.gridView);
 
@@ -189,7 +192,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
 
 
             currentTask.setPhoto(taskImgStringList);
-            currentTask.setStatus(taskStatusString);
+            currentTask.setStatus(taskStatus.getText().toString());
             currentTask.setRequester(taskRequester.getUsername());
             currentTask.setId(taskIDString);
 
@@ -215,6 +218,32 @@ public class SingleTaskActivity extends AppCompatActivity  {
             Toast toast = Toast.makeText(getApplicationContext(), "Task updated",
                     Toast.LENGTH_SHORT);
             toast.show();
+        });
+
+        deleteTaskButton.setOnClickListener((View v) -> {
+            //TODO: delete button   -DONE
+            //TODO: popup to confirm deleting
+
+
+            // confirmation dialog
+            //ConfirmDeletingDialog deletingTaskDialog =  new ConfirmDeletingDialog();
+            //deletingTaskDialog.setTargetFragment(deletingTaskDialog, 0);
+            //deletingTaskDialog.show(getFragmentManager(), "tag");
+
+            ElasticFactory.DeletingTask deletingTask = new ElasticFactory.DeletingTask();
+            deletingTask.execute(taskIDString);
+
+            // toast to notify user a task is deleted
+            Toast toast = Toast.makeText(getApplicationContext(), "Task deleted",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+
+            // grey out delete and save buttons to prevent user to deleting/saving non-existent task
+            deleteTaskButton.setAlpha(.5f);
+            deleteTaskButton.setClickable(false);
+            saveTaskButton.setAlpha(.5f);
+            saveTaskButton.setClickable(false);
+
         });
     }
 

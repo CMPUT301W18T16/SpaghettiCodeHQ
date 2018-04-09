@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class Task implements Parcelable {
     private String title;
     private String description;
-    private BidList listBids;
+    private ArrayList<Bid> listBids;
     private LatLng geoLoc;
     private ArrayList<String> pictureArray;
     private String status;
