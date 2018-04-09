@@ -1,5 +1,8 @@
 package com.example.peter.mercenary;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import io.searchbox.annotations.JestId;
 
 /**
@@ -10,7 +13,7 @@ import io.searchbox.annotations.JestId;
  *
  */
 
-public class Bid {
+public class Bid implements Parcelable {
     private String username;
     private float value;
     private String flag;  // is the bid declined or accepted
@@ -30,6 +33,17 @@ public class Bid {
         this.value=value;
         this.flag = flag;
     }
+    public static final Creator<Bid> CREATOR = new Creator<Bid>() {
+        @Override
+        public Bid createFromParcel(Parcel in) {
+            return new Bid(in);
+        }
+
+        @Override
+        public Bid[] newArray(int size) {
+            return new Bid[size];
+        }
+    };
 
     /**
      * @param id: the ID of User's username
@@ -60,5 +74,36 @@ public class Bid {
 
     public void setFlag(String flag){this.flag = flag;}
     public String getFlag(){return this.flag;}
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(username);
+        dest.writeFloat(value);
+        dest.writeString(id);
+        dest.writeString(UserId);
+    }
+
+    /**
+     *
+     * @param username: User's username
+     * @param value: User's bid amount in dollars
+     *
+     */
+    public Bid(String username, float value){
+        this.username=username;
+        this.value=value;
+    }
+
+    protected Bid(Parcel in) {
+        username = in.readString();
+        value = in.readFloat();
+        id = in.readString();
+        UserId = in.readString();
+    }
 
 }

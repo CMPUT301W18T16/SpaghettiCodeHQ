@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
@@ -31,16 +32,24 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
-
+/**
+ * Main elastic factory class
+ */
 public class ElasticFactory {
     private static String elasticIndex = "cmput301w18t16";
     private static JestDroidClient client;
 
     public static class AddingTasks extends AsyncTask<Task, Void, Void>{
+
+        /**
+         *
+         * @param tasks: a Tasklist
+         * @return Void: function just updates elastic search in background, returns nothing
+         *
+         */
         @Override
         protected Void doInBackground(Task...tasks){
             verifySettings();
-            //String uniqueID = UUID.randomUUID().toString();
 
             for(Task task : tasks){
 
@@ -60,8 +69,8 @@ public class ElasticFactory {
                 }
                 Log.i("json created:",json.toString());
 
-                Index index = new Index.Builder(task).index(elasticIndex).type("minciTestTask1").build();
 
+                Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
 
                 try{
                     DocumentResult result = client.execute(index);
@@ -83,6 +92,17 @@ public class ElasticFactory {
             return null;
         }
     }
+
+    /**
+     * Function used to build Task with offline functionality
+     * @param task: a specific Task
+     * @return Index: returns the Index of elasticSearch for the task
+     */
+    public static Index buildTaskOffline(Task task){
+        Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
+        return index;
+    }
+
 
     public static class AddingUser extends AsyncTask<User, Void, Void>{
         @Override
@@ -106,7 +126,7 @@ public class ElasticFactory {
                 }
                 Log.i("json created:",json.toString());
 
-                Index index = new Index.Builder(user).index(elasticIndex).type("minciTestUser").build();
+                Index index = new Index.Builder(user).index(elasticIndex).type("User").build();
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
@@ -126,18 +146,59 @@ public class ElasticFactory {
         }
     }
 
-    public static class UpdateUser extends AsyncTask<String, Void, Void>{
-        protected Void doInBackground(String...search_parameters){
+    public static class GetUser extends AsyncTask<String, Void, User>{
+        @Override
+        protected User doInBackground(String...search_paramters) {
+            verifySettings();
+
+            Search search = new Search.Builder("" + search_paramters[0] + "")
+                    .addIndex(elasticIndex)
+                    .addType("User")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                User user = result.getSourceAsObject(User.class);
+                return user;
+            } catch (Exception e) {
+                Log.i("Error", "Failed to find user");
+            }
+            return null;
+        }
+    }
+
+    public static class UpdateUser extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... search_parameters) {
             verifySettings();
 
             try {
-                client.execute(new Update.Builder(search_parameters[0])
+                client.execute(new Update.Builder("" + search_parameters[0] + "")
                         .index(elasticIndex)
-                        .type("minciTestUser")
-                        .id("1")
+
+                        .type("user")
+                        .id(search_parameters[1])
                         .build());
-            } catch(Exception e){
-                Log.i("Error", "The application failed to build and send the user");
+        } catch(Exception e) {
+            Log.i("Error", "The application failed to build and find user");
+        }
+        return null;
+        }
+    }
+
+    public static class UpdateTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... search_parameters) {
+            verifySettings();
+
+            try {
+                client.execute(new Update.Builder("" + search_parameters[0] + "")
+                        .index(elasticIndex)
+                        .type("task")
+                        .id(search_parameters[1])
+                        .build());
+            } catch(Exception e) {
+                Log.i("Error", "The application failed to build and find task");
             }
             return null;
         }
@@ -153,21 +214,6 @@ public class ElasticFactory {
                 taskID = task.getId();
                 Log.i("ID_in_ES", taskID);
 
-                /*
-                ArrayList<String> imageListToBeUpdated = task.getPhoto();
-                // last element of img list
-                String imageToBeUpdated = imageListToBeUpdated.get(imageListToBeUpdated.size()-1);
-                if (!StringUtils.isEmpty(imageToBeUpdated)) {
-                    String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(imageToBeUpdated);
-
-                    // StringEscapeUtils is extremely slow
-                    //String escapedImg = StringEscapeUtils.escapeJson(imageToBeUpdated);
-                    task.setPhoto(escapedImg);
-                }
-                else{
-
-                }
-                */
                 try {
                     // minci: changed Update to Index;
                     // Error:
@@ -175,7 +221,7 @@ public class ElasticFactory {
                     // The ES server disabled update and lang groovy
                     DocumentResult result = client.execute(new Index.Builder(task)
                             .index(elasticIndex)
-                            .type("minciTestTask1")
+                            .type("User")
                             .id(taskID)
                             .build());
                     Log.i("YOU TRIED", "to update a task");
@@ -208,52 +254,6 @@ public class ElasticFactory {
     }
 
 
-
-
-    // search for a user and reuturn the User object if there's one in database
-    public static class returnUser extends AsyncTask<String, Void, User>{
-        @Override
-        protected User doInBackground(String...search_parameters){
-            verifySettings();
-            
-            Search search = new Search.Builder(""+search_parameters[0]+"")
-                    .addIndex(elasticIndex)
-                    .addType("minciTestUser")
-                    .build();
-            try{
-                SearchResult result = client.execute(search);
-                if(result.getTotal()==1)
-                {
-                    Log.i("RESULT:", result.getSourceAsString());
-                    String searchResult = result.getSourceAsString();
-
-                    JSONObject obj = new JSONObject(searchResult);
-                    String loginUserName = obj.getString("username");
-                    String loginUserEMail = obj.getString("email");
-                    String loginUserPhoneNumber = obj.getString("phoneNumber");
-                    float loginUserRating = Float.valueOf(obj.getString("rating"));
-                    User loginUser = new User(loginUserName, loginUserEMail,loginUserPhoneNumber,loginUserRating);
-                    return loginUser;
-                }
-                else
-                {
-                    Log.i("Error","The search query failed");
-                    User loginUser = null;
-                    return loginUser;
-                }
-            }
-            catch (Exception e){
-                Log.i("Error: ", "invoking returnUser: Something went wrong when we tried to communicate with the elasticsearch server!");
-                User loginUser = null;
-                return loginUser;
-
-            }
-
-        }
-    }
-
-
-
     public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
         @Override
         protected Boolean doInBackground(String...search_parameters){
@@ -261,7 +261,7 @@ public class ElasticFactory {
 
             Search search = new Search.Builder(search_parameters[0])
                     .addIndex(elasticIndex)
-                    .addType("minciTestUser")
+                    .addType("User")
                     .build();
 
             try{
@@ -287,6 +287,28 @@ public class ElasticFactory {
             }
 
 
+
+    public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
+        @Override
+        protected Boolean doInBackground(String...search_parameters){
+            verifySettings();
+
+            Search search = new Search.Builder("" + search_parameters[0] + "")
+                        .addIndex(elasticIndex)
+                        .addType("User")
+                        .build();
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.getTotal() == 1) {
+                        return true;
+                    } else {
+                        Log.i("Error", "The search query failed");
+                        return false;
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                    return false;
+                }
         }
     }
 
@@ -301,7 +323,7 @@ public class ElasticFactory {
 
                 Search search = new Search.Builder(search_parameters[0])
                         .addIndex(elasticIndex)
-                        .addType("minciTestTask1")
+                        .addType("task")
                         .build();
                 try{
                     SearchResult result = client.execute(search);
@@ -333,7 +355,7 @@ public class ElasticFactory {
             try {
                 client.execute(new Delete.Builder(search_parameters[0])
                         .index(elasticIndex)
-                        .type("minciTestTask1")
+                        .type("task")
                         .build());
 
             } catch (IOException e) {

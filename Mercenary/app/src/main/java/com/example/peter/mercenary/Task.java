@@ -23,24 +23,31 @@ public class Task implements Parcelable {
     private String title;
     private String description;
     private BidList listBids;
-    private LatLng geoLoc;
+
+    private String taskProvider;
+    private user;
+    private LatLng geoLoc = new LatLng(0, 0);
     private ArrayList<String> pictureArray;
     private String status;
-    private String taskProvider;
-    private String taskRequester;
-    User user;
-    private int mData;
+    private String userId;
 
+    private String userName;
+    private String acceptedUser;
 
     @JestId
     private String id;
 
-    public Task(String title, String description, String status, String taskRequester, ArrayList<String> pictureArray) {
+
+    public Task(String title, String description, LatLng geoLoc, String status, String userId, String userName, ArrayList<String> pictureList) {
         this.title = title;
         this.description = description;
+        this.geoLoc = geoLoc;
         this.status = status;
-        this.taskRequester = taskRequester;
         this.pictureArray = pictureArray;
+        this.userId = userId;
+        this.userName = userName;
+        this.pictureArray = pictureList;
+
     }
 
     /**
@@ -86,7 +93,7 @@ public class Task implements Parcelable {
      */
     public void setPhoto(ArrayList<String> pictureList){
 
-        this.pictureArray = pictureList;
+        this.pictureArray=pictureList;
     }
 
     /**
@@ -94,7 +101,9 @@ public class Task implements Parcelable {
      * @param geoLoc: the geolocation (most likely a pair of float coordinates) the user will assign to the task
      * Setter
      */
-    public void setGeo(LatLng geoLoc){ this.geoLoc=geoLoc;}
+    public void setGeo(LatLng geoLoc){
+        this.geoLoc=geoLoc;
+    }
 
     /**
      *
@@ -149,8 +158,20 @@ public class Task implements Parcelable {
      */
     public String getStatus(){return this.status;}
 
-    public User getUser() {
-        return this.user;
+    public String getUserId() {
+        return this.userId;
+    }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public String getAcceptedUser() {
+        return this.acceptedUser;
+    }
+
+    public void setAcceptedUser(String username) {
+        this.acceptedUser = username;
     }
 
     @Override
@@ -160,7 +181,15 @@ public class Task implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(mData);
+        out.writeString(title);
+        out.writeString(description);
+        out.writeDouble(geoLoc.latitude);
+        out.writeDouble(geoLoc.longitude);
+        out.writeString(status);
+        out.writeString(userId);
+        out.writeString(userName);
+        out.writeList(pictureArray);
+
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
@@ -195,14 +224,16 @@ public class Task implements Parcelable {
 
 
     private Task(Parcel in) {
-        mData = in.readInt();
+        this.title = in.readString();
+        this.description = in.readString();
+        this.geoLoc = new LatLng(in.readDouble(), in.readDouble());
+        this.status = in.readString();
+        this.userId = in.readString();
+        this.userName = in.readString();
+        this.pictureArray = new ArrayList<String>();
+        in.readList(pictureArray, String.class.getClassLoader());
     }
 
-
-
-    public BidList getBids(){return this.listBids;}
-
-    public void setBids(BidList listbids){this.listBids = listbids;}
 
     /* Save this for subclass "MyTasks"
     public void addBid(Bid bid){
@@ -210,12 +241,9 @@ public class Task implements Parcelable {
     }
     public void delBid(Bid bid){
         this.listBids.delBid(bid);}
-
     public float getLowestBid() {
         float value=-1;
-
         for(int i=0; i<listBids.size(); i++){
-
             if (i==0 || value==-1){
                 value = listBids.getBid(i).getValue();
             }
@@ -224,7 +252,6 @@ public class Task implements Parcelable {
                     value =listBids.getBid(i).getValue();
                 }
             }
-
         }
         return value;
     }

@@ -28,14 +28,15 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.common.base.Objects;
+
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -55,196 +56,115 @@ import io.searchbox.core.DocumentResult;
 
 import static com.google.common.base.Objects.equal;
 
+import java.util.concurrent.ExecutionException;
+
 
 /**
  * Created by minci on 2018/3/19.
  */
 
 public class SingleTaskActivity extends AppCompatActivity  {
-    User currentUser; //currently logged in user
-    String encoded;  //  bitmap encoded to string for simple storage
-    User taskRequester;
-    String taskDescriptionString;
-    String taskStatusString;
-    String taskTitleString;
-    ArrayList<String> taskImgStringList;
-    String taskIDString;
-    Task currentTask;
-    ArrayList<Bitmap> ImgBitmapArray = new ArrayList<Bitmap>();
+    private String encoded;  //  bitmap encoded to string for simple storage
+    private String taskDescriptionString;
+    private String taskStatusString;
+    private String taskTitleString;
+    private String taskIDString;
+  
+    private ArrayList<String> taskImgStringList;
+    private ArrayList<Bitmap> ImgBitmapArray = new ArrayList<Bitmap>();
     private ArrayAdapter<String> imageArrayAdapter;
+  
+    private User user; //currently logged in user
+    private Task task;
+    private User clickedUser; //target user
+    private static final String TASKFILE = "taskfile.sav";
+    private static final String ELASTICFILE = "elasticfile.sav";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_task_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        EditText taskTitle = findViewById(R.id.task_title);
-        EditText taskDesc = findViewById(R.id.task_desc);
-        EditText taskStatus = findViewById(R.id.task_act_status);
+        TextView taskTitle = findViewById(R.id.task_title);
+        TextView taskDesc = findViewById(R.id.task_desc);
         TextView userText = findViewById(R.id.usernameText);
-        Button addImgButton = findViewById(R.id.add_img_button);
+        Button editTask = findViewById(R.id.edit_task);
+        Button completed = findViewById(R.id.completedBtn);
+
         ImageButton map = findViewById(R.id.mapBtn);
-        Button saveTaskButton = findViewById(R.id.task_save_button);
-        Button deleteTaskButton = findViewById(R.id.task_delete_button);
-        ImageView imgByte = findViewById(R.id.byte_img);
-        GridView imgGrid = (GridView) findViewById(R.id.gridView);
+        task = getIntent().getParcelableExtra("task");
+        user = getIntent().getParcelableExtra("user");
 
-         Bundle bundle = getIntent().getExtras();
+        taskTitle.setText(task.getTitle());
+        taskDesc.setText(task.getDescription());
 
-        if (bundle != null){
+        String query = "{\n" + " \"query\": { \"match\": {\"_id\":\"" + task.getUserId() + "\"} }\n" + "}";
 
-            taskRequester = bundle.getParcelable("user");
-            taskTitleString = bundle.getString("task_title");
-            taskDescriptionString = bundle.getString("task_desc");
-            taskStatusString = bundle.getString("task_status");
-            taskImgStringList = bundle.getStringArrayList("task_img");
-            currentTask = bundle.getParcelable("task");
-            taskIDString = bundle.getString("task_id");
-            taskTitle.setText(taskTitleString);
-            taskDesc.setText(taskDescriptionString);
-            taskStatus.setText(taskStatusString);
-            //Log.i("singletTaskID", taskIDString);
-
-            if (taskImgStringList.isEmpty())
-            {
-                //Log.i("!taskimg", "is empty" );
-
+        if (NetworkStatus.connectionStatus(this)) {
+            try {
+                ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
+                clickedUser = getUser.execute(query).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
 
-
-            else{
-                //TODO: photo grid adapter goes here
-                //Log.i("check","there are some img(s)");
-
-                // StringEscapeUtils is extremely slow
-                //String unescapedImg = StringEscapeUtils.unescapeJson(imgFromServer);
-
-                //Log.i("checking","img from server has "+taskImgStringList.size());
-
-                // let's just test first img from the img list
-                assert(taskImgStringList != null);
-                for (String S : taskImgStringList){
-                    Log.i("HUGE!!!",Integer.toString(S.length()));
-                    ImgBitmapArray.add(getBitmapFromString(S));
+            userText.setText(clickedUser.getUsername());
+            userText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //todo
+                    //when the user clicks on the username go to the userprofile
+                    Intent intent = new Intent(SingleTaskActivity.this, UserProfile.class);
+                    intent.putExtra("user", user.getUsername());
+                    intent.putExtra("clicked_user", clickedUser.getUsername());
+                    startActivity(intent);
                 }
+            });
 
-                ImageAdapter myImageAdapter = new ImageAdapter(this);
-                myImageAdapter.setImgBitmapArray(ImgBitmapArray);
-                imgGrid.setAdapter(myImageAdapter);
+            map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    intent.putExtra("goal", "single");
+                    intent.putExtra("lat", task.getGeoLoc().latitude);
+                    intent.putExtra("long", task.getGeoLoc().longitude);
+                    startActivity(intent);
+                }
+            });
 
+            editTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(SingleTaskActivity.this, EditTaskActivity.class);
+                    intent.putExtra("task", task);
+                    startActivity(intent);
+                }
+            });
 
-                imgGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> parent, View v,
-                                            int position, long id) {
-                        Toast.makeText(SingleTaskActivity.this, "" + position,
-                                Toast.LENGTH_SHORT).show();
-
-                        final Intent intent = new Intent(SingleTaskActivity.this, SingleImgActivity.class);
-                        intent.putExtra("Bitmap",ImgBitmapArray.get(position));
+            if (task.getStatus().equals("accepted")
+                    && task.getUserName().equals(user.getUsername())) {
+                completed.setVisibility(View.VISIBLE);
+                completed.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        task.setStatus("completed");
+                        Intent intent = new Intent(SingleTaskActivity.this, RateReviewActivity.class);
+                        intent.putExtra("username", task.getAcceptedUser());
                         startActivity(intent);
                     }
                 });
+            } else {
+                completed.setVisibility(View.INVISIBLE);
             }
         }
-
-        addImgButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select an image"), PICK_IMAGE);
-            }
-        });
-
-        userText.setOnClickListener(v -> {
-            //todo
-            //when the user clicks on the username go to the userprofile
-        });
-
-        map.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-            intent.putExtra("Lat", 53.526f); //needs to pass task location
-            intent.putExtra("Long", -113.525f);
-            startActivity(intent);
-        });
-
-        saveTaskButton.setOnClickListener(v -> {
-            //create query
-            //and upload
-            //TODO: detect if photo list if empty; if empty then initialize it; if not then add photo to it
-            if (encoded != null ) {
-                String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(encoded);
-                taskImgStringList.add(escapedImg);
-            }
-
-            //10 is the min limit
-            if (taskImgStringList.size() > 11){
-                Collections.rotate(taskImgStringList, taskImgStringList.size()-11);
-                taskImgStringList = new ArrayList<>(taskImgStringList.subList(0, 11));
-
-            }
-
-
-
-
-            currentTask.setPhoto(taskImgStringList);
-            currentTask.setStatus(taskStatus.getText().toString());
-            currentTask.setRequester(taskRequester.getUsername());
-            currentTask.setId(taskIDString);
-
-            try {
-                currentTask.setDescription(taskDesc.getText().toString());
-            } catch (DescTooLongException e) {
-                e.printStackTrace();
-            }
-            try {
-                currentTask.setTitle(taskTitle.getText().toString());
-            } catch (TitleTooLongException e) {
-                e.printStackTrace();
-            }
-            //Log.i("after", currentTask.getId());
-
-            ElasticFactory.UpdateTask addTask = new ElasticFactory.UpdateTask();
-            addTask.execute(currentTask);
-
-            // if task updated then toast success
-            // if no internet toast a fail message
-            // else toast a fail message
-            // TODO: we need to get result from the server and if internet is connected
-            Toast toast = Toast.makeText(getApplicationContext(), "Task updated",
-                    Toast.LENGTH_SHORT);
-            toast.show();
-        });
-
-        deleteTaskButton.setOnClickListener((View v) -> {
-            //TODO: delete button   -DONE
-            //TODO: popup to confirm deleting
-
-
-            // confirmation dialog
-            //ConfirmDeletingDialog deletingTaskDialog =  new ConfirmDeletingDialog();
-            //deletingTaskDialog.setTargetFragment(deletingTaskDialog, 0);
-            //deletingTaskDialog.show(getFragmentManager(), "tag");
-
-            ElasticFactory.DeletingTask deletingTask = new ElasticFactory.DeletingTask();
-            deletingTask.execute(taskIDString);
-
-            // toast to notify user a task is deleted
-            Toast toast = Toast.makeText(getApplicationContext(), "Task deleted",
-                    Toast.LENGTH_SHORT);
-            toast.show();
-
-            // grey out delete and save buttons to prevent user to deleting/saving non-existent task
-            deleteTaskButton.setAlpha(.5f);
-            deleteTaskButton.setClickable(false);
-            saveTaskButton.setAlpha(.5f);
-            saveTaskButton.setClickable(false);
-
-        });
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(), "Currently offline, functionalities may not be available.", Toast.LENGTH_LONG);
+        }
     }
 
 
@@ -354,7 +274,6 @@ public class SingleTaskActivity extends AppCompatActivity  {
 
     @Override
     public void onBackPressed() {
-
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);
         super.onBackPressed();
@@ -433,3 +352,4 @@ public class SingleTaskActivity extends AppCompatActivity  {
 
 
 
+}

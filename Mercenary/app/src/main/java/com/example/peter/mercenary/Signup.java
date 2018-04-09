@@ -67,7 +67,6 @@ public class Signup extends AppCompatActivity {
 
                         ElasticFactory.AddingUser addUser = new ElasticFactory.AddingUser();
                         addUser.execute(newUser);
-                        //saveUser(newUser);
                         finish();
                     }
                 } catch (UsernameTooLongException e) {
@@ -84,25 +83,5 @@ public class Signup extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    /**
-     * Saves the newly created user account
-     * @param user The new user created by the user
-     */
-    //based on the code from the lab
-    public void saveUser(User user) {
-        try {
-
-            FileOutputStream fos = openFileOutput("users.sav", Context.MODE_APPEND);
-            fos.write((user.getUsername() + "|" + user.getEmail() + "|" +
-                    user.getPhoneNumber() + "|" + Float.toString(user.getRating()) + "\n").getBytes());
-            fos.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
