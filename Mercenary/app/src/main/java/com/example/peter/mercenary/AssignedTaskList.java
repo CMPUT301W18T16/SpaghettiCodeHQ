@@ -53,12 +53,14 @@ public class AssignedTaskList extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         taskList= new ArrayList<Task>();
 
         user = getIntent().getParcelableExtra("user");
         setContentView(R.layout.drawer_layout_assigned);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarA);
         setSupportActionBar(toolbar);
         oldTaskList = (ListView) findViewById(R.id.myTaskView);
         Button addButton = (Button) findViewById(R.id.add1);
@@ -73,10 +75,9 @@ public class AssignedTaskList extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+
     protected void onStart() {
-        // TODO Auto-generated method stub
         super.onStart();
-        //loadFromFile(); // TODO replace this with elastic search
 
         String query = "{\n" + " \"query\": { \"match\": {\"acceptedUser\":\"" + user.getId() + "\"} }\n" + "}";
 

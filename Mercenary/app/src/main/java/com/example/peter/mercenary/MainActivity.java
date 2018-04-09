@@ -97,19 +97,6 @@ public class MainActivity extends AppCompatActivity
                 intent.putParcelableArrayListExtra("offline",offlineAddedTaskList);
                 startActivity(intent);
             }
-            /*public void onActivityResult(int requestCode, int resultCode, Intent data){
-                String title = data.getStringExtra("title");
-                String desc = data.getStringExtra("description");
-                String status = data.getStringExtra("status");
-                String id = data.getStringExtra("id");
-                Task newTask = new Task(title, desc, status, id);
-                taskList.add(newTask);
-
-                Toast toast = Toast.makeText(getApplicationContext(), title+
-                        desc+status+id, Toast.LENGTH_LONG);
-                toast.show();
-                adapter.notifyDataSetChanged();
-            }*/
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
