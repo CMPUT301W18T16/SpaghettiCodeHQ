@@ -89,4 +89,6 @@ public class Bid implements Parcelable {
         UserId = in.readString();
     }
 
+
+
 }

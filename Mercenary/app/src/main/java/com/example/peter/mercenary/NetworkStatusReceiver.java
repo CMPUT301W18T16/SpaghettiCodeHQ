@@ -8,10 +8,16 @@ import android.widget.Toast;
 
 /**
  * Created by peter on 2018-04-06.
+ * Modified by Shardul on 2018-04-09.
  */
 
 public class NetworkStatusReceiver extends BroadcastReceiver {
 
+    /**
+     *
+     * @param context: the current Context of NetworkStatusReceiver
+     * @param intent: Intent intent, used for Receiving a Network Status
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
 
