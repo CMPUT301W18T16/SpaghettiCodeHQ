@@ -46,8 +46,6 @@ public class AssignedTaskList extends AppCompatActivity
     private ArrayList<Task> taskList;
     private ArrayList<Task> assignedTask;
     private TaskAdapter adapter;
-    private TimerTask timerTask;
-    private Timer timer;
     private User user; //currently logged in user
 
     @Override
@@ -60,9 +58,9 @@ public class AssignedTaskList extends AppCompatActivity
         user = getIntent().getParcelableExtra("user");
         setContentView(R.layout.drawer_layout_assigned);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarA);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        oldTaskList = (ListView) findViewById(R.id.myTaskView);
+        oldTaskList = (ListView) findViewById(R.id.assignedTaskView);
         Button addButton = (Button) findViewById(R.id.add1);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -78,6 +76,7 @@ public class AssignedTaskList extends AppCompatActivity
 
     protected void onStart() {
         super.onStart();
+        taskList= new ArrayList<Task>();
 
         String query = "{\n" + " \"query\": { \"match\": {\"acceptedUser\":\"" + user.getId() + "\"} }\n" + "}";
 
@@ -123,9 +122,9 @@ public class AssignedTaskList extends AppCompatActivity
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-        oldTaskList = (ListView) findViewById(R.id.myTaskView);
+        oldTaskList = (ListView) findViewById(R.id.assignedTaskView);
 
-        String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
+        String query = "{\n" + " \"query\": { \"match\": {\"acceptedUserId\":\"" + user.getId() + "\"} }\n" + "}";
 
         if (NetworkStatus.connectionStatus(this)) {
 
@@ -200,7 +199,7 @@ public class AssignedTaskList extends AppCompatActivity
             intent.putExtra("user",user);
             startActivity(intent);
         }else if (id == R.id.nav_assigned_list) {
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_userprofile);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.nav_assigned_list);
             drawer.closeDrawer(GravityCompat.START);
         }
 
