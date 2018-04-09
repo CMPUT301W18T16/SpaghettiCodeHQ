@@ -18,7 +18,7 @@ public class BidListTest {
     @Test
     public void add() throws Exception {
         BidList bidsList;
-        bidsList = new BidList()
+        bidsList = new BidList();
         Bid myBid = new Bid("test_user_name", (float) 19.99,"declined");
         assertFalse(Arrays.asList(bidsList).contains(myBid));
         bidsList.add(myBid);
