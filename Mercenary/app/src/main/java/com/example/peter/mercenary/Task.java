@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class Task implements Parcelable {
     private String title;
     private String description;
-    private ArrayList<Bid> listBids;
+    private BidList listBids;
     private LatLng geoLoc;
     private ArrayList<String> pictureArray;
     private String status;
@@ -200,8 +200,9 @@ public class Task implements Parcelable {
 
 
 
-    //public BidList getBids(){return this.listBids;}
+    public BidList getBids(){return this.listBids;}
 
+    public void setBids(BidList listbids){this.listBids = listbids;}
 
     /* Save this for subclass "MyTasks"
     public void addBid(Bid bid){
