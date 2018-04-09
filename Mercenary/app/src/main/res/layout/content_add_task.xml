@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.peter.mercenary.AddTaskActivity"
     tools:showIn="@layout/activity_add_task">
@@ -26,7 +27,7 @@
         android:layout_marginStart="8dp"
 
         android:layout_marginTop="44dp"
-        android:background="@color/wallet_dim_foreground_disabled_holo_dark"
+        android:background="@color/colorPrimary"
         android:ems="10"
         android:hint="Title"
         android:inputType="textPersonName"
@@ -43,7 +44,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:background="@color/wallet_dim_foreground_disabled_holo_dark"
+        android:background="@color/colorPrimary"
         android:ems="10"
         android:hint="Description"
         android:inputType="textPersonName"

@@ -351,5 +351,3 @@ public class SingleTaskActivity extends AppCompatActivity  {
 }
 
 
-
-}

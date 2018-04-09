@@ -25,7 +25,6 @@ public class Task implements Parcelable {
     private BidList listBids;
 
     private String taskProvider;
-    private user;
     private LatLng geoLoc = new LatLng(0, 0);
     private ArrayList<String> pictureArray;
     private String status;
@@ -203,25 +202,15 @@ public class Task implements Parcelable {
 
     // TODO: taskProvider and taskRequester of a task, getters and setters
 
-    public String getRequester(){
-        return this.taskRequester;
-    }
 
     public String getProvider(){
         return this.taskProvider;
 
     }
 
-    public void setRequester(String taskRequester){
-        this.taskRequester = taskRequester;
-    }
-
     public void setTaskProvider(String taskProvider){
-        this.taskRequester = taskProvider;
+        this.taskProvider = taskProvider;
     }
-
-
-
 
     private Task(Parcel in) {
         this.title = in.readString();

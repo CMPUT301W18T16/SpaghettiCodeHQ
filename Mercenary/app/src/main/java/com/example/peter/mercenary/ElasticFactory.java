@@ -62,7 +62,7 @@ public class ElasticFactory {
                             .put("picture", task.getPhoto())
                             .put("status", task.getStatus())
                             .put("title",task.getTitle())
-                            .put("taskRequester",task.getRequester())
+                            .put("username",task.getUserName())
                     ;
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -185,7 +185,7 @@ public class ElasticFactory {
         return null;
         }
     }
-
+/*
     public static class UpdateTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... search_parameters) {
@@ -203,7 +203,7 @@ public class ElasticFactory {
             return null;
         }
     }
-
+*/
     public static class UpdateTask extends AsyncTask<Task, Void, Void> {
         protected Void doInBackground(Task...tasks) {
             verifySettings();
@@ -252,40 +252,6 @@ public class ElasticFactory {
             return null;
         }
     }
-
-
-    public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
-        @Override
-        protected Boolean doInBackground(String...search_parameters){
-            verifySettings();
-
-            Search search = new Search.Builder(search_parameters[0])
-                    .addIndex(elasticIndex)
-                    .addType("User")
-                    .build();
-
-            try{
-                SearchResult result = client.execute(search);
-
-                if(result.getTotal() == 1)
-                {
-                    return true;
-                }
-                else // including multiple duplicated username in the db
-                {
-                    Log.i("Error","checkUserExist: The search query failed");
-                    return false;
-                }
-            }
-            catch (Exception e){
-
-                Log.i("Error", "checkUserExist: Something went wrong when we tried to communicate with the elasticsearch server!");
-                Log.i("exfeption", e.toString());
-                e.printStackTrace();
-                return false;
-
-            }
-
 
 
     public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
