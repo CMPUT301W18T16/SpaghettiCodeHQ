@@ -45,6 +45,22 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/*
+                        ___    ___
+                       / _ \  / _ \
+                      ( (_) )( (_) )
+                       \_ _/  \_ _/
+             __       _.-\\----//--._
+         _  / _\___.-'/ _| / _\  /\/\`-._.-.__   _
+        (_\_)| \___   ||_  ((_  //\/\\  _.-._ \-' )
+          \__)   __)  | _| _) ) ||  || (_    \_.-'
+                /_-.  ||   \_/  ||  .-'-.\
+            _._//  / .--._______.-'\ \   \\__._
+           /_._/   \ \              ))    \__._)
+          (/     _.-')             ( `-._
+                (_.-'         :F_P: `--._)
+ */
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TASKFILE = "taskfile.sav";

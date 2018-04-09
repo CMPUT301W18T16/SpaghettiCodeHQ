@@ -63,8 +63,6 @@ public class ElasticFactory {
         return index;
     }
 
-
-
     public static class AddingUser extends AsyncTask<User, Void, Void>{
         @Override
         protected Void doInBackground(User...users){

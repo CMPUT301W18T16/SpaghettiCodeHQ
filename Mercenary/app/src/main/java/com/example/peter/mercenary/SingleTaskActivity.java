@@ -47,7 +47,6 @@ public class SingleTaskActivity extends AppCompatActivity {
 
         TextView taskTitle = findViewById(R.id.task_title);
         TextView taskDesc = findViewById(R.id.task_desc);
-        TextView taskStatus = findViewById(R.id.task_status);
         TextView userText = findViewById(R.id.usernameText);
         Button editTask = findViewById(R.id.edit_task);
         Button completed = findViewById(R.id.completedBtn);
@@ -85,7 +84,6 @@ public class SingleTaskActivity extends AppCompatActivity {
 
         taskTitle.setText(task.getTitle());
         taskDesc.setText(task.getDescription());
-        taskStatus.setText(task.getStatus());
 
         String query = "{\n" + " \"query\": { \"match\": {\"_id\":\"" + task.getUserId() + "\"} }\n" + "}";
 

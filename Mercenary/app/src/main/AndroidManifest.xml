@@ -31,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver
             android:name=".NetworkStatusReceiver"
             android:label="NetworkStatusReceiver">
@@ -39,6 +40,7 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".Signup" />
         <activity
@@ -66,9 +68,10 @@
         <activity
             android:name=".EditTaskActivity"
             android:label="@string/title_activity_edit_task"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".RateAndReviewActivity" />
-        <activity android:name=".RateReviewActivity"></activity>
+        <activity android:name=".RateReviewActivity" />
+        <activity android:name=".SearchActivity"></activity>
     </application>
 
 </manifest>
