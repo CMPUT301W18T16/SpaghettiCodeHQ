@@ -32,6 +32,9 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import android.os.Bundle;
+import android.app.NotificationManager;
+import android.support.v4.app.NotificationCompat;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     private Timer timer;
     private User user; //currently logged in user
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sendNotice(view);
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
                 intent.putExtra("user", user);
                 intent.putParcelableArrayListExtra("taskList",taskList);
@@ -333,5 +338,24 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    public void sendNotice(View view) {
+
+        //Get an instance of NotificationManager//
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.spag1)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!");
+
+
+        // Gets an instance of the NotificationManager service//
+
+        NotificationManager mNotificationManager =
+
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(001, mBuilder.build());
+    }
 }
+
+
 
