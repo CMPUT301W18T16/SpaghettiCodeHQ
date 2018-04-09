@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Mercenary.iml" filepath="$PROJECT_DIR$/Mercenary.iml" />
+      <module fileurl="file://C:\Users\Hammer\AndroidStudioProjects\SpaghettiCodeHQ-Master\Mercenary\Mercenary.iml" filepath="C:\Users\Hammer\AndroidStudioProjects\SpaghettiCodeHQ-Master\Mercenary\Mercenary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Hammer\AndroidStudioProjects\SpaghettiCodeHQ-Master\Mercenary\app\app.iml" filepath="C:\Users\Hammer\AndroidStudioProjects\SpaghettiCodeHQ-Master\Mercenary\app\app.iml" />
     </modules>
   </component>
 </project>
