@@ -15,6 +15,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+/**
+ * Created by Melissa B.
+ *
+ */
+
 public class UserProfile extends AppCompatActivity {
     User user;
 
