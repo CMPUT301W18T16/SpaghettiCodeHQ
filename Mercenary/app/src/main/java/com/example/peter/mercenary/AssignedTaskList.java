@@ -43,10 +43,12 @@ public class AssignedTaskList extends AppCompatActivity
     private ListView oldTaskList;
     private ArrayList<Task> taskList;
     private ArrayList<Task> offlineAddedTaskList;
+    private ArrayList<Task> assignedList;
     private TaskAdapter adapter;
     private TimerTask timerTask;
     private Timer timer;
     private User user; //currently logged in user
+    private int length;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +112,13 @@ public class AssignedTaskList extends AppCompatActivity
             ElasticFactory.getListOfTask getTaskList
                     = new ElasticFactory.getListOfTask();
             getTaskList.execute(query);
-
             try {
                 taskList = getTaskList.get();
+                length = taskList.size();
+                for (int i = 0; i<length; i++){
+                    if (user = Task.getAcceptedUser()){
+                        assignedList.add(taskList[i]);
+                    }
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
