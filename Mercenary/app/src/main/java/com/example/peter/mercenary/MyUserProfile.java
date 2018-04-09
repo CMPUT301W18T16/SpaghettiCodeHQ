@@ -1,27 +1,28 @@
 package com.example.peter.mercenary;
 
+/**
+ * Created by Peter on 2018-04-09.
+ */
+
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
-public class UserProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+public class MyUserProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     User user;
 
@@ -38,31 +39,19 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout_userprofile);
 
-        String username_current = getIntent().getStringExtra("user"); //currently signed in user
-        String username_clicked = getIntent().getStringExtra("clicked_user"); //user whose profile we are looking at
+        user = getIntent().getParcelableExtra("user");
 
-        String query = "{\n" + " \"query\": { \"match\": {\"username\":\"" + username_clicked + "\"} }\n" + "}";
-        ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
-        getUser.execute(query);
-        
-        try {
-            user = getUser.get();
-        } catch (Exception e) {
-            Log.i("Error", "search failed");    
-        }
-        
-        if (username_current.equals(username_clicked)) {
-            edit = (Button) findViewById(R.id.editButton);
-            edit.setVisibility(View.VISIBLE);
-            edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), EditUserProfile.class);
-                    intent.putExtra("user", user);
-                    startActivityForResult(intent, 0);
-                }
-            });
-        }
+        edit = (Button) findViewById(R.id.editButton);
+        edit.setVisibility(View.VISIBLE);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), EditUserProfile.class);
+                intent.putExtra("user", user);
+                startActivityForResult(intent, 0);
+            }
+        });
+
 
         usernameText = findViewById(R.id.usernameText);
         emailText = findViewById(R.id.emailText);
@@ -115,7 +104,9 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_userprofile);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_task_list) {
-            startActivity(new Intent(this, MainActivity.class));
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
         }
 
         return true;

@@ -245,7 +245,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_user_profile) {
-            startActivity(new Intent(this, UserProfile.class));
+            Intent intent = new Intent(MainActivity.this, MyUserProfile.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
+
         } else if (id == R.id.nav_task_list) {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
