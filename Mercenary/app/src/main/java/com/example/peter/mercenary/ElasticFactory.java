@@ -150,7 +150,6 @@ public class ElasticFactory {
             String taskID;
             for (Task task : tasks){
 
-
                 taskID = task.getId();
                 Log.i("ID_in_ES", taskID);
 

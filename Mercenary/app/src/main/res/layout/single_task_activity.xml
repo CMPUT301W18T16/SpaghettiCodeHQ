@@ -8,31 +8,34 @@
     tools:context="com.example.peter.mercenary.SingleTaskActivity"
     tools:layout_editor_absoluteY="25dp">
 
-    <TextView
+    <EditText
         android:id="@+id/task_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="68dp"
-        android:fontFamily="sans-serif"
-        android:text="Task title here"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:maxLength="30"
+        android:text="Title"
         android:textColor="@android:color/holo_blue_dark"
-        android:textSize="30sp"
-        android:typeface="sans"
+        android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <TextView
+    <EditText
         android:id="@+id/task_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Task description here"
-        android:textColor="@color/colorAccent"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_title" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:ems="10"
+        android:text="Task desc"
+        app:layout_constraintBottom_toTopOf="@+id/usernameText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLength="300"
+        android:maxLines="2"/>
 
     <TextView
         android:id="@+id/task_status_str"
@@ -68,33 +71,32 @@
         android:id="@+id/usernameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:text="Username"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_desc" />
+        app:layout_constraintBottom_toTopOf="@+id/byte_img"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/mapBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.629"
-        app:layout_constraintStart_toEndOf="@+id/task_title"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@android:drawable/ic_dialog_map" />
 
     <ImageView
         android:id="@+id/byte_img"
         android:layout_width="76dp"
         android:layout_height="76dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/gridView"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameText"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal_background" />
 
     <Button
@@ -102,16 +104,16 @@
         style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
         android:layout_width="76dp"
         android:layout_height="76dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="36dp"
         android:background="?attr/colorButtonNormal"
         android:text="ADD..."
         android:textColor="@android:color/background_dark"
         android:textSize="18sp"
         android:textStyle="bold"
         android:typeface="sans"
-        app:layout_constraintStart_toEndOf="@+id/byte_img"
-        app:layout_constraintTop_toBottomOf="@+id/usernameText" />
+        app:layout_constraintBottom_toTopOf="@+id/gridView"
+        app:layout_constraintStart_toEndOf="@+id/byte_img" />
 
     <Button
         android:id="@+id/task_save_button"

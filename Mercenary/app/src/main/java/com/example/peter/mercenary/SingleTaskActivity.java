@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.view.View;
@@ -78,9 +79,9 @@ public class SingleTaskActivity extends AppCompatActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final TextView taskTitle = findViewById(R.id.task_title);
-        final TextView taskDesc = findViewById(R.id.task_desc);
-        final TextView taskStatus = findViewById(R.id.task_status);
+        EditText taskTitle = findViewById(R.id.task_title);
+        EditText taskDesc = findViewById(R.id.task_desc);
+        TextView taskStatus = findViewById(R.id.task_status);
         TextView userText = findViewById(R.id.usernameText);
         Button addImgButton = findViewById(R.id.add_img_button);
         ImageButton map = findViewById(R.id.mapBtn);
@@ -185,18 +186,20 @@ public class SingleTaskActivity extends AppCompatActivity  {
             }
 
 
+
+
             currentTask.setPhoto(taskImgStringList);
             currentTask.setStatus(taskStatusString);
             currentTask.setRequester(taskRequester.getUsername());
             currentTask.setId(taskIDString);
 
             try {
-                currentTask.setDescription(taskDescriptionString);
+                currentTask.setDescription(taskDesc.getText().toString());
             } catch (DescTooLongException e) {
                 e.printStackTrace();
             }
             try {
-                currentTask.setTitle(taskTitleString);
+                currentTask.setTitle(taskTitle.getText().toString());
             } catch (TitleTooLongException e) {
                 e.printStackTrace();
             }
@@ -212,9 +215,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
             Toast toast = Toast.makeText(getApplicationContext(), "Task updated",
                     Toast.LENGTH_SHORT);
             toast.show();
-
         });
-
     }
 
 
@@ -226,7 +227,6 @@ public class SingleTaskActivity extends AppCompatActivity  {
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
             try {
                 // TODO:
