@@ -77,11 +77,12 @@ public class AddTaskActivity extends AppCompatActivity {
                     description = (EditText) findViewById(R.id.desc);
                     error1 = (TextView) findViewById(R.id.error1);
                     error1.setText("");
+                    ArrayList<String> photoArray = new ArrayList<String>();
 
                     // LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
                     newTask = new Task(title.getText().toString(),
                             description.getText().toString(),
-                            geoLocation, "requested", user.getId(), user.getUsername());
+                            geoLocation, "requested", user.getId(), user.getUsername(), photoArray);
 
                     //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                     //Toast.LENGTH_LONG);
@@ -102,11 +103,11 @@ public class AddTaskActivity extends AppCompatActivity {
                     title = (EditText) findViewById(R.id.title);
                     description = (EditText) findViewById(R.id.desc);
                     error1 = (TextView) findViewById(R.id.error1);
-
+                    ArrayList<String> photoArray = new ArrayList<String>();
                     // LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
                     newTask = new Task(title.getText().toString(),
                             description.getText().toString(),
-                            geoLocation, "requested", user.getId(), user.getUsername());
+                            geoLocation, "requested", user.getId(), user.getUsername(),photoArray);
 
                  //   Log.i("SOURCECHECK",source);
 

@@ -7,6 +7,8 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+
 /**
  * Created by peter on 2018-02-22.
  * Edited by Jason L. and Shardul S. on 2018-05-15
@@ -21,7 +23,7 @@ public class Task implements Parcelable {
     private String description;
     private BidList listBids;
     private LatLng geoLoc;
-    private byte picture;
+    private ArrayList<String> pictureArray;
     private String status;
     private String userId;
     private int mData;
@@ -31,13 +33,14 @@ public class Task implements Parcelable {
     @JestId
     private String id;
 
-    public Task(String title, String description, LatLng geoLoc, String status, String userId, String userName) {
+    public Task(String title, String description, LatLng geoLoc, String status, String userId, String userName, ArrayList<String> pictureList) {
         this.title = title;
         this.description = description;
         this.geoLoc = geoLoc;
         this.status = status;
         this.userId = userId;
         this.userName = userName;
+        this.pictureArray = pictureList;
 
     }
 
@@ -79,11 +82,11 @@ public class Task implements Parcelable {
 
     /**
      *
-     * @param picture: the photo the user wishes to assign to the task
+     * @param pictureList: the photo the user wishes to assign to the task
      * Setter
      */
-    public void setPhoto(byte picture){
-        this.picture=picture;
+    public void setPhoto(ArrayList<String> pictureList){
+        this.pictureArray=pictureList;
     }
 
     /**
@@ -129,7 +132,7 @@ public class Task implements Parcelable {
      * Getter.
      * @see public void setPhoto(...)
      */
-    public byte getPhoto(){return this.picture;}
+    public ArrayList<String> getPhoto(){return this.pictureArray;}
 
     /**
      *
@@ -177,6 +180,7 @@ public class Task implements Parcelable {
         out.writeString(status);
         out.writeString(userId);
         out.writeString(userName);
+        out.writeList(pictureArray);
 
     }
 
@@ -196,6 +200,8 @@ public class Task implements Parcelable {
         this.status = in.readString();
         this.userId = in.readString();
         this.userName = in.readString();
+        this.pictureArray = new ArrayList<String>();
+        in.readList(pictureArray, String.class.getClassLoader());
     }
 
     //public BidList getBids(){return this.listBids;}
