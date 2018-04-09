@@ -252,6 +252,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_task_list) {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
+
+        }else if (id == R.id.nav_assigned_list) {
+            Intent intent = new Intent(MainActivity.this, AssignedTaskList.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

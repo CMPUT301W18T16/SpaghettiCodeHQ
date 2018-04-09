@@ -115,7 +115,13 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_userprofile);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_task_list) {
-            startActivity(new Intent(this, MainActivity.class));
+            Intent intent = new Intent(UserProfile.this, MainActivity.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
+        }else if (id == R.id.nav_assigned_list) {
+            Intent intent = new Intent(UserProfile.this, AssignedTaskList.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
         }
 
         return true;
