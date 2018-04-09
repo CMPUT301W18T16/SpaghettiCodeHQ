@@ -93,7 +93,7 @@ public class Tasklist implements Parcelable {
     protected Tasklist(Parcel in) {
         tasks = in.createTypedArrayList(Task.CREATOR);
     }
-    
+
 
     public static final Creator<Tasklist> CREATOR = new Creator<Tasklist>() {
         @Override

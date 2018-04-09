@@ -26,11 +26,21 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
+/**
+ * Main elastic factory class
+ */
 public class ElasticFactory {
     private static String elasticIndex = "cmput301w18t16";
     private static JestDroidClient client;
 
     public static class AddingTasks extends AsyncTask<Task, Void, Void>{
+
+        /**
+         *
+         * @param tasks: a Tasklist
+         * @return Void: function just updates elastic search in background, returns nothing
+         *
+         */
         @Override
         protected Void doInBackground(Task...tasks){
             verifySettings();
@@ -58,10 +68,16 @@ public class ElasticFactory {
         }
     }
 
+    /**
+     * Function used to build Task with offline functionality
+     * @param task: a specific Task
+     * @return Index: returns the Index of elasticSearch for the task
+     */
     public static Index buildTaskOffline(Task task){
         Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
         return index;
     }
+
 
     public static class AddingUser extends AsyncTask<User, Void, Void>{
         @Override
