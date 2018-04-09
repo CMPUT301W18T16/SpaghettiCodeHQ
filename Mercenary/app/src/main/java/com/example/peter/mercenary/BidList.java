@@ -1,9 +1,12 @@
 package com.example.peter.mercenary;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
- * @date: Created by peter on 2018-02-23. Modified by Shardul on 2018-03-18.
+ * @date: Created by peter on 2018-02-23. Modified by Shardul on 2018-04-08.
  * @author Peter
  * @version version 1.0
  * @see class Bid
@@ -11,10 +14,9 @@ import java.util.ArrayList;
  */
 
 //Custom ArrayList type BidList
-public class BidList {
+public class BidList implements Parcelable {
 
-    private ArrayList<Bid> bids = new ArrayList<Bid>();
-
+    private ArrayList<Bid> bids = new ArrayList<>();
 
     /**
      *
@@ -23,7 +25,6 @@ public class BidList {
      * @see: class Bid
      */
     public void add(Bid bid) {
-
         if (hasBid(bid)) {
             throw new IllegalArgumentException("Duplicate bid found!");
         }
@@ -51,7 +52,6 @@ public class BidList {
      */
 
     public Bid getBid(int index) {
-
         return bids.get(index);
 
     }
@@ -74,4 +74,33 @@ public class BidList {
         return bids.size();
     }
 
+    /**
+     *
+     * @return: 0 (dummy)
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(bids);
+    }
+
+    protected BidList(Parcel in) {
+        bids = in.createTypedArrayList(Bid.CREATOR);
+    }
+
+    public static final Creator<BidList> CREATOR = new Creator<BidList>() {
+        @Override
+        public BidList createFromParcel(Parcel in) {
+            return new BidList(in);
+        }
+
+        @Override
+        public BidList[] newArray(int size) {
+            return new BidList[size];
+        }
+    };
 }

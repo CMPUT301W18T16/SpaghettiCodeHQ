@@ -6,18 +6,20 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -31,13 +33,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".NetworkStatusReceiver"
+            android:label="NetworkStatusReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".Signup" />
         <activity
             android:name=".AddTaskActivity"
             android:label="@string/title_activity_add_task"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".SingleTaskActivity" />
+        <activity android:name=".SingleTaskActivity" android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity android:name=".UserProfile" />
         <activity android:name=".EditUserProfile" />
         <!--
@@ -54,7 +67,15 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".SingleImgActivity"></activity>
+        <activity
+            android:name=".EditTaskActivity"
+            android:label="@string/title_activity_edit_task"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".RateAndReviewActivity" />
+        <activity android:name=".RateReviewActivity" />
+        <activity android:name=".SearchActivity" />
     </application>
 
 </manifest>
