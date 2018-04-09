@@ -199,6 +199,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
                 currentTask.setTitle(taskTitleString);
             } catch (TitleTooLongException e) {
                 e.printStackTrace();
+            }
             //Log.i("after", currentTask.getId());
 
             ElasticFactory.UpdateTask addTask = new ElasticFactory.UpdateTask();
