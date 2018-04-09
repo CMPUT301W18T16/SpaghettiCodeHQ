@@ -1,10 +1,13 @@
 package com.example.peter.mercenary;
 
+import android.os.Parcel;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static java.lang.System.in;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.*;
 
@@ -14,12 +17,14 @@ import static org.junit.Assert.*;
 public class BidListTest {
     @Test
     public void add() throws Exception {
-        BidList bidsList = new BidList();
-        Bid myBid = new Bid("test_user_name", (float) 19.99);
+        BidList bidsList;
+        bidsList = new BidList()
+        Bid myBid = new Bid("test_user_name", (float) 19.99,"declined");
         assertFalse(Arrays.asList(bidsList).contains(myBid));
         bidsList.add(myBid);
         System.out.println("Test user name is: " + bidsList.getBid(0).getUsername() + '\n');
         System.out.println("Test bid value is: " + bidsList.getBid(0).getValue() + '\n');
+        System.out.println("Test bid value is: " + bidsList.getBid(0).getFlag() + '\n');
         /*TODO: contains method does not work on objects; build your own contains method*/
         assertTrue(Arrays.asList(bidsList).contains(myBid));
     }

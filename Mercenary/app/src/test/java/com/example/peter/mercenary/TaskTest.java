@@ -2,6 +2,8 @@ package com.example.peter.mercenary;
 
 import android.media.Image;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.Object;
@@ -9,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import org.junit.Test;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -16,6 +19,17 @@ import static org.junit.Assert.*;
  * Created by minci on 2018/3/15.
  */
 public class TaskTest {
+
+    @Test
+    public void setTaskTitle() throws Exception {
+        String taskTitle = null;
+        LatLng coord = new LatLng(1,1);
+        Task testTask = new Task(taskTitle, "test desc", coord, "bidded", "sampleUsrID_r56yh", "sampleuserName", new ArrayList<String>());
+        assertFalse(testTask.getTitle() != null);
+        testTask.setTitle("testTitle");
+        assertTrue(testTask.getTitle() == "testTitle");
+    }
+
     @Test
     public void getId() throws Exception {
 
@@ -29,6 +43,7 @@ public class TaskTest {
     public void addPicture() throws Exception {
         int imgSize;
         int sizeLimit = 65536;
+
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("temple.gif");
         System.out.println(in.available());
         imgSize = in.available();
