@@ -49,16 +49,15 @@ public class LoginScreen extends AppCompatActivity {
                 String usernameText = username.getText().toString();
                 ElasticFactory.checkUserExist checkUser = new ElasticFactory.checkUserExist();
                 String query = "{\n" + " \"query\": { \"match\": {\"username\":\"" + usernameText + "\"} }\n" + "}";
-
                 try {
                     if (checkUser.execute(query).get()) {
                         ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
                         user = getUser.execute(query).get();
 
                         Intent intent = new Intent(LoginScreen.this, MainActivity.class);
+
                         intent.putExtra("user", user);
                         //intent.putExtra("username", user.getUsername());
-
                         startActivity(intent);
 
                     } else {

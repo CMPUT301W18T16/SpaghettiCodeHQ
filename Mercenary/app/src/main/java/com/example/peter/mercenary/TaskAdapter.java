@@ -16,11 +16,24 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class TaskAdapter extends ArrayAdapter<Task> {
+    /**
+     *
+     * @param context: a Context
+     * @param task: a ArrayList of tasks (i.e. list of tasks)
+     */
     public TaskAdapter(Context context, ArrayList<Task> task){
         super(context, 0, task);
         }
 
     //@Override
+
+    /**
+     *
+     * @param position: position to get a Task from
+     * @param convertView: a specific View - convertView used in this context
+     * @param parent: parent ViewGroup
+     * @return: returns the View needed for the task adapter
+     */
     public View getView(int position, View convertView, ViewGroup parent){
 
         Task task = getItem(position);

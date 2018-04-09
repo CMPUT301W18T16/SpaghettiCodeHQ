@@ -26,10 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -44,6 +41,22 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+/*
+                        ___    ___
+                       / _ \  / _ \
+                      ( (_) )( (_) )
+                       \_ _/  \_ _/
+             __       _.-\\----//--._
+         _  / _\___.-'/ _| / _\  /\/\`-._.-.__   _
+        (_\_)| \___   ||_  ((_  //\/\\  _.-._ \-' )
+          \__)   __)  | _| _) ) ||  || (_    \_.-'
+                /_-.  ||   \_/  ||  .-'-.\
+            _._//  / .--._______.-'\ \   \\__._
+           /_._/   \ \              ))    \__._)
+          (/     _.-')             ( `-._
+                (_.-'         :F_P: `--._)
+ */
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -78,6 +91,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
+
                 intent.putExtra("user", user);
                 intent.putParcelableArrayListExtra("taskList",taskList);
                 intent.putParcelableArrayListExtra("offline",offlineAddedTaskList);
@@ -103,6 +117,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -163,8 +178,8 @@ public class MainActivity extends AppCompatActivity
 
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
-        if (NetworkStatus.connectionStatus(this)) {
 
+        if (NetworkStatus.connectionStatus(this)) {
             ElasticFactory.getListOfTask getTaskList
                     = new ElasticFactory.getListOfTask();
 
@@ -221,26 +236,23 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_user_profile) {
+            Intent intent = new Intent(MainActivity.this, MyUserProfile.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_task_list) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -315,7 +327,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
 
 }
 
