@@ -61,8 +61,8 @@ import java.util.TimerTask;
                 (_.-'         :F_P: `--._)
  */
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity{
+      implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TASKFILE = "taskfile.sav";
     private static final String ADDTASKFILE = "addTaskFile.sav";
     private EditText bodyText;
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
+
                 intent.putExtra("user", user);
                 intent.putParcelableArrayListExtra("taskList",taskList);
                 intent.putParcelableArrayListExtra("offline",offlineAddedTaskList);
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -179,8 +181,8 @@ public class MainActivity extends AppCompatActivity
 
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
-        if (NetworkStatus.connectionStatus(this)) {
 
+        if (NetworkStatus.connectionStatus(this)) {
             ElasticFactory.getListOfTask getTaskList
                     = new ElasticFactory.getListOfTask();
 
@@ -237,8 +239,10 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -331,7 +335,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
 
 }
 

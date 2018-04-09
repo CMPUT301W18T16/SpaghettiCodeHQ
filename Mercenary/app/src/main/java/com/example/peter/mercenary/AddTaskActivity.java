@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ import io.searchbox.core.Index;
 public class AddTaskActivity extends AppCompatActivity {
     private EditText title;
     private EditText description;
+    private EditText status;
     private TextView error1;
     private ImageButton maps;
     private Button done;
@@ -126,9 +128,6 @@ public class AddTaskActivity extends AppCompatActivity {
                 }
             });
         }
-
-
-
 
     }
 

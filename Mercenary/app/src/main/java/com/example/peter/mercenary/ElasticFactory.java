@@ -5,21 +5,27 @@ package com.example.peter.mercenary;
  */
 
 import android.os.AsyncTask;
+import android.system.Os;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Objects;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
-import io.searchbox.core.DeleteByQuery;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -44,24 +50,43 @@ public class ElasticFactory {
         @Override
         protected Void doInBackground(Task...tasks){
             verifySettings();
-            //String uniqueID = UUID.randomUUID().toString();
 
             for(Task task : tasks){
+
+                JSONObject json = new JSONObject();
+
+                try {
+                    json = new JSONObject()
+                            .put("description", task.getDescription())
+                            .put("mData", 0)
+                            .put("picture", task.getPhoto())
+                            .put("status", task.getStatus())
+                            .put("title",task.getTitle())
+                            .put("taskRequester",task.getRequester())
+                    ;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i("json created:",json.toString());
+
+
                 Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
 
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
                     {
+                        Log.i("ADDID", result.getId());
                         task.setId(result.getId());
+
                     }
                     else{
                         Log.i("Error","Elasticsearch was not able to add the task");
+                        Log.i("addTask", result.getJsonString());
                     }
                 }
                 catch(Exception e){
                     Log.i("Error", "The application failed to build and send the task");
-
                 }
             }
             return null;
@@ -86,6 +111,21 @@ public class ElasticFactory {
             //String uniqueID = UUID.randomUUID().toString();
 
             for(User user : users){
+                JSONObject json = new JSONObject();
+
+                try {
+                     json = new JSONObject()
+                                  .put("email", user.getEmail())
+                                  .put("mData", 0)
+                                  .put("phoneNumber", user.getPhoneNumber())
+                                  .put("username", user.getUsername()
+                                  )
+                                  ;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i("json created:",json.toString());
+
                 Index index = new Index.Builder(user).index(elasticIndex).type("User").build();
                 try{
                     DocumentResult result = client.execute(index);
@@ -135,6 +175,7 @@ public class ElasticFactory {
             try {
                 client.execute(new Update.Builder("" + search_parameters[0] + "")
                         .index(elasticIndex)
+
                         .type("user")
                         .id(search_parameters[1])
                         .build());
@@ -163,6 +204,89 @@ public class ElasticFactory {
         }
     }
 
+    public static class UpdateTask extends AsyncTask<Task, Void, Void> {
+        protected Void doInBackground(Task...tasks) {
+            verifySettings();
+
+            String taskID;
+            for (Task task : tasks){
+
+                taskID = task.getId();
+                Log.i("ID_in_ES", taskID);
+
+                try {
+                    // minci: changed Update to Index;
+                    // Error:
+                    // nested: ScriptException[scripts of type [indexed], operation [update] and lang [groovy] are disabled]
+                    // The ES server disabled update and lang groovy
+                    DocumentResult result = client.execute(new Index.Builder(task)
+                            .index(elasticIndex)
+                            .type("User")
+                            .id(taskID)
+                            .build());
+                    Log.i("YOU TRIED", "to update a task");
+                    if(result.getJsonString() != null)
+                    {
+                        if (result.isSucceeded()){
+                            // make a toast, havent figured out how to do this in non-activity class
+                            Log.i("RESULT:", result.getJsonString());
+                        }
+                        else {
+                            // find out what's going on with our query
+                            Log.i("RESULT:", result.getJsonString());
+                        }
+                    }
+
+                    else
+                    {
+                        JSONObject obj = new JSONObject(result.getSourceAsString());
+                        Log.i("Error","UpdateTask FAILED" + obj);
+                    }
+                } catch(Exception e){
+                    Log.i("Error", "UpdateTask: The application failed to update task");
+                    e.printStackTrace();
+
+                }
+            }
+
+            return null;
+        }
+    }
+
+
+    public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
+        @Override
+        protected Boolean doInBackground(String...search_parameters){
+            verifySettings();
+
+            Search search = new Search.Builder(search_parameters[0])
+                    .addIndex(elasticIndex)
+                    .addType("User")
+                    .build();
+
+            try{
+                SearchResult result = client.execute(search);
+
+                if(result.getTotal() == 1)
+                {
+                    return true;
+                }
+                else // including multiple duplicated username in the db
+                {
+                    Log.i("Error","checkUserExist: The search query failed");
+                    return false;
+                }
+            }
+            catch (Exception e){
+
+                Log.i("Error", "checkUserExist: Something went wrong when we tried to communicate with the elasticsearch server!");
+                Log.i("exfeption", e.toString());
+                e.printStackTrace();
+                return false;
+
+            }
+
+
 
     public static class checkUserExist extends AsyncTask<String, Void, Boolean>{
         @Override
@@ -188,6 +312,8 @@ public class ElasticFactory {
         }
     }
 
+
+
     public static class getListOfTask extends AsyncTask<String, Void, ArrayList<Task>>{
             @Override
         protected ArrayList<Task> doInBackground(String...search_parameters){
@@ -209,11 +335,11 @@ public class ElasticFactory {
                     }
                     else
                     {
-                        Log.i("Error","The search query failed");
+                        Log.i("Error","getListOfTask: The search query failed");
                     }
                 }
                 catch (Exception e){
-                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                    Log.i("Error", "getListOfTask: Something went wrong when we tried to communicate with the elasticsearch server!");
 
                 }
               return taskList;

@@ -1,9 +1,10 @@
 package com.example.peter.mercenary;
 
 import io.searchbox.annotations.JestId;
-import android.media.Image;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Base64;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -22,22 +23,27 @@ public class Task implements Parcelable {
     private String title;
     private String description;
     private BidList listBids;
+
+    private String taskProvider;
+    private user;
     private LatLng geoLoc = new LatLng(0, 0);
     private ArrayList<String> pictureArray;
     private String status;
     private String userId;
-    private int mData;
+
     private String userName;
     private String acceptedUser;
 
     @JestId
     private String id;
 
+
     public Task(String title, String description, LatLng geoLoc, String status, String userId, String userName, ArrayList<String> pictureList) {
         this.title = title;
         this.description = description;
         this.geoLoc = geoLoc;
         this.status = status;
+        this.pictureArray = pictureArray;
         this.userId = userId;
         this.userName = userName;
         this.pictureArray = pictureList;
@@ -86,6 +92,7 @@ public class Task implements Parcelable {
      * Setter
      */
     public void setPhoto(ArrayList<String> pictureList){
+
         this.pictureArray=pictureList;
     }
 
@@ -132,6 +139,7 @@ public class Task implements Parcelable {
      * Getter.
      * @see public void setPhoto(...)
      */
+
     public ArrayList<String> getPhoto(){return this.pictureArray;}
 
     /**
@@ -193,6 +201,28 @@ public class Task implements Parcelable {
         }
     };
 
+    // TODO: taskProvider and taskRequester of a task, getters and setters
+
+    public String getRequester(){
+        return this.taskRequester;
+    }
+
+    public String getProvider(){
+        return this.taskProvider;
+
+    }
+
+    public void setRequester(String taskRequester){
+        this.taskRequester = taskRequester;
+    }
+
+    public void setTaskProvider(String taskProvider){
+        this.taskRequester = taskProvider;
+    }
+
+
+
+
     private Task(Parcel in) {
         this.title = in.readString();
         this.description = in.readString();
@@ -203,8 +233,6 @@ public class Task implements Parcelable {
         this.pictureArray = new ArrayList<String>();
         in.readList(pictureArray, String.class.getClassLoader());
     }
-
-    //public BidList getBids(){return this.listBids;}
 
 
     /* Save this for subclass "MyTasks"
