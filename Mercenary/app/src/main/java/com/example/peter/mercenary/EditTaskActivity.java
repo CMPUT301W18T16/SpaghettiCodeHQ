@@ -20,7 +20,6 @@ public class EditTaskActivity extends AppCompatActivity {
 
         EditText taskTitle = findViewById(R.id.task_title);
         EditText taskDesc = findViewById(R.id.task_desc);
-        EditText taskStatus = findViewById(R.id.task_status);
         Button saveChange = findViewById(R.id.save_change);
 
         Task task = getIntent().getExtras().getParcelable("task");

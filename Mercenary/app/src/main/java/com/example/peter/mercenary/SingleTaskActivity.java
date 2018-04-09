@@ -50,6 +50,7 @@ public class SingleTaskActivity extends AppCompatActivity {
         TextView taskStatus = findViewById(R.id.task_status);
         TextView userText = findViewById(R.id.usernameText);
         Button editTask = findViewById(R.id.edit_task);
+        Button completed = findViewById(R.id.completedBtn);
 
         ImageButton map = findViewById(R.id.mapBtn);
         task = getIntent().getParcelableExtra("task");
@@ -130,6 +131,22 @@ public class SingleTaskActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+            if (task.getStatus().equals("accepted")
+                    && task.getUserName().equals(user.getUsername())) {
+                completed.setVisibility(View.VISIBLE);
+                completed.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        task.setStatus("completed");
+                        Intent intent = new Intent(SingleTaskActivity.this, RateReviewActivity.class);
+                        intent.putExtra("username", task.getAcceptedUser());
+                        startActivity(intent);
+                    }
+                });
+            } else {
+                completed.setVisibility(View.INVISIBLE);
+            }
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(), "Currently offline, functionalities may not be available.", Toast.LENGTH_LONG);

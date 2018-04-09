@@ -34,7 +34,6 @@ import io.searchbox.core.Index;
 public class AddTaskActivity extends AppCompatActivity {
     private EditText title;
     private EditText description;
-    private EditText status;
     private TextView error1;
     private ImageButton maps;
     private Button done;
@@ -76,14 +75,13 @@ public class AddTaskActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     title = (EditText) findViewById(R.id.title);
                     description = (EditText) findViewById(R.id.desc);
-                    status = (EditText) findViewById(R.id.status);
                     error1 = (TextView) findViewById(R.id.error1);
                     error1.setText("");
 
                     // LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
                     newTask = new Task(title.getText().toString(),
                             description.getText().toString(),
-                            geoLocation, status.getText().toString(), user.getId(), user.getUsername());
+                            geoLocation, "requested", user.getId(), user.getUsername());
 
                     //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                     //Toast.LENGTH_LONG);
@@ -103,13 +101,12 @@ public class AddTaskActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     title = (EditText) findViewById(R.id.title);
                     description = (EditText) findViewById(R.id.desc);
-                    status = (EditText) findViewById(R.id.status);
                     error1 = (TextView) findViewById(R.id.error1);
 
                     // LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
                     newTask = new Task(title.getText().toString(),
                             description.getText().toString(),
-                            geoLocation, status.getText().toString(), user.getId(), user.getUsername());
+                            geoLocation, "requested", user.getId(), user.getUsername());
 
                  //   Log.i("SOURCECHECK",source);
 
