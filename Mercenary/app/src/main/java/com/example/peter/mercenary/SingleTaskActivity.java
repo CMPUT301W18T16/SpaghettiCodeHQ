@@ -59,7 +59,6 @@ import static com.google.common.base.Objects.equal;
 
 public class SingleTaskActivity extends AppCompatActivity  {
     User currentUser; //currently logged in user
-    byte[] byteArray;  // base64 byte array of the compressed img
     String encoded;  //  bitmap encoded to string for simple storage
     User taskRequester;
     String taskDescriptionString;
@@ -70,7 +69,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
     Task currentTask;
     ArrayList<Bitmap> ImgBitmapArray = new ArrayList<Bitmap>();
     private ArrayAdapter<String> imageArrayAdapter;
-    private GridView ImgGrid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -87,7 +86,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
         ImageButton map = findViewById(R.id.mapBtn);
         Button saveTaskButton = findViewById(R.id.task_save_button);
         ImageView imgByte = findViewById(R.id.byte_img);
-        ImgGrid = (GridView) findViewById(R.id.gridView);
+        GridView imgGrid = (GridView) findViewById(R.id.gridView);
 
          Bundle bundle = getIntent().getExtras();
 
@@ -123,35 +122,25 @@ public class SingleTaskActivity extends AppCompatActivity  {
 
                 // let's just test first img from the img list
                 assert(taskImgStringList != null);
-
-
-                //byte[] decodedBase64 = Base64.decode(taskImgStringList.get(0), Base64.DEFAULT);
-                //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedBase64, 0, decodedBase64.length);
-                //imgByte.setImageBitmap(decodedByte);
-                //encoded = taskImgStringList.get(0);
-                //ArrayList<Bitmap> ImgBitmapArray;
-                //ImgBitmapArray = new ArrayList<Bitmap>();
-
-
                 for (String S : taskImgStringList){
-                    //Log.i("array size is:",Integer.toString(taskImgStringList.size()));
-                    //Log.i("the img str is", taskImgStringList.get(i));
-                    //byte[] tempImgByte = Base64.decode(taskImgStringList.get(i), Base64.DEFAULT);
-                    //Bitmap tempBitmap = BitmapFactory.decodeByteArray(tempImgByte, 0, tempImgByte.length);
                     Log.i("HUGE!!!",Integer.toString(S.length()));
                     ImgBitmapArray.add(getBitmapFromString(S));
                 }
 
                 ImageAdapter myImageAdapter = new ImageAdapter(this);
                 myImageAdapter.setImgBitmapArray(ImgBitmapArray);
-                ImgGrid.setAdapter(myImageAdapter);
+                imgGrid.setAdapter(myImageAdapter);
 
 
-                ImgGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                imgGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View v,
                                             int position, long id) {
                         Toast.makeText(SingleTaskActivity.this, "" + position,
                                 Toast.LENGTH_SHORT).show();
+
+                        final Intent intent = new Intent(SingleTaskActivity.this, SingleImgActivity.class);
+                        intent.putExtra("Bitmap",ImgBitmapArray.get(position));
+                        startActivity(intent);
                     }
                 });
             }
@@ -167,73 +156,61 @@ public class SingleTaskActivity extends AppCompatActivity  {
             }
         });
 
-        userText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //todo
-                //when the user clicks on the username go to the userprofile
-            }
+        userText.setOnClickListener(v -> {
+            //todo
+            //when the user clicks on the username go to the userprofile
         });
 
-        map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putExtra("Lat", 53.526f); //needs to pass task location
-                intent.putExtra("Long", -113.525f);
-                startActivity(intent);
-            }
+        map.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+            intent.putExtra("Lat", 53.526f); //needs to pass task location
+            intent.putExtra("Long", -113.525f);
+            startActivity(intent);
         });
 
-        saveTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //create query
-                //and upload
-                //TODO: detect if photo list if empty; if empty then initialize it; if not then add photo to it
-                if (encoded != null ) {
-                    String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(encoded);
-                    taskImgStringList.add(escapedImg);
-                }
+        saveTaskButton.setOnClickListener(v -> {
+            //create query
+            //and upload
+            //TODO: detect if photo list if empty; if empty then initialize it; if not then add photo to it
+            if (encoded != null ) {
+                String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(encoded);
+                taskImgStringList.add(escapedImg);
+            }
 
-                //10 is the min limit
-                if (taskImgStringList.size() > 11){
-                    Collections.rotate(taskImgStringList, taskImgStringList.size()-11);
-                    ArrayList<String> subItems = new ArrayList<String>(taskImgStringList.subList(0, 11));
-                    taskImgStringList = subItems;
-
-                }
-
-
-                currentTask.setPhoto(taskImgStringList);
-                currentTask.setStatus(taskStatusString);
-                currentTask.setRequester(taskRequester.getUsername());
-                currentTask.setId(taskIDString);
-
-                try {
-                    currentTask.setDescription(taskDescriptionString);
-                } catch (DescTooLongException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    currentTask.setTitle(taskTitleString);
-                } catch (TitleTooLongException e) {
-                    e.printStackTrace();
-                }
-                //Log.i("after", currentTask.getId());
-
-                ElasticFactory.UpdateTask addTask = new ElasticFactory.UpdateTask();
-                addTask.execute(currentTask);
-
-                // if task updated then toast success
-                // if no internet toast a fail message
-                // else toast a fail message
-                // TODO: we need to get result from the server and if internet is connected
-                Toast toast = Toast.makeText(getApplicationContext(), "Task updated",
-                        Toast.LENGTH_SHORT);
-                toast.show();
+            //10 is the min limit
+            if (taskImgStringList.size() > 11){
+                Collections.rotate(taskImgStringList, taskImgStringList.size()-11);
+                taskImgStringList = new ArrayList<>(taskImgStringList.subList(0, 11));
 
             }
+
+
+            currentTask.setPhoto(taskImgStringList);
+            currentTask.setStatus(taskStatusString);
+            currentTask.setRequester(taskRequester.getUsername());
+            currentTask.setId(taskIDString);
+
+            try {
+                currentTask.setDescription(taskDescriptionString);
+            } catch (DescTooLongException e) {
+                e.printStackTrace();
+            }
+            try {
+                currentTask.setTitle(taskTitleString);
+            } catch (TitleTooLongException e) {
+                e.printStackTrace();
+            //Log.i("after", currentTask.getId());
+
+            ElasticFactory.UpdateTask addTask = new ElasticFactory.UpdateTask();
+            addTask.execute(currentTask);
+
+            // if task updated then toast success
+            // if no internet toast a fail message
+            // else toast a fail message
+            // TODO: we need to get result from the server and if internet is connected
+            Toast toast = Toast.makeText(getApplicationContext(), "Task updated",
+                    Toast.LENGTH_SHORT);
+            toast.show();
 
         });
 
@@ -325,13 +302,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
 
                 final ImageView bitmapView = findViewById(R.id.byte_img);
                 bitmapView.setImageBitmap(compressedImage);
-                //compressedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                //byteArray = stream.toByteArray();
                 encoded = getStringFromBitmap(compressedImage);
-                //Log.i("!!HUGE!!", byteArray.toString());
-                //Log.i("!!SIZE!!",Integer.toString(selectedImageSize) );
-                //Log.i("!!BYTE_SIZE!!", Integer.toString(byteArray.length));
-                //Log.i("STRING_LEN!", String.valueOf(encoded.length()));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -346,28 +317,18 @@ public class SingleTaskActivity extends AppCompatActivity  {
             toast.show();
 
         }
-
-
-
         else{
 
-
         }
-
-        // time to save your stuffs
-        // maybe check some other return codes
-
     }
 
     @Override
     public void onBackPressed() {
 
-
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);
         super.onBackPressed();
         finish();
-
 
     }
 
@@ -436,8 +397,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
 * This Function converts the String back to Bitmap
 * */
         byte[] decodedString = Base64.decode(jsonString, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 }
 
