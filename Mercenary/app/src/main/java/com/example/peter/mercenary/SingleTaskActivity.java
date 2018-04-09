@@ -56,7 +56,6 @@ public class SingleTaskActivity extends AppCompatActivity {
         user = getIntent().getParcelableExtra("user");
 
         /*if (bundle != null) {
-
             userText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -64,7 +63,6 @@ public class SingleTaskActivity extends AppCompatActivity {
                     //when the user clicks on the username go to the userprofile
                 }
             });
-
             editTask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -73,7 +71,6 @@ public class SingleTaskActivity extends AppCompatActivity {
                     intentEdit.putExtra("task", task);
                 }
             });
-
             map.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -84,7 +81,7 @@ public class SingleTaskActivity extends AppCompatActivity {
                 }
             });
         }*/
-              
+
         taskTitle.setText(task.getTitle());
         taskDesc.setText(task.getDescription());
         taskStatus.setText(task.getStatus());
@@ -121,6 +118,15 @@ public class SingleTaskActivity extends AppCompatActivity {
                     intent.putExtra("goal", "single");
                     intent.putExtra("lat", task.getGeoLoc().latitude);
                     intent.putExtra("long", task.getGeoLoc().longitude);
+                    startActivity(intent);
+                }
+            });
+
+            editTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(SingleTaskActivity.this, EditTaskActivity.class);
+                    intent.putExtra("task", task);
                     startActivity(intent);
                 }
             });

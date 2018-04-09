@@ -16,8 +16,7 @@
         android:layout_marginTop="80dp"
         android:fontFamily="sans-serif"
         android:text="Task title here"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textColorLink="#4682B4"
+        android:textColor="#4682B4"
         android:textSize="30sp"
         android:typeface="sans"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,43 +26,18 @@
 
     <TextView
         android:id="@+id/task_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="348dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
         android:text="Task description here"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_title" />
-
-    <TextView
-        android:id="@+id/task_status_str"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginStart="32dp"
-        android:text="Task Status: "
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/task_status"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginBottom="32dp"
-        android:layout_marginStart="16dp"
-        android:text="task status here"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/task_status_str" />
+        tools:layout_editor_absoluteY="187dp" />
 
     <TextView
         android:id="@+id/byte_img"
@@ -94,10 +68,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="Username"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.053"
+        app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_desc" />
+        app:layout_constraintTop_toBottomOf="@+id/task_title" />
 
     <ImageButton
         android:id="@+id/mapBtn"
@@ -113,10 +88,13 @@
         android:id="@+id/edit_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="272dp"
+        android:layout_marginStart="8dp"
         android:text="Edit Task"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/task_del"

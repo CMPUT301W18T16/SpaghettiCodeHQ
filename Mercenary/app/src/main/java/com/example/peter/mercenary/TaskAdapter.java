@@ -31,19 +31,15 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         }
 
         TextView textName = (TextView) convertView.findViewById(R.id.TextName);
-        TextView textUser = (TextView) convertView.findViewById(R.id.TextUser);
         TextView textStatus = (TextView) convertView.findViewById(R.id.TextStatus);
         TextView textDescription = (TextView) convertView.findViewById(R.id.TextDescription);
 
-        textName.setText(String.format("Title: %s", task.getTitle()));
-        textUser.setText(String.format("Date Started: %s", task.getUserName()));
+        textName.setText(String.format(task.getTitle()));
         textStatus.setText(String.format("Status: %s", task.getStatus()));
         //textUser.setText(String.format("Date Started: %s", task.getUserId()));
-        textDescription.setText(String.format("Description: %s", task.getDescription()));
+        textDescription.setText(String.format(task.getDescription()));
 
         String query = "{\n" + " \"query\": { \"match\": {\"_id\":\"" + task.getUserId() + "\"} }\n" + "}";
-
-
 
         return convertView;
         }

@@ -13,39 +13,62 @@
         android:layout_width="96dp"
         android:layout_height="64dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="272dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Save Changes"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_status"
+        app:layout_constraintVertical_bias="0.864" />
 
     <EditText
         android:id="@+id/task_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/wallet_dim_foreground_disabled_holo_dark"
         android:ems="10"
+        android:hint="Task Title"
         android:inputType="textPersonName"
-        android:text="Task Title"
-        tools:layout_editor_absoluteX="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="16dp" />
 
     <EditText
         android:id="@+id/task_desc"
         android:layout_width="343dp"
         android:layout_height="114dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/wallet_dim_foreground_disabled_holo_dark"
         android:ems="10"
+        android:hint="Description"
         android:inputType="textLongMessage"
-        android:text="Description"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="76dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.32"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_title" />
 
     <EditText
         android:id="@+id/task_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/wallet_dim_foreground_disabled_holo_dark"
         android:ems="10"
+        android:hint="Task Status"
         android:inputType="textPersonName"
-        android:text="Task Status"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="449dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_desc" />
 
 </android.support.constraint.ConstraintLayout>

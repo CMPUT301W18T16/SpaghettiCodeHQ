@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
         if(NetworkStatus.connectionStatus(this)) {
-
             ElasticFactory.getListOfTask getTaskList
                     = new ElasticFactory.getListOfTask();
             getTaskList.execute(query);
@@ -127,30 +126,16 @@ public class MainActivity extends AppCompatActivity
             } catch (Exception e) {
                 Log.i("Error", "Failed to get the tweets from the async object");
             }
-        }
-        else{
+        } else {
             loadTaskFile();
         }
         saveTaskFile();
-        /*taskList.add(new Task("Snow", "Please shovel the snow",
-                new LatLng(53.5424028, -113.5095353), "requested"));
-        taskList.add(new Task("Fix my xbox", "My xbox is broken please fix it",
-                new LatLng(53.4658257, -113.4946275), "requested"));*/
-
-        //Intent intent = new Intent(MainActivity.this, RateReviewActivity.class);
-        //intent.putExtra("user", user);
-        //startActivity(intent);
-
-        /*Intent intent = new Intent(MainActivity.this, UserProfile.class);
-        intent.putExtra("user", user.getUsername());
-        intent.putExtra("clicked_user", user.getUsername());
-        startActivity(intent);*/
 
         adapter = new TaskAdapter(this, taskList);
         oldTaskList.setAdapter(adapter);
 
-            // listen to task clicks
-            oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // listen to task clicks
+        oldTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Task task = (Task) oldTaskList.getAdapter().getItem(position);
@@ -160,7 +145,6 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("user", user);
 
                     startActivityForResult(intent, 0);
-
                 }
             });
 

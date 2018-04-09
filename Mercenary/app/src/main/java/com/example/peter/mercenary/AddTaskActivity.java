@@ -78,6 +78,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     description = (EditText) findViewById(R.id.desc);
                     status = (EditText) findViewById(R.id.status);
                     error1 = (TextView) findViewById(R.id.error1);
+                    error1.setText("");
 
                     // LatLng geoLocation = map.getLocationFromAddress(getApplicationContext(), location.getText().toString());
                     newTask = new Task(title.getText().toString(),
