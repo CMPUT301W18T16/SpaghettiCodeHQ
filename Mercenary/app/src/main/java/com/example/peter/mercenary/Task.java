@@ -22,7 +22,7 @@ public class Task implements Parcelable {
     private String title;
     private String description;
     private BidList listBids;
-    private LatLng geoLoc;
+    private LatLng geoLoc = new LatLng(0, 0);
     private ArrayList<String> pictureArray;
     private String status;
     private String userId;
@@ -213,12 +213,9 @@ public class Task implements Parcelable {
     }
     public void delBid(Bid bid){
         this.listBids.delBid(bid);}
-
     public float getLowestBid() {
         float value=-1;
-
         for(int i=0; i<listBids.size(); i++){
-
             if (i==0 || value==-1){
                 value = listBids.getBid(i).getValue();
             }
@@ -227,7 +224,6 @@ public class Task implements Parcelable {
                     value =listBids.getBid(i).getValue();
                 }
             }
-
         }
         return value;
     }

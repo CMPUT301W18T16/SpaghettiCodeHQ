@@ -109,7 +109,7 @@ public class AddTaskActivity extends AppCompatActivity {
                             description.getText().toString(),
                             geoLocation, "requested", user.getId(), user.getUsername(),photoArray);
 
-                 //   Log.i("SOURCECHECK",source);
+                    //   Log.i("SOURCECHECK",source);
 
                     //Toast toast = Toast.makeText(getApplicationContext(), newTask.getTitle() + newTask.getDescription() + newTask.getStatus(),
                     //Toast.LENGTH_LONG);
@@ -134,7 +134,7 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK) {
-           geoLocation = data.getParcelableExtra("location");
+            geoLocation = data.getParcelableExtra("location");
         }
     }
 
