@@ -1,9 +1,10 @@
 package com.example.peter.mercenary;
 
 import io.searchbox.annotations.JestId;
-import android.media.Image;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Base64;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -22,22 +23,26 @@ public class Task implements Parcelable {
     private String title;
     private String description;
     private BidList listBids;
-    private LatLng geoLoc;
+
+    private String taskProvider;
+    private LatLng geoLoc = new LatLng(0, 0);
     private ArrayList<String> pictureArray;
     private String status;
     private String userId;
-    private int mData;
+
     private String userName;
-    private String acceptedUser;
+    private String acceptedUserId;
 
     @JestId
     private String id;
+
 
     public Task(String title, String description, LatLng geoLoc, String status, String userId, String userName, ArrayList<String> pictureList) {
         this.title = title;
         this.description = description;
         this.geoLoc = geoLoc;
         this.status = status;
+        this.pictureArray = pictureArray;
         this.userId = userId;
         this.userName = userName;
         this.pictureArray = pictureList;
@@ -86,6 +91,7 @@ public class Task implements Parcelable {
      * Setter
      */
     public void setPhoto(ArrayList<String> pictureList){
+
         this.pictureArray=pictureList;
     }
 
@@ -132,6 +138,7 @@ public class Task implements Parcelable {
      * Getter.
      * @see public void setPhoto(...)
      */
+
     public ArrayList<String> getPhoto(){return this.pictureArray;}
 
     /**
@@ -159,11 +166,11 @@ public class Task implements Parcelable {
     }
 
     public String getAcceptedUser() {
-        return this.acceptedUser;
+        return this.acceptedUserId;
     }
 
     public void setAcceptedUser(String username) {
-        this.acceptedUser = username;
+        this.acceptedUserId = acceptedUserId;
     }
 
     @Override
@@ -180,6 +187,7 @@ public class Task implements Parcelable {
         out.writeString(status);
         out.writeString(userId);
         out.writeString(userName);
+        out.writeString(acceptedUserId);
         out.writeList(pictureArray);
 
     }
@@ -193,6 +201,18 @@ public class Task implements Parcelable {
         }
     };
 
+    // TODO: taskProvider and taskRequester of a task, getters and setters
+
+
+    public String getProvider(){
+        return this.taskProvider;
+
+    }
+
+    public void setTaskProvider(String taskProvider){
+        this.taskProvider = taskProvider;
+    }
+
     private Task(Parcel in) {
         this.title = in.readString();
         this.description = in.readString();
@@ -200,11 +220,10 @@ public class Task implements Parcelable {
         this.status = in.readString();
         this.userId = in.readString();
         this.userName = in.readString();
+        this.acceptedUserId = in.readString();
         this.pictureArray = new ArrayList<String>();
         in.readList(pictureArray, String.class.getClassLoader());
     }
-
-    //public BidList getBids(){return this.listBids;}
 
 
     /* Save this for subclass "MyTasks"
@@ -213,12 +232,9 @@ public class Task implements Parcelable {
     }
     public void delBid(Bid bid){
         this.listBids.delBid(bid);}
-
     public float getLowestBid() {
         float value=-1;
-
         for(int i=0; i<listBids.size(); i++){
-
             if (i==0 || value==-1){
                 value = listBids.getBid(i).getValue();
             }
@@ -227,7 +243,6 @@ public class Task implements Parcelable {
                     value =listBids.getBid(i).getValue();
                 }
             }
-
         }
         return value;
     }

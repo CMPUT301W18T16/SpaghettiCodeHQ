@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.Manifest;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -109,11 +110,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             ArrayList<Task> tasks = getTaskList.get();
-            tasks.add(new Task("Snow", "Please shovel the snow",
-                    new LatLng(53.5424028, -113.5095353), "requested","91223123141","SnowWhite"));
-            tasks.add(new Task("Fix my xbox", "My xbox is broken please fix it",
-                    new LatLng(53.4658257, -113.4946275), "requested","132254577878","PCMaster"));
-
             for (int i = 0; i < tasks.size(); i++) {
                 if (tasks.get(i).getStatus().equals("requested") ||
                         tasks.get(i).getStatus().equals("bidded")) {

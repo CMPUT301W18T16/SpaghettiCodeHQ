@@ -11,6 +11,11 @@ import android.content.Context;
 
 public class Util {
 
+    /**
+     * Function needed for latency management / scheduling for elasticFactory
+     * @param context: context for elasticFactory scheduling
+     *
+     */
     public static void scheduleJob(Context context){
         ComponentName serviceComponent = new ComponentName(context, ElasticFactory.class);
         JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);

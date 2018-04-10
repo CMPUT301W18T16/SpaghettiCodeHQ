@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 /**
- * @date: Created by peter on 2018-02-23. Modified by Shardul on 2018-03-18.
+ * @date: Created by peter on 2018-02-23. Modified by Shardul on 2018-04-08.
  * @author Peter
  * @version version 1.0
  * @see class Bid
@@ -74,6 +74,10 @@ public class BidList implements Parcelable {
         return bids.size();
     }
 
+    /**
+     *
+     * @return: 0 (dummy)
+     */
     @Override
     public int describeContents() {
         return 0;

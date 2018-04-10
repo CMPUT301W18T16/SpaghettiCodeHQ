@@ -26,10 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -94,24 +91,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
+
                 intent.putExtra("user", user);
                 intent.putParcelableArrayListExtra("taskList",taskList);
                 intent.putParcelableArrayListExtra("offline",offlineAddedTaskList);
                 startActivity(intent);
             }
-            /*public void onActivityResult(int requestCode, int resultCode, Intent data){
-                String title = data.getStringExtra("title");
-                String desc = data.getStringExtra("description");
-                String status = data.getStringExtra("status");
-                String id = data.getStringExtra("id");
-                Task newTask = new Task(title, desc, status, id);
-                taskList.add(newTask);
-
-                Toast toast = Toast.makeText(getApplicationContext(), title+
-                        desc+status+id, Toast.LENGTH_LONG);
-                toast.show();
-                adapter.notifyDataSetChanged();
-            }*/
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -119,6 +104,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -179,8 +165,8 @@ public class MainActivity extends AppCompatActivity
 
         String query = "{\n" + " \"query\": { \"match\": {\"userId\":\"" + user.getId() + "\"} }\n" + "}";
 
-        if (NetworkStatus.connectionStatus(this)) {
 
+        if (NetworkStatus.connectionStatus(this)) {
             ElasticFactory.getListOfTask getTaskList
                     = new ElasticFactory.getListOfTask();
 
@@ -237,26 +223,28 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_user_profile) {
+            Intent intent = new Intent(MainActivity.this, MyUserProfile.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_task_list) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        }else if (id == R.id.nav_assigned_list) {
+            Intent intent = new Intent(MainActivity.this, AssignedTaskList.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -331,7 +319,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
 
 }
 

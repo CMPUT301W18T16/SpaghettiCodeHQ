@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@drawable/spaghettibkg"
     tools:context="com.example.peter.mercenary.Signup">
 
     <RelativeLayout
@@ -39,7 +39,7 @@
             android:layout_alignLeft="@+id/textView"
             android:layout_alignStart="@+id/textView"
             android:layout_below="@id/username"
-            android:background="@color/cast_intro_overlay_button_background_color"
+            android:background="@color/colorPrimaryDark"
             android:ems="10"
             android:hint="Username"
             android:inputType="textPersonName"
@@ -67,7 +67,7 @@
             android:layout_alignLeft="@+id/textView"
             android:layout_alignStart="@+id/textView"
             android:layout_below="@id/email"
-            android:background="@color/cast_intro_overlay_button_background_color"
+            android:background="@color/colorPrimary"
             android:ems="10"
             android:hint="Email"
             android:inputType="textPersonName"
@@ -95,7 +95,7 @@
             android:layout_alignLeft="@+id/textView"
             android:layout_alignStart="@+id/textView"
             android:layout_below="@id/phone"
-            android:background="@color/cast_intro_overlay_button_background_color"
+            android:background="@color/colorPrimary"
             android:ems="10"
             android:hint="Phone number"
             android:inputType="textPersonName"

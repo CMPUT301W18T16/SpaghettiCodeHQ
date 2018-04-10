@@ -16,10 +16,23 @@ import io.searchbox.annotations.JestId;
 public class Bid implements Parcelable {
     private String username;
     private float value;
+    private String flag;  // is the bid declined or accepted
+
     @JestId
     private String id;
     private String UserId;
 
+    /**
+     *
+     * @param username: User's username
+     * @param value: User's bid amount in dollars
+     *
+     */
+    public Bid(String username, float value, String flag){
+        this.username=username;
+        this.value=value;
+        this.flag = flag;
+    }
     public static final Creator<Bid> CREATOR = new Creator<Bid>() {
         @Override
         public Bid createFromParcel(Parcel in) {
@@ -58,6 +71,10 @@ public class Bid implements Parcelable {
         return this.value;
     }
 
+
+    public void setFlag(String flag){this.flag = flag;}
+    public String getFlag(){return this.flag;}
+
     @Override
     public int describeContents() {
         return 0;
@@ -88,5 +105,7 @@ public class Bid implements Parcelable {
         id = in.readString();
         UserId = in.readString();
     }
+
+
 
 }

@@ -11,6 +11,10 @@ import android.widget.EditText;
 
 public class EditTaskActivity extends AppCompatActivity {
 
+    /**
+     *
+     * @param savedInstanceState: Bundle used for onCreate function
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
