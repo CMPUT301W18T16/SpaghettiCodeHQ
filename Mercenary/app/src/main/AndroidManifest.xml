@@ -74,8 +74,8 @@
         <activity
             android:name=".EditTaskActivity"
             android:label="@string/title_activity_edit_task"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".RateAndReviewActivity" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" android:windowSoftInputMode="adjustPan" />
+
         <activity android:name=".RateReviewActivity" />
         <activity android:name=".SearchActivity" />
     </application>

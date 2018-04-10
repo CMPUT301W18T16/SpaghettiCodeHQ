@@ -176,7 +176,7 @@ public class ElasticFactory {
                 client.execute(new Update.Builder("" + search_parameters[0] + "")
                         .index(elasticIndex)
 
-                        .type("user")
+                        .type("User")
                         .id(search_parameters[1])
                         .build());
         } catch(Exception e) {
@@ -209,6 +209,7 @@ public class ElasticFactory {
             verifySettings();
 
             String taskID;
+
             for (Task task : tasks){
 
                 taskID = task.getId();
@@ -221,7 +222,7 @@ public class ElasticFactory {
                     // The ES server disabled update and lang groovy
                     DocumentResult result = client.execute(new Index.Builder(task)
                             .index(elasticIndex)
-                            .type("User")
+                            .type("task")
                             .id(taskID)
                             .build());
                     Log.i("YOU TRIED", "to update a task");
