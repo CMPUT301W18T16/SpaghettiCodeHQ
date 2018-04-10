@@ -175,8 +175,25 @@ public class ElasticFactory {
             try {
                 client.execute(new Update.Builder("" + search_parameters[0] + "")
                         .index(elasticIndex)
-
                         .type("User")
+                        .id(search_parameters[1])
+                        .build());
+        } catch(Exception e) {
+            Log.i("Error", "The application failed to build and find user");
+        }
+        return null;
+        }
+    }
+/*
+    public static class UpdateTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... search_parameters) {
+            verifySettings();
+
+            try {
+                client.execute(new Update.Builder("" + search_parameters[0] + "")
+                        .index(elasticIndex)
+                        .type("task")
                         .id(search_parameters[1])
                         .build());
             } catch(Exception e) {

@@ -2,20 +2,13 @@ package com.example.peter.mercenary;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
-import android.support.v4.graphics.BitmapCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.Toolbar;
@@ -26,21 +19,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.common.base.Objects;
 
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -49,12 +35,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import io.searchbox.core.DocumentResult;
-
-import static com.google.common.base.Objects.equal;
 
 import java.util.concurrent.ExecutionException;
 
@@ -89,13 +69,47 @@ public class SingleTaskActivity extends AppCompatActivity  {
         setSupportActionBar(toolbar);
 
 
+        TextView taskTitle = findViewById(R.id.task_title_edit);
+        TextView taskDesc = findViewById(R.id.task_desc_edit);
         TextView userText = findViewById(R.id.usernameText);
         Button editTask = findViewById(R.id.edit_task);
         Button completed = findViewById(R.id.completedBtn);
-
+        GridView imgGrid = findViewById(R.id.img_grid_view_task);
+        Button delTask = findViewById(R.id.task_del);
         ImageButton map = findViewById(R.id.mapBtn);
         task = getIntent().getParcelableExtra("task");
+
         user = getIntent().getParcelableExtra("user");
+        String taskId = getIntent().getStringExtra("taskid");
+        TextView showTaskStatus = findViewById(R.id.task_act_status);
+        showTaskStatus.setText(task.getStatus());
+        taskImgStringList = task.getPhoto();
+        if (taskImgStringList.isEmpty()){
+
+        }
+        else{
+            for (String S : taskImgStringList){
+                Log.i("HUGE!!!",Integer.toString(S.length()));
+                ImgBitmapArray.add(getBitmapFromString(S));
+            }
+            ImageAdapter myImageAdapter = new ImageAdapter(this);
+            myImageAdapter.setImgBitmapArray(ImgBitmapArray);
+            imgGrid.setAdapter(myImageAdapter);
+
+            imgGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v,
+                                        int position, long id) {
+                    Toast.makeText(SingleTaskActivity.this, "" + position,
+                            Toast.LENGTH_SHORT).show();
+
+                    final Intent intent = new Intent(SingleTaskActivity.this, SingleImgActivity.class);
+                    intent.putExtra("Bitmap",ImgBitmapArray.get(position));
+                    startActivity(intent);
+                }
+            });
+
+        }
+
 
 
         String query = "{\n" + " \"query\": { \"match\": {\"_id\":\"" + task.getUserId() + "\"} }\n" + "}";
@@ -134,12 +148,39 @@ public class SingleTaskActivity extends AppCompatActivity  {
                 }
             });
 
+            delTask.setOnClickListener((View v) -> {
+                //TODO: delete button   -DONE
+                //TODO: popup to confirm deleting
+
+
+                // confirmation dialog
+                //ConfirmDeletingDialog deletingTaskDialog =  new ConfirmDeletingDialog();
+                //deletingTaskDialog.setTargetFragment(deletingTaskDialog, 0);
+                //deletingTaskDialog.show(getFragmentManager(), "tag");
+
+                ElasticFactory.DeletingTask deletingTask = new ElasticFactory.DeletingTask();
+                deletingTask.execute(taskId);
+
+                // toast to notify user a task is deleted
+                Toast toast = Toast.makeText(getApplicationContext(), "Task deleted",
+                        Toast.LENGTH_SHORT);
+                toast.show();
+
+                // grey out delete and save buttons to prevent user to deleting/saving non-existent task
+                delTask.setAlpha(.5f);
+                delTask.setClickable(false);
+
+            });
+            
             editTask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(SingleTaskActivity.this, EditTaskActivity.class);
                     intent.putExtra("task", task);
                     intent.putExtra("user",user);
+                    // I must get taskId here, otherwise there's no way a task can update
+                    // unless you want to pass a whole tasklist to every activity uses taskid ^^
+                    intent.putExtra("taskid", taskId);
                     startActivity(intent);
                 }
             });
@@ -323,7 +364,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
     }
 
 
-    // TODO:reference
+    // reference: http://mobile.cs.fsu.edu/converting-images-to-json-objects/
     private String getStringFromBitmap(Bitmap bitmapPicture) {
  /*
  * This functions converts Bitmap picture to a string which can be
