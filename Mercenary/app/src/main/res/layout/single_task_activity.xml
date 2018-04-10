@@ -8,53 +8,6 @@
     tools:context="com.example.peter.mercenary.SingleTaskActivity"
     tools:layout_editor_absoluteY="25dp">
 
-    <EditText
-        android:id="@+id/task_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
-        android:fontFamily="sans-serif"
-        android:text="Task title here"
-        android:textColor="#4682B4"
-        android:textSize="30sp"
-        android:typeface="sans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <EditText
-        android:id="@+id/task_desc"
-
-        android:layout_width="348dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Task description here"
-        android:textColor="@color/colorAccent"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameText" />
-
-    <TextView
-        android:id="@+id/byte_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="256dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/null_img"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -66,17 +19,15 @@
         android:id="@+id/usernameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
 
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:text="Username"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.035"
+        app:layout_constraintHorizontal_bias="0.055"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_title" />
+        app:layout_constraintTop_toBottomOf="@+id/task_title_edit" />
 
     <ImageButton
         android:id="@+id/mapBtn"
@@ -90,25 +41,9 @@
 
 
     <Button
-        android:id="@+id/add_img_button"
-        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-        android:layout_width="76dp"
-        android:layout_height="76dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="12dp"
-        android:background="?attr/colorButtonNormal"
-        android:text="ADD..."
-        android:textColor="@android:color/background_dark"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:typeface="sans"
-        app:layout_constraintBottom_toTopOf="@+id/gridView"
-        app:layout_constraintStart_toEndOf="@+id/byte_img" />
-
-    <Button
         android:id="@+id/task_save_button"
         android:layout_width="90dp"
-          android:layout_height="37dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:text="SAVE"
@@ -117,48 +52,36 @@
 
     <GridView
 
-        android:id="@+id/gridView"
+        android:id="@+id/img_grid_view_task"
         android:layout_width="175dp"
-        android:layout_height="200dp"
-        android:layout_marginBottom="4dp"
+        android:layout_height="281dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
-        android:gravity="center"
 
+        android:gravity="center"
         android:horizontalSpacing="-5dp"
         android:numColumns="2"
         android:verticalSpacing="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/edit_task"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/task_act_status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="bidded, or done"
-        android:inputType="textPersonName"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/task_save_button"
-        />
-
     <Button
         android:id="@+id/edit_task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="272dp"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="8dp"
         android:text="Edit Task"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/task_act_status"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -175,11 +98,56 @@
         android:id="@+id/completedBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="16dp"
         android:text="Completed"
+        tools:layout_editor_absoluteX="271dp"
+        tools:layout_editor_absoluteY="459dp" />
+
+    <TextView
+        android:id="@+id/task_desc_edit"
+        android:layout_width="0dp"
+        android:layout_height="67dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Task desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameText" />
+
+    <TextView
+        android:id="@+id/task_title_edit"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Title"
+        android:textColor="?android:attr/colorAccent"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/mapBtn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/task_act_status"
+        android:layout_width="127dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/task_save_button" />
+
+    <ImageView
+        android:id="@+id/byte_img"
+        android:layout_width="71dp"
+        android:layout_height="68dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_desc_edit"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_light_normal_background" />
 
 
 </android.support.constraint.ConstraintLayout>

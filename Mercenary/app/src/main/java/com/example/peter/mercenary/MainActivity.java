@@ -144,6 +144,9 @@ public class MainActivity extends AppCompatActivity
 
                     Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
                     intent.putExtra("task", task);
+                    // I must pass taskId here, otherwise there's no way a task can update
+                    // unless you want to pass a whole tasklist to every activity uses taskid ^^
+                    intent.putExtra("taskid",task.getId());
                     intent.putExtra("user", user);
 
                     startActivityForResult(intent, 0);
