@@ -88,8 +88,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TextView taskTitle = findViewById(R.id.task_title);
-        TextView taskDesc = findViewById(R.id.task_desc);
+
         TextView userText = findViewById(R.id.usernameText);
         Button editTask = findViewById(R.id.edit_task);
         Button completed = findViewById(R.id.completedBtn);
@@ -98,8 +97,6 @@ public class SingleTaskActivity extends AppCompatActivity  {
         task = getIntent().getParcelableExtra("task");
         user = getIntent().getParcelableExtra("user");
 
-        taskTitle.setText(task.getTitle());
-        taskDesc.setText(task.getDescription());
 
         String query = "{\n" + " \"query\": { \"match\": {\"_id\":\"" + task.getUserId() + "\"} }\n" + "}";
 
@@ -142,6 +139,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
                 public void onClick(View v) {
                     Intent intent = new Intent(SingleTaskActivity.this, EditTaskActivity.class);
                     intent.putExtra("task", task);
+                    intent.putExtra("user",user);
                     startActivity(intent);
                 }
             });

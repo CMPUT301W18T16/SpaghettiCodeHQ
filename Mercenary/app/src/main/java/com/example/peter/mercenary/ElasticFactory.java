@@ -114,13 +114,13 @@ public class ElasticFactory {
                 JSONObject json = new JSONObject();
 
                 try {
-                     json = new JSONObject()
-                                  .put("email", user.getEmail())
-                                  .put("mData", 0)
-                                  .put("phoneNumber", user.getPhoneNumber())
-                                  .put("username", user.getUsername()
-                                  )
-                                  ;
+                    json = new JSONObject()
+                            .put("email", user.getEmail())
+                            .put("mData", 0)
+                            .put("phoneNumber", user.getPhoneNumber())
+                            .put("username", user.getUsername()
+                            )
+                    ;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -176,39 +176,40 @@ public class ElasticFactory {
                 client.execute(new Update.Builder("" + search_parameters[0] + "")
                         .index(elasticIndex)
 
-                        .type("user")
-                        .id(search_parameters[1])
-                        .build());
-        } catch(Exception e) {
-            Log.i("Error", "The application failed to build and find user");
-        }
-        return null;
-        }
-    }
-/*
-    public static class UpdateTask extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... search_parameters) {
-            verifySettings();
-
-            try {
-                client.execute(new Update.Builder("" + search_parameters[0] + "")
-                        .index(elasticIndex)
-                        .type("task")
+                        .type("User")
                         .id(search_parameters[1])
                         .build());
             } catch(Exception e) {
-                Log.i("Error", "The application failed to build and find task");
+                Log.i("Error", "The application failed to build and find user");
             }
             return null;
         }
     }
-*/
+    /*
+        public static class UpdateTask extends AsyncTask<String, Void, Void> {
+            @Override
+            protected Void doInBackground(String... search_parameters) {
+                verifySettings();
+
+                try {
+                    client.execute(new Update.Builder("" + search_parameters[0] + "")
+                            .index(elasticIndex)
+                            .type("task")
+                            .id(search_parameters[1])
+                            .build());
+                } catch(Exception e) {
+                    Log.i("Error", "The application failed to build and find task");
+                }
+                return null;
+            }
+        }
+    */
     public static class UpdateTask extends AsyncTask<Task, Void, Void> {
         protected Void doInBackground(Task...tasks) {
             verifySettings();
 
             String taskID;
+
             for (Task task : tasks){
 
                 taskID = task.getId();
@@ -221,7 +222,7 @@ public class ElasticFactory {
                     // The ES server disabled update and lang groovy
                     DocumentResult result = client.execute(new Index.Builder(task)
                             .index(elasticIndex)
-                            .type("User")
+                            .type("task")
                             .id(taskID)
                             .build());
                     Log.i("YOU TRIED", "to update a task");
@@ -260,57 +261,57 @@ public class ElasticFactory {
             verifySettings();
 
             Search search = new Search.Builder("" + search_parameters[0] + "")
-                        .addIndex(elasticIndex)
-                        .addType("User")
-                        .build();
-                try {
-                    SearchResult result = client.execute(search);
-                    if (result.getTotal() == 1) {
-                        return true;
-                    } else {
-                        Log.i("Error", "The search query failed");
-                        return false;
-                    }
-                } catch (Exception e) {
-                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                    .addIndex(elasticIndex)
+                    .addType("User")
+                    .build();
+            try {
+                SearchResult result = client.execute(search);
+                if (result.getTotal() == 1) {
+                    return true;
+                } else {
+                    Log.i("Error", "The search query failed");
                     return false;
                 }
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                return false;
+            }
         }
     }
 
 
 
     public static class getListOfTask extends AsyncTask<String, Void, ArrayList<Task>>{
-            @Override
+        @Override
         protected ArrayList<Task> doInBackground(String...search_parameters){
-                verifySettings();
+            verifySettings();
 
-                ArrayList<Task> taskList = new ArrayList<Task>();
+            ArrayList<Task> taskList = new ArrayList<Task>();
 
-                Search search = new Search.Builder(search_parameters[0])
-                        .addIndex(elasticIndex)
-                        .addType("task")
-                        .build();
-                try{
-                    SearchResult result = client.execute(search);
-                    if(result.isSucceeded())
-                    {
-                        List<Task> foundTasks =result.getSourceAsObjectList(Task.class);
-                        taskList.addAll(foundTasks);
-                        //Log.i("print",taskList.toString());
-                    }
-                    else
-                    {
-                        Log.i("Error","getListOfTask: The search query failed");
-                    }
+            Search search = new Search.Builder(search_parameters[0])
+                    .addIndex(elasticIndex)
+                    .addType("task")
+                    .build();
+            try{
+                SearchResult result = client.execute(search);
+                if(result.isSucceeded())
+                {
+                    List<Task> foundTasks =result.getSourceAsObjectList(Task.class);
+                    taskList.addAll(foundTasks);
+                    //Log.i("print",taskList.toString());
                 }
-                catch (Exception e){
-                    Log.i("Error", "getListOfTask: Something went wrong when we tried to communicate with the elasticsearch server!");
-
+                else
+                {
+                    Log.i("Error","getListOfTask: The search query failed");
                 }
-              return taskList;
+            }
+            catch (Exception e){
+                Log.i("Error", "getListOfTask: Something went wrong when we tried to communicate with the elasticsearch server!");
 
             }
+            return taskList;
+
+        }
     }
 
     public static class DeletingTask extends AsyncTask<String, Void, Task>{
