@@ -91,6 +91,8 @@ public class AddTaskActivity extends AppCompatActivity {
                     toast.show();
                     ElasticFactory.AddingTasks addTask = new ElasticFactory.AddingTasks();
                     addTask.execute(newTask);
+                    Log.i("title",newTask.getTitle());
+
                     onBackPressed();
                 }
             });

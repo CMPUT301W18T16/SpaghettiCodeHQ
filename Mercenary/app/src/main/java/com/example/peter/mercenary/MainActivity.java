@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTaskActivity.class);
                 intent.putExtra("user", user);
+
                 intent.putParcelableArrayListExtra("taskList",taskList);
                 intent.putParcelableArrayListExtra("offline",offlineAddedTaskList);
                 startActivity(intent);
@@ -159,6 +160,7 @@ public class MainActivity extends AppCompatActivity
                     Intent intent = new Intent(MainActivity.this, SingleTaskActivity.class);
                     intent.putExtra("task", task);
                     intent.putExtra("user", user);
+
 
                     startActivityForResult(intent, 0);
                 }

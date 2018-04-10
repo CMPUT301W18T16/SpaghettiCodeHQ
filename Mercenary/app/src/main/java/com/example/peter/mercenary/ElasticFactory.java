@@ -11,6 +11,8 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +39,17 @@ public class ElasticFactory {
             //String uniqueID = UUID.randomUUID().toString();
 
             for(Task task : tasks){
-                Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
+                Index index = new Index.Builder(task).index(elasticIndex).type("task1").build();
 
                 try{
                     DocumentResult result = client.execute(index);
                     if(result.isSucceeded())
                     {
+                        Log.i("ADDID", result.getId());
+
                         task.setId(result.getId());
+                        Log.i("taskid!!!!!!!!!!!!",task.getId());
+
                     }
                     else{
                         Log.i("Error","Elasticsearch was not able to add the task");
@@ -59,7 +65,7 @@ public class ElasticFactory {
     }
 
     public static Index buildTaskOffline(Task task){
-        Index index = new Index.Builder(task).index(elasticIndex).type("task").build();
+        Index index = new Index.Builder(task).index(elasticIndex).type("task1").build();
         return index;
     }
 
@@ -129,20 +135,64 @@ public class ElasticFactory {
         }
     }
 
-    public static class UpdateTask extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... search_parameters) {
+    public static class UpdateTask extends AsyncTask<Task, Void, Void> {
+        protected Void doInBackground(Task...tasks) {
             verifySettings();
 
-            try {
-                client.execute(new Update.Builder("" + search_parameters[0] + "")
-                        .index(elasticIndex)
-                        .type("task")
-                        .id(search_parameters[1])
-                        .build());
-            } catch(Exception e) {
-                Log.i("Error", "The application failed to build and find task");
+            String taskID;
+            for (Task task : tasks){
+
+                taskID = task.getId();
+                Log.i("ID_in_ES", taskID);
+
+                /*
+                ArrayList<String> imageListToBeUpdated = task.getPhoto();
+                // last element of img list
+                String imageToBeUpdated = imageListToBeUpdated.get(imageListToBeUpdated.size()-1);
+                if (!StringUtils.isEmpty(imageToBeUpdated)) {
+                    String escapedImg = org.apache.lucene.queryparser.classic.QueryParser.escape(imageToBeUpdated);
+                    // StringEscapeUtils is extremely slow
+                    //String escapedImg = StringEscapeUtils.escapeJson(imageToBeUpdated);
+                    task.setPhoto(escapedImg);
+                }
+                else{
+                }
+                */
+                try {
+                    // minci: changed Update to Index;
+                    // Error:
+                    // nested: ScriptException[scripts of type [indexed], operation [update] and lang [groovy] are disabled]
+                    // The ES server disabled update and lang groovy
+                    DocumentResult result = client.execute(new Index.Builder(task)
+                            .index(elasticIndex)
+                            .type("minciTestTask1")
+                            .id(taskID)
+                            .build());
+                    Log.i("YOU TRIED", "to update a task");
+                    if(result.getJsonString() != null)
+                    {
+                        if (result.isSucceeded()){
+                            // make a toast, havent figured out how to do this in non-activity class
+                            Log.i("RESULT:", result.getJsonString());
+                        }
+                        else {
+                            // find out what's going on with our query
+                            Log.i("RESULT:", result.getJsonString());
+                        }
+                    }
+
+                    else
+                    {
+                        JSONObject obj = new JSONObject(result.getSourceAsString());
+                        Log.i("Error","UpdateTask FAILED" + obj);
+                    }
+                } catch(Exception e){
+                    Log.i("Error", "UpdateTask: The application failed to update task");
+                    e.printStackTrace();
+
+                }
             }
+
             return null;
         }
     }
@@ -166,7 +216,7 @@ public class ElasticFactory {
                         return false;
                     }
                 } catch (Exception e) {
-                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                    Log.i("Errorcheckuserexist", "Something went wrong when we tried to communicate with the elasticsearch server!");
                     return false;
                 }
         }
@@ -181,7 +231,7 @@ public class ElasticFactory {
 
                 Search search = new Search.Builder(search_parameters[0])
                         .addIndex(elasticIndex)
-                        .addType("task")
+                        .addType("task1")
                         .build();
                 try{
                     SearchResult result = client.execute(search);
@@ -197,7 +247,7 @@ public class ElasticFactory {
                     }
                 }
                 catch (Exception e){
-                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                    Log.i("Errorgetlistoftask", "Something went wrong when we tried to communicate with the elasticsearch server!");
 
                 }
               return taskList;
@@ -213,7 +263,7 @@ public class ElasticFactory {
             try {
                 client.execute(new Delete.Builder(search_parameters[0])
                         .index(elasticIndex)
-                        .type("task")
+                        .type("task1")
                         .build());
 
             } catch (IOException e) {
