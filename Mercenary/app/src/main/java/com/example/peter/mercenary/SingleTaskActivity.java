@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import android.widget.ImageView;
@@ -59,27 +60,47 @@ public class SingleTaskActivity extends AppCompatActivity  {
     private User clickedUser; //target user
     private static final String TASKFILE = "taskfile.sav";
     private static final String ELASTICFILE = "elasticfile.sav";
+    private Button delTask;
+    private Button completed;
+    private Button editTask;
+    private EditText makeBid;
+    private TextView seeBid;
+    private boolean myTask=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_task_activity);
 
+        task = getIntent().getParcelableExtra("task");
+        user = getIntent().getParcelableExtra("user");
+
+
+        if (task.getUserId().equals(user.getId())) {
+
+            setContentView(R.layout.single_task_activity);
+             editTask = findViewById(R.id.edit_task);
+             delTask = findViewById(R.id.task_del);
+             seeBid = findViewById(R.id.see_bid);
+        }
+        else{
+            myTask=false;
+            setContentView(R.layout.other_single_task_activity);
+            makeBid = findViewById(R.id.make_bid);
+
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        completed = findViewById(R.id.completedBtn);
 
         TextView taskTitle = findViewById(R.id.task_title_edit);
         TextView taskDesc = findViewById(R.id.task_desc_edit);
         TextView userText = findViewById(R.id.usernameText);
-        Button editTask = findViewById(R.id.edit_task);
-        Button completed = findViewById(R.id.completedBtn);
-        GridView imgGrid = findViewById(R.id.img_grid_view_task);
-        Button delTask = findViewById(R.id.task_del);
-        ImageButton map = findViewById(R.id.mapBtn);
-        task = getIntent().getParcelableExtra("task");
 
-        user = getIntent().getParcelableExtra("user");
+
+        GridView imgGrid = findViewById(R.id.img_grid_view_task);
+        ImageButton map = findViewById(R.id.mapBtn);
+
         String taskId = getIntent().getStringExtra("taskid");
         TextView showTaskStatus = findViewById(R.id.task_act_status);
         showTaskStatus.setText(task.getStatus());
@@ -114,6 +135,7 @@ public class SingleTaskActivity extends AppCompatActivity  {
 
         String query = "{\n" + " \"query\": { \"match\": {\"_id\":\"" + task.getUserId() + "\"} }\n" + "}";
 
+
         if (NetworkStatus.connectionStatus(this)) {
             try {
                 ElasticFactory.GetUser getUser = new ElasticFactory.GetUser();
@@ -147,43 +169,61 @@ public class SingleTaskActivity extends AppCompatActivity  {
                     startActivity(intent);
                 }
             });
+            if(myTask) {
 
-            delTask.setOnClickListener((View v) -> {
-                //TODO: delete button   -DONE
-                //TODO: popup to confirm deleting
+                delTask.setOnClickListener((View v) -> {
+                    //TODO: delete button   -DONE
+                    //TODO: popup to confirm deleting
 
 
-                // confirmation dialog
-                //ConfirmDeletingDialog deletingTaskDialog =  new ConfirmDeletingDialog();
-                //deletingTaskDialog.setTargetFragment(deletingTaskDialog, 0);
-                //deletingTaskDialog.show(getFragmentManager(), "tag");
+                    // confirmation dialog
+                    //ConfirmDeletingDialog deletingTaskDialog =  new ConfirmDeletingDialog();
+                    //deletingTaskDialog.setTargetFragment(deletingTaskDialog, 0);
+                    //deletingTaskDialog.show(getFragmentManager(), "tag");
 
-                ElasticFactory.DeletingTask deletingTask = new ElasticFactory.DeletingTask();
-                deletingTask.execute(taskId);
+                    ElasticFactory.DeletingTask deletingTask = new ElasticFactory.DeletingTask();
+                    deletingTask.execute(taskId);
 
-                // toast to notify user a task is deleted
-                Toast toast = Toast.makeText(getApplicationContext(), "Task deleted",
-                        Toast.LENGTH_SHORT);
-                toast.show();
+                    // toast to notify user a task is deleted
+                    Toast toast = Toast.makeText(getApplicationContext(), "Task deleted",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
 
-                // grey out delete and save buttons to prevent user to deleting/saving non-existent task
-                delTask.setAlpha(.5f);
-                delTask.setClickable(false);
+                    // grey out delete and save buttons to prevent user to deleting/saving non-existent task
+                    delTask.setAlpha(.5f);
+                    delTask.setClickable(false);
 
-            });
-            
-            editTask.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(SingleTaskActivity.this, EditTaskActivity.class);
-                    intent.putExtra("task", task);
-                    intent.putExtra("user",user);
-                    // I must get taskId here, otherwise there's no way a task can update
-                    // unless you want to pass a whole tasklist to every activity uses taskid ^^
-                    intent.putExtra("taskid", taskId);
-                    startActivity(intent);
-                }
-            });
+                });
+
+                editTask.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SingleTaskActivity.this, EditTaskActivity.class);
+                        intent.putExtra("task", task);
+                        intent.putExtra("user", user);
+                        // I must get taskId here, otherwise there's no way a task can update
+                        // unless you want to pass a whole tasklist to every activity uses taskid ^^
+                        intent.putExtra("taskid", taskId);
+                        startActivity(intent);
+                    }
+                });
+
+
+            }
+            else{
+                makeBid.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SingleTaskActivity.this, MakeBid.class);
+                        intent.putExtra("task", task);
+                        intent.putExtra("user", user);
+                        // I must get taskId here, otherwise there's no way a task can update
+                        // unless you want to pass a whole tasklist to every activity uses taskid ^^
+                        intent.putExtra("taskid", taskId);
+                        startActivity(intent);
+                    }
+                });
+            }
 
             if (task.getStatus().equals("accepted")
                     && task.getUserName().equals(user.getUsername())) {

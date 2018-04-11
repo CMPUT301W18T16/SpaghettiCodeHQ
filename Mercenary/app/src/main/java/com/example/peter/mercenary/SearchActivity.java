@@ -62,6 +62,7 @@ public class SearchActivity extends AppCompatActivity
 
                 ElasticFactory.getListOfTask getTaskList
                         = new ElasticFactory.getListOfTask();
+
                 for (int i = 0; i < keywords.length; i++) {
                     String query = "{\n" + " \"query\": { \"match\": {\"description\":\"" + keywords[i] + "\"} }\n" + "}";
                     getTaskList.execute(query);

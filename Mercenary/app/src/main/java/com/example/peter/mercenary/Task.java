@@ -22,7 +22,6 @@ import java.util.ArrayList;
 public class Task implements Parcelable {
     private String title;
     private String description;
-    private BidList listBids;
 
     private String taskProvider;
     private LatLng geoLoc = new LatLng(0, 0);
